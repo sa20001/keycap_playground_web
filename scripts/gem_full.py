@@ -44,8 +44,8 @@ color_init()
 from keycap import Keycap
 
 # Change these to the correct paths in your environment:
-OPENSCAD_PATH = Path("/home/riskable/downloads/OpenSCAD-2022.12.06.ai12948-x86_64.AppImage")
-COLORSCAD_PATH = Path("/home/riskable/downloads/colorscad/colorscad.sh")
+OPENSCAD_PATH = "openscad"
+COLORSCAD_PATH = "colorscad.sh"
 
 KEY_UNIT = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE = 0.8 # Space between keycaps

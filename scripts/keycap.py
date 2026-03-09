@@ -210,8 +210,7 @@ class Keycap(object):
         self.colorscad_path = colorscad_path
         self.openscad_path = openscad_path
         # This speeds things up considerably:
-        # self.openscad_args = "--enable=fast-csg" # TODO enable back once I can make it work
-        self.openscad_args = ""
+        self.openscad_args = "--enable=fast-csg"
 
     # NOTE: This doesn't seem to work right for unknown reasons so you'll want
     #       to generate the quote keycap by hand on the command line.

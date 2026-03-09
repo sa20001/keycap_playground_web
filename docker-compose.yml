@@ -1,0 +1,8 @@
+services:
+  keycapplayground:
+    container_name: keycapplayground
+    build: .
+    # no ports published as per request
+    volumes:
+      - .:/app
+    # restart policy can be added if desired

@@ -1,17 +1,8 @@
 #!/usr/bin/env python3
+# type: ignore
 
 """
-Generates a whole keyboard's worth of keycaps (and a few extras). Best way
-to use this script is from within the `keycap_playground` directory.
-
-.. bash::
-
-    $ ./scripts/riskeycap_full.py --out /tmp/output_dir
-
-.. note::
-
-    Make sure you add the correct path to colorscad.sh if you want
-    multi-material keycaps!
+NOTE test script used to testing docker deployment
 
 Fonts used by this script:
 --------------------------
@@ -43,10 +34,6 @@ color_init()
 # Our own stuff
 from src.libraries import Keycap
 
-# Change these to the correct paths in your environment:
-OPENSCAD_PATH = "openscad"
-COLORSCAD_PATH = "colorscad.sh"
-
 KEY_UNIT = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE = 0.8 # Space between keycaps
 FILE_TYPE = "3mf" # 3mf or stl
@@ -56,11 +43,7 @@ class gem_base(Keycap):
     Base keycap definitions for GEM profile + our personal prefs.
     """
     def __init__(self, **kwargs):
-        self.openscad_path = OPENSCAD_PATH
-        self.colorscad_path = COLORSCAD_PATH
-        super().__init__(**kwargs,
-            openscad_path=self.openscad_path,
-            colorscad_path=self.colorscad_path)
+        super().__init__(**kwargs)
         self.render = ["keycap", "stem"]
         self.file_type = FILE_TYPE
         self.key_profile = "gem"
@@ -966,7 +949,7 @@ if __name__ == "__main__":
                         keycap.name = f"{keycap.name}_legends"
                         # Change it to .stl since PrusaSlicer doesn't like .3mf
                         # for "parts" for unknown reasons...
-                        keycap.file_type = "stl"
+                        # keycap.file_type = "stl" # TODO no .stl
                         if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
                             print(Style.BRIGHT +
                                 f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
@@ -1011,7 +994,7 @@ if __name__ == "__main__":
                 legend.render = ["legends"]
                 # Change it to .stl since PrusaSlicer doesn't like .3mf
                 # for "parts" for unknown reasons...
-                legend.file_type = "stl"
+                # legend.file_type = "stl" # TODO no .stl
                 if not args.force:
                     if os.path.exists(f"{args.out}/{legend.name}.{legend.file_type}"):
                         print(Style.BRIGHT +

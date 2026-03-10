@@ -1,3 +1,12 @@
 {
-    "python.analysis.typeCheckingMode": "strict"
+    "python.analysis.typeCheckingMode": "strict",
+    "cSpell.words": [
+        "BETWEENSPACE",
+        "colorscad",
+        "Keycap",
+        "keycaps",
+        "mfmerge",
+        "openscad",
+        "riskeycap"
+    ]
 }

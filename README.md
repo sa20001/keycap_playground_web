@@ -14,13 +14,13 @@ docker compose run --rm keycapplayground /bin/bash
 To view all options run
 
 ```
-python -m src.layouts.gem_full
+python -m src.layouts.test
 ```
 
-To generate all keycaps defined in gem_full.py along with the .stl files for legends run
+To generate all keycaps defined in `test` along with the .stl files for legends run
 
 ```
-python -m src.layouts.gem_full --legends --out generated
+python -m src.layouts.test --legends --out generated
 ```
 
 This will place all .stl files in the `/generated` directory

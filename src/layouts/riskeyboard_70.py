@@ -69,7 +69,7 @@ class riskeyboard70_base(Keycap):
             [0,-20,0],
             [68,0,0],
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 # KEY_ROTATION = [0,107.8,90]; // GEM profile rotation 1.5U
 
@@ -89,7 +89,7 @@ class riskeyboard70_alphas(riskeyboard70_base):
             [3.5,3,1], # Top right Gotham Rounded
             [0.15,-3,2], # Front legend
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeyboard70_numrow(riskeyboard70_base):
     """
@@ -127,7 +127,7 @@ class riskeyboard70_numrow(riskeyboard70_base):
             [1,1,3],
             [1,1,3],
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeyboard70_tilde(riskeyboard70_numrow):
     """
@@ -235,7 +235,7 @@ class riskeyboard70_double_legends(riskeyboard70_base):
             [1,1.75,3], # For the pipe to make it taller/more of a divider
             [1,1,3],
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeyboard70_gt_lt(riskeyboard70_double_legends):
     """
@@ -273,7 +273,7 @@ class riskeyboard70_1_U_text(riskeyboard70_alphas):
         kwargs_copy = deepcopy(kwargs)
         self.font_sizes[0] = 4
         self.trans[0] = [2.5,0,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
 
 class riskeyboard70_arrows(riskeyboard70_alphas):
     """
@@ -306,7 +306,7 @@ class riskeyboard70_1_25U(riskeyboard70_alphas):
         self.key_length = KEY_UNIT*1.25-BETWEENSPACE
         self.key_rotation = [0,108.55,90]
         self.trans[0] = [3,0.2,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('1.25U_'):
             self.name = f"1.25U_{self.name}"
 
@@ -320,7 +320,7 @@ class riskeyboard70_1_5U(riskeyboard70_double_legends):
         super().__init__(**kwargs)
         self.key_length = KEY_UNIT*1.5-BETWEENSPACE
         self.key_rotation = [0,107.825,90]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
         if not self.name.startswith('1.5U_'):
             self.name = f"1.5U_{self.name}"
 
@@ -349,7 +349,7 @@ class riskeyboard70_1_75U(riskeyboard70_alphas):
         super().__init__(**kwargs)
         self.key_length = KEY_UNIT*1.75-BETWEENSPACE
         self.key_rotation = [0,107.85,90]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
         if not self.name.startswith('1.75U_'):
             self.name = f"1.75U_{self.name}"
 
@@ -364,7 +364,7 @@ class riskeyboard70_2U(riskeyboard70_alphas):
         if "dish_invert" in kwargs and kwargs["dish_invert"]:
             self.key_rotation = [0,111.88,90] # Spacebars are different
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
         if not self.name.startswith('2U_'):
             self.name = f"2U_{self.name}"
 
@@ -382,7 +382,7 @@ class riskeyboard70_2_25U(riskeyboard70_alphas):
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2.25U_'):
             self.name = f"2.25U_{self.name}"
 
@@ -400,7 +400,7 @@ class riskeyboard70_2_5U(riskeyboard70_alphas):
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2.5U_'):
             self.name = f"2.5U_{self.name}"
 
@@ -418,7 +418,7 @@ class riskeyboard70_2_75U(riskeyboard70_alphas):
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2.75U_'):
             self.name = f"2.75U_{self.name}"
 
@@ -436,7 +436,7 @@ class riskeyboard70_6_25U(riskeyboard70_alphas):
         self.stem_locations = [[0,0,0], [50,0,0], [-50,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('6.25U_'):
             self.name = f"6.25U_{self.name}"
 
@@ -454,7 +454,7 @@ class riskeyboard70_7U(riskeyboard70_alphas):
         self.stem_locations = [[0,0,0], [57,0,0], [-57,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('7U_'):
             self.name = f"7U_{self.name}"
 

@@ -20,7 +20,7 @@ from colorama import Fore, Back, Style
 from colorama import init as color_init
 color_init()
 # Our own stuff
-from keycap import Keycap
+from src.libraries.keycap import Keycap
 
 KEY_UNIT = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE = 0.8 # Space between keycaps

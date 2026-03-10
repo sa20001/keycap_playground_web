@@ -3,19 +3,16 @@
 """
 Contains the Keycap class which makes it easy to script the generation of
 keycaps using the Keycap Playground.
-
-.. note::
-
-    This was made to be run on a Linux system but if you change the various
-    `Path(<whatever>)` variables it should work on anything.
 """
 
 import os
 import json
 from pathlib import Path
+from typing import Any, List, Optional
 
-KEY_UNIT = 19.05 # Square that makes up the entire space of a key
-BETWEENSPACE = 0.8 # Space between keycaps
+
+KEY_UNIT: float = 19.05 # Square that makes up the entire space of a key
+BETWEENSPACE: float = 0.8 # Space between keycaps
 
 class OpenSCADException(Exception):
     """
@@ -79,67 +76,73 @@ class Keycap(object):
         from subprocess import getstatusoutput
         retcode, output = getstatusoutput(str(tilde))
     """
-    def __init__(self,
-            name=None,
-            render=["keycap", "stem"],
-            key_profile="riskeycap",
-            key_length=KEY_UNIT-BETWEENSPACE,
-            key_width=KEY_UNIT-BETWEENSPACE,
-            key_rotation=[0,0,0],
-            key_height=8,
-            key_top_difference=5,
-            key_top_x=0,
-            key_top_y=0,
-            wall_thickness=0.45*2.5,
-            dish_thickness=1.0,
-            dish_type="cylinder",
-            dish_x=0,
-            dish_y=0,
-            dish_z=0,
-            dish_depth=1,
-            dish_invert=False,
-            dish_invert_division_x=4,
-            dish_invert_division_y=1,
-            dish_tilt=0,
-            dish_tilt_curve=True,
-            dish_fn=256,
-            dish_corner_fn=64,
-            uniform_wall_thickness=True,
-            polygon_layers=10,
-            polygon_layer_rotation=0,
-            polygon_edges=4,
-            polygon_rotation=True,
-            corner_radius=1,
-            corner_radius_curve=3,
-            stem_type="box_cherry",
-            stem_height=4,
-            stem_top_thickness=0.5,
-            stem_inset=1,
-            stem_inside_tolerance=0.2,
-            stem_outside_tolerance_x=0.05,
-            stem_outside_tolerance_y=0.05,
-            stem_side_supports=[0,0,0,0],
-            stem_locations=[[0,0,0]],
-            stem_sides_wall_thickness=0.65,
-            stem_snap_fit=False,
-            stem_walls_inset=1.05,
-            stem_walls_tolerance=0.2,
-            homing_dot_length=0, # 0 means no "dot"
-            homing_dot_width=1,
-            homing_dot_x=0,
-            homing_dot_y=-2,
-            homing_dot_z=-0.35, # How far it sticks out
-            legends=[""],
-            fonts=[], font_sizes=[],
-            trans=[[0,0,0]], trans2=[[0,0,0]],
-            rotation=[[0,0,0]], rotation2=[[0,0,0]],
-            scale=[[1,1,1]], underset=[[0,0,0]],
-            legend_carved=False,
-            keycap_playground_path=Path("./keycap_playground.scad"),
-            file_type="3mf",
-            openscad_path=Path("/usr/bin/openscad"),
-            colorscad_path=Path(""),
-            output_path=Path(".")):
+    def __init__(
+        self,
+        name: Optional[str] = None,
+        render: List[str] = ["keycap", "stem"],
+        key_profile: str = "riskeycap",
+        key_length: float = KEY_UNIT - BETWEENSPACE,
+        key_width: float = KEY_UNIT - BETWEENSPACE,
+        key_rotation: List[float] = [0, 0, 0],
+        key_height: float = 8,
+        key_top_difference: float = 5,
+        key_top_x: float = 0,
+        key_top_y: float = 0,
+        wall_thickness: float = 0.45 * 2.5,
+        dish_thickness: float = 1.0,
+        dish_type: str = "cylinder",
+        dish_x: float = 0,
+        dish_y: float = 0,
+        dish_z: float = 0,
+        dish_depth: float = 1,
+        dish_invert: bool = False,
+        dish_invert_division_x: int = 4,
+        dish_invert_division_y: int = 1,
+        dish_tilt: float = 0,
+        dish_tilt_curve: bool = True,
+        dish_fn: int = 256,
+        dish_corner_fn: int = 64,
+        uniform_wall_thickness: bool = True,
+        polygon_layers: int = 10,
+        polygon_layer_rotation: float = 0,
+        polygon_edges: int = 4,
+        polygon_rotation: bool = True,
+        corner_radius: float = 1,
+        corner_radius_curve: float = 3,
+        stem_type: str = "box_cherry",
+        stem_height: float = 4,
+        stem_top_thickness: float = 0.5,
+        stem_inset: float = 1,
+        stem_inside_tolerance: float = 0.2,
+        stem_outside_tolerance_x: float = 0.05,
+        stem_outside_tolerance_y: float = 0.05,
+        stem_side_supports: List[int] = [0, 0, 0, 0],
+        stem_locations: List[List[float]] = [[0, 0, 0]],
+        stem_sides_wall_thickness: float = 0.65,
+        stem_snap_fit: bool = False,
+        stem_walls_inset: float = 1.05,
+        stem_walls_tolerance: float = 0.2,
+        homing_dot_length: float = 0,  # 0 means no "dot"
+        homing_dot_width: float = 1,
+        homing_dot_x: float = 0,
+        homing_dot_y: float = -2,
+        homing_dot_z: float = -0.35,  # How far it sticks out
+        legends: List[str] = [""],
+        fonts: List[str] = [],
+        font_sizes: List[float] = [],
+        trans: List[List[float]] = [[0, 0, 0]],
+        trans2: List[List[float]] = [[0, 0, 0]],
+        rotation: List[List[float]] = [[0, 0, 0]],
+        rotation2: List[List[float]] = [[0, 0, 0]],
+        scale: List[List[float]] = [[1, 1, 1]],
+        underset: List[List[float]] = [[0, 0, 0]],
+        legend_carved: bool = False,
+        keycap_playground_path: Path = Path("./keycap_playground.scad"),
+        file_type: str = "3mf",
+        openscad_path: Path = Path("/usr/bin/openscad"),
+        colorscad_path: Path = Path(""),
+        output_path: Path = Path("."),
+    ) -> None:
         self.name = name
         self.output_path = output_path
         self.render = render
@@ -212,9 +215,10 @@ class Keycap(object):
         # This speeds things up considerably:
         self.openscad_args = "--enable=fast-csg"
 
+    # TODO: look into it
     # NOTE: This doesn't seem to work right for unknown reasons so you'll want
     #       to generate the quote keycap by hand on the command line.
-    def quote(self, legends):
+    def quote(self, legends: List[str]) -> str:
         """
         Checks for the edge case of a single quote (') legend and converts it
         into `"'"'"'"` so that bash will pass it correclty to OpenSCAD via
@@ -227,7 +231,7 @@ class Keycap(object):
         """
         properly_escaped_quote = r'''"'"'"'"'''
         out = "["
-        for i, legend in enumerate(legends):
+        for _, legend in enumerate(legends):
             if legend == "'":
                 out += properly_escaped_quote + ","
             elif legend == '"':
@@ -237,7 +241,7 @@ class Keycap(object):
         out = out.rstrip(',') # Get rid of trailing comma
         return out + "]"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"""
         name: {self.name}
         render: {self.render}
@@ -250,7 +254,7 @@ class Keycap(object):
         scale: {self.scale}
         underset: {self.underset}"""
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns the OpenSCAD command line to use to generate this keycap.
         """
@@ -341,7 +345,7 @@ class Keycap(object):
             f"{last_part}"
         )
 
-    def postinit(self, **kwargs):
+    def postinit(self, **kwargs: Any) -> None:
         """
         Override anything passed in via kwargs
         """

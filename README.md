@@ -5,12 +5,6 @@ This has been forked from the original Linux implementation and rewritten to in 
 
 ## How to use
 
-### Preps
-Create `genereated` dir:
-```
-mkdir generated
-```
-
 ### Run
 Enter the container
 ```
@@ -20,13 +14,13 @@ docker compose run --rm keycapplayground /bin/bash
 To view all options run
 
 ```
-python scripts/gem_full.py
+python -m src.layouts.gem_full
 ```
 
 To generate all keycaps defined in gem_full.py along with the .stl files for legends run
 
 ```
-python scripts/gem_full.py --legends --out generated
+python -m src.layouts.gem_full --legends --out generated
 ```
 
 This will place all .stl files in the `/generated` directory

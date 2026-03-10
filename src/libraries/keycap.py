@@ -5,12 +5,12 @@ Contains the Keycap class which makes it easy to script the generation of
 keycaps using the Keycap Playground.
 """
 
-import os
+import shutil
 import json
 from pathlib import Path
 from typing import Any, List, Optional
 
-
+USE_COLORSCAD: bool = True # TODO temp option, find more elegant solution for this in the future
 KEY_UNIT: float = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE: float = 0.8 # Space between keycaps
 
@@ -22,7 +22,7 @@ class OpenSCADException(Exception):
 
 class ColorscadException(Exception):
     """
-    Raised when colorscad.sh can't be found or it's not working correctly.
+    Raised when colorscad and 3mfmerge can't be found or are not working correctly.
     """
     pass
 
@@ -30,7 +30,7 @@ class Keycap(object):
     """
     A convenient abstraction for specifying a keycap's details.  The most useful
     way to use this class is to subclass it to make your own "base" class
-    containing our kecap's parameters.  Example::
+    containing our keycap's parameters.  Example::
 
         class KeycapBase(Keycap):
         '''
@@ -64,9 +64,9 @@ class Keycap(object):
                 [0,-20,0],
                 [68,0,0], # Front-facing legends need a lot of rotation
             ]
-            self.postinit(**kwargs)
+            self.postInit(**kwargs)
 
-    The call to `self.postinit(**kwargs)` is important if you want to be able
+    The call to `self.postInit(**kwargs)` is important if you want to be able
     to override things in `KeycapBase()` by passing them via arguments like so::
 
         tilde = KeycapBase(name="tilde", legends=["`", "", "~"])
@@ -74,7 +74,7 @@ class Keycap(object):
     To actually generate a keycap you can use something like this::
 
         from subprocess import getstatusoutput
-        retcode, output = getstatusoutput(str(tilde))
+        returnCode, output = getstatusoutput(str(tilde))
     """
     def __init__(
         self,
@@ -139,8 +139,6 @@ class Keycap(object):
         legend_carved: bool = False,
         keycap_playground_path: Path = Path("./keycap_playground.scad"),
         file_type: str = "3mf",
-        openscad_path: Path = Path("/usr/bin/openscad"),
-        colorscad_path: Path = Path(""),
         output_path: Path = Path("."),
     ) -> None:
         self.name = name
@@ -210,8 +208,6 @@ class Keycap(object):
         self.legend_carved = legend_carved
         self.file_type = file_type
         self.keycap_playground_path = keycap_playground_path
-        self.colorscad_path = colorscad_path
-        self.openscad_path = openscad_path
         # This speeds things up considerably:
         self.openscad_args = "--enable=fast-csg"
 
@@ -221,7 +217,7 @@ class Keycap(object):
     def quote(self, legends: List[str]) -> str:
         """
         Checks for the edge case of a single quote (') legend and converts it
-        into `"'"'"'"` so that bash will pass it correclty to OpenSCAD via
+        into `"'"'"'"` so that bash will pass it correctly to OpenSCAD via
         `getstatusoutput()`.  Also covers the slash (\\) legend for
         completeness.
 
@@ -258,27 +254,27 @@ class Keycap(object):
         """
         Returns the OpenSCAD command line to use to generate this keycap.
         """
+
+        if shutil.which("openscad") is None:
+            raise OpenSCADException("OpenSCAD executable not found in PATH.")
+        
+        if (shutil.which("colorscad") or shutil.which("3mfmerge")) is None:
+            raise ColorscadException("ColorSCAD executable not found in PATH.")
+
         first_part = (
-            f"{self.openscad_path} {self.openscad_args} -o "
+            f"openscad {self.openscad_args} -o "
             f"'{self.output_path}'/'{self.name}.{self.file_type}' -D $'"
         )
         last_part = self.keycap_playground_path
         render = self.render
-        if str(self.colorscad_path): # Use colorscad.sh
-            # Check to make sure it actually exists
-            if os.path.exists(self.colorscad_path):
-                # Add openscad to the $PATH variable so colorscad can find it
-                os.environ["PATH"] += f"{self.openscad_path.parent}"
-                first_part = (
-                    #f'PATH="${self.openscad_path.parent}:$PATH"; '
-                    f"{self.colorscad_path} -i {self.keycap_playground_path} "
-                    f"-o '{self.output_path}'/'{self.name}.{self.file_type}' "
-                    f"-p '{self.openscad_path}' "
-                    f"-- {self.openscad_args} -D $'"
-                )
-                last_part = ""
-                #render = ["keycap", "stem", "legends"]
-                render.append("legends")
+        if USE_COLORSCAD: # Use colorscad for multicolor 3MF output
+            first_part = (
+                f"colorscad -i {self.keycap_playground_path} "
+                f"-o '{self.output_path}/{self.name}.{self.file_type}' "
+                f"-- {self.openscad_args} -D $'"
+            )
+            last_part = ""
+            render.append("legends")
         # NOTE: Since OpenSCAD requires double quotes I'm using the json module
         #       to encode things that need it:
         return (
@@ -345,11 +341,11 @@ class Keycap(object):
             f"{last_part}"
         )
 
-    def postinit(self, **kwargs: Any) -> None:
+    def postInit(self, **kwargs: Any) -> None:
         """
         Override anything passed in via kwargs
         """
-        #print(f"postinit kwargs: {kwargs}")
+        #print(f"postInit kwargs: {kwargs}")
         for k, v in kwargs.items():
             #print(f"Updating: {k}: {v}")
             self.__dict__.update({k: v})

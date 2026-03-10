@@ -41,7 +41,7 @@ from colorama import Fore, Back, Style
 from colorama import init as color_init
 color_init()
 # Our own stuff
-from keycap import Keycap
+from src.libraries import Keycap
 
 # Change these to the correct paths in your environment:
 OPENSCAD_PATH = "openscad"
@@ -507,7 +507,7 @@ class gem_2U(gem_alphas):
 
 class gem_2UV(gem_alphas):
     """
-    The base for all 2U keycaps.
+    The base for all 2UV keycaps.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

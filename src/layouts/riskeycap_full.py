@@ -46,7 +46,7 @@ from colorama import Fore, Back, Style
 from colorama import init as color_init
 color_init()
 # Our own stuff
-from keycap import Keycap
+from src.libraries.keycap import Keycap
 
 # Change these to the correct paths in your environment:
 OPENSCAD_PATH = Path("/home/riskable/downloads/OpenSCAD-2022.12.06.ai12948-x86_64.AppImage")

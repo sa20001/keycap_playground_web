@@ -195,7 +195,7 @@ class riskeycap_base(Keycap):
         #               f"{openscad_full_version})")
         #     if self.openscad_version >= 2022:
         #         self.enable_fast_csg = "--enable=fast-csg"
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeycap_alphas(riskeycap_base):
     """
@@ -213,7 +213,7 @@ class riskeycap_alphas(riskeycap_base):
             [3.5,3,1], # Top right Gotham Rounded
             [0.15,-3,2], # Front legend
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeycap_alphas_homing_dot(riskeycap_alphas):
     """
@@ -263,7 +263,7 @@ class riskeycap_numrow(riskeycap_base):
             [1,1,3],
             [1,1,3],
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeycap_tilde(riskeycap_numrow):
     """
@@ -382,7 +382,7 @@ class riskeycap_double_legends(riskeycap_base):
             [1,1.75,3], # For the pipe to make it taller/more of a divider
             [1,1,3],
         ]
-        self.postinit(**kwargs)
+        self.postInit(**kwargs)
 
 class riskeycap_gt_lt(riskeycap_double_legends):
     """
@@ -420,7 +420,7 @@ class riskeycap_1_U_text(riskeycap_alphas):
         kwargs_copy = deepcopy(kwargs)
         self.font_sizes[0] = 4
         self.trans[0] = [2.5,0,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
 
 class riskeycap_1_U_2_row_text(riskeycap_alphas):
     """
@@ -438,7 +438,7 @@ class riskeycap_1_U_2_row_text(riskeycap_alphas):
             [1,1,3], # Back to normal
             [1,1,3],
         ]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
 
 class riskeycap_arrows(riskeycap_alphas):
     """
@@ -461,7 +461,7 @@ class riskeycap_fontawesome(riskeycap_alphas):
         self.fonts[0] = "Font Awesome 6 Free:style=Solid"
         self.font_sizes[0] = 5
         self.trans[0] = [2.6,0.3,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
 
 class riskeycap_material_icons(riskeycap_alphas):
     """
@@ -473,7 +473,7 @@ class riskeycap_material_icons(riskeycap_alphas):
         self.fonts[0] = "Material Design Icons:style=Regular"
         self.font_sizes[0] = 6
         self.trans[0] = [2.6,0.3,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
 
 class riskeycap_1_25U(riskeycap_alphas):
     """
@@ -485,7 +485,7 @@ class riskeycap_1_25U(riskeycap_alphas):
         self.key_length = KEY_UNIT*1.25-BETWEENSPACE
         self.key_rotation = [0,110.1,-90]
         self.trans[0] = [3,0.2,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('1.25U_'):
             self.name = f"1.25U_{self.name}"
 
@@ -501,7 +501,7 @@ class riskeycap_1_5U(riskeycap_double_legends):
         self.key_length = KEY_UNIT*1.5-BETWEENSPACE
         self.key_rotation = [0,109.335,-90]
         self.trans[0] = [3,0.2,0]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('1.5U_'):
             self.name = f"1.5U_{self.name}"
 
@@ -540,7 +540,7 @@ class riskeycap_1_75U(riskeycap_alphas):
         kwargs_copy = deepcopy(kwargs) # Because self.trans[0] updates in place
         self.key_length = KEY_UNIT*1.75-BETWEENSPACE
         self.key_rotation = [0,109.335,-90]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('1.75U_'):
             self.name = f"1.75U_{self.name}"
 
@@ -556,7 +556,7 @@ class riskeycap_2U(riskeycap_alphas):
         if "dish_invert" in kwargs and kwargs["dish_invert"]:
             self.key_rotation = [0,113.65,-90] # Spacebars are different
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2U_'):
             self.name = f"2U_{self.name}"
 
@@ -583,7 +583,7 @@ class riskeycap_2UV(riskeycap_alphas):
             [0,0,0],
             [0,0,0],
         ]
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2UV_'):
             self.name = f"2UV_{self.name}"
 
@@ -601,7 +601,7 @@ class riskeycap_2_25U(riskeycap_alphas):
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2.25U_'):
             self.name = f"2.25U_{self.name}"
 
@@ -619,7 +619,7 @@ class riskeycap_2_5U(riskeycap_alphas):
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2.5U_'):
             self.name = f"2.5U_{self.name}"
 
@@ -637,7 +637,7 @@ class riskeycap_2_75U(riskeycap_alphas):
         self.stem_locations = [[0,0,0], [12,0,0], [-12,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('2.75U_'):
             self.name = f"2.75U_{self.name}"
 
@@ -655,7 +655,7 @@ class riskeycap_6_25U(riskeycap_alphas):
         self.stem_locations = [[0,0,0], [50,0,0], [-50,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('6.25U_'):
             self.name = f"6.25U_{self.name}"
 
@@ -673,7 +673,7 @@ class riskeycap_7U(riskeycap_alphas):
         self.stem_locations = [[0,0,0], [57,0,0], [-57,0,0]]
         self.trans[0] = [3.1,0.2,0]
         self.font_sizes[0] = 4
-        self.postinit(**kwargs_copy)
+        self.postInit(**kwargs_copy)
         if not self.name.startswith('7U_'):
             self.name = f"7U_{self.name}"
 

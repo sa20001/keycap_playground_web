@@ -30,6 +30,11 @@ from subprocess import getstatusoutput
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 from tqdm import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
+from loguru import logger
+import os
+
+NUM_PROC = os.cpu_count()
 
 # 3rd party stuff
 from colorama import Fore, Back, Style
@@ -38,6 +43,8 @@ color_init()
 
 # Our own stuff
 from src.libraries import Keycap
+from src.libraries import logger_init # Import and run logger initialization
+from src.libraries import tqdm_logging # Import tqdm logging context manager
 
 KEY_UNIT = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE = 0.8 # Space between keycaps
@@ -886,26 +893,26 @@ def print_keycaps():
     """
     Prints the names of all keycaps in KEYCAPS.
     """
-    print(Style.BRIGHT +
+    logger.info(Style.BRIGHT +
           f"Here's all the keycaps we can render:\n" + Style.RESET_ALL)
     keycap_names = ", ".join(a.name for a in KEYCAPS_COMMAND_LIST)
-    print(f"{keycap_names}")
+    logger.info(f"{keycap_names}")
 
 def keycap_generator(keycap, args):
     keycap.output_path = f"{args.out}"
     if not args.force:
         if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
-            print(Style.BRIGHT +
+            logger.info(Style.BRIGHT +
                 f"{args.out}/{keycap.name}.{keycap.file_type} exists; skipping..."
                 + Style.RESET_ALL)
             return
-    print(Style.BRIGHT +
+    logger.info(Style.BRIGHT +
         f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
         + Style.RESET_ALL)
-    print(keycap)
+    logger.debug(keycap)
     returnCode, output = getstatusoutput(str(keycap))
     if returnCode == 0: # Success!
-        print(f"{args.out}/{keycap.name}.{keycap.file_type} rendered successfully")
+        logger.success(f"{args.out}/{keycap.name}.{keycap.file_type} rendered successfully")
 
 def legend_generator(legend, args):
     if legend.legends == [""]:
@@ -918,17 +925,17 @@ def legend_generator(legend, args):
     # legend.file_type = "stl" # TODO no .stl
     if not args.force:
         if os.path.exists(f"{args.out}/{legend.name}.{legend.file_type}"):
-            print(Style.BRIGHT +
+            logger.info(Style.BRIGHT +
                 f"{args.out}/{legend.name}.{legend.file_type} exists; skipping..."
                 + Style.RESET_ALL)
             return
-    print(Style.BRIGHT +
+    logger.info(Style.BRIGHT +
         f"Rendering {args.out}/{legend.name}.{legend.file_type}..."
         + Style.RESET_ALL)
-    print(legend)
+    logger.debug(legend)
     returnCode, output = getstatusoutput(str(legend))
     if returnCode == 0: # Success!
-        print(f"{args.out}/{legend.name}.{legend.file_type} rendered successfully")
+        logger.success(f"{args.out}/{legend.name}.{legend.file_type} rendered successfully")
 
 
 if __name__ == "__main__":
@@ -950,7 +957,7 @@ if __name__ == "__main__":
         nargs='*', metavar="name",
         help='Optional name of specific keycap you wish to render')
     args = parser.parse_args()
-    #print(args)
+    logger.trace(args)
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
@@ -958,11 +965,11 @@ if __name__ == "__main__":
         print_keycaps()
         sys.exit(1)
     if not os.path.exists(args.out):
-        print(Style.BRIGHT +
+        logger.info(Style.BRIGHT +
               f"Output path, '{args.out}' does not exist; making it..."
               + Style.RESET_ALL)
         os.mkdir(args.out)
-    print(Style.BRIGHT + f"Outputting to: {args.out}" + Style.RESET_ALL)
+    logger.info(Style.BRIGHT + f"Outputting to: {args.out}" + Style.RESET_ALL)
     if args.names: # Just render the specified keycaps
         matched = False
         for name in args.names:
@@ -973,19 +980,19 @@ if __name__ == "__main__":
                     exists = False
                     if not args.force:
                         if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
-                            print(Style.BRIGHT +
+                            logger.info(Style.BRIGHT +
                                 f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
                                 f"skipping..."
                                 + Style.RESET_ALL)
                             exists = True
                     if not exists:
-                        print(Style.BRIGHT +
+                        logger.info(Style.BRIGHT +
                             f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
                             + Style.RESET_ALL)
-                        print(keycap)
+                        logger.debug(keycap)
                         returnCode, output = getstatusoutput(str(keycap))
                         if returnCode == 0: # Success!
-                            print(
+                            logger.success(
                                 f"{args.out}/{keycap.name}.{keycap.file_type} "
                                 f"rendered successfully")
                     if args.legends:
@@ -994,36 +1001,46 @@ if __name__ == "__main__":
                         # for "parts" for unknown reasons...
                         # keycap.file_type = "stl" # TODO no .stl
                         if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
-                            print(Style.BRIGHT +
+                            logger.info(Style.BRIGHT +
                                 f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
                                 f"skipping..."
                                 + Style.RESET_ALL)
                             continue
-                        print(Style.BRIGHT +
+                        logger.info(Style.BRIGHT +
                             f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
                             + Style.RESET_ALL)
-                        print(keycap)
+                        logger.debug(keycap)
                         returnCode, output = getstatusoutput(str(keycap))
                         if returnCode == 0: # Success!
-                            print(
+                            logger.success(
                                 f"{args.out}/{keycap.name}.{keycap.file_type} "
                                 f"rendered successfully")
         if not matched:
-            print(f"Cound not find a keycap named {name}")
+            logger.warning(f"Could not find a keycap named {name}")
     else:
-        # First render the keycaps
-        with ThreadPoolExecutor() as executor:
-            list(tqdm(
-                executor.map(keycap_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
-                total=len(KEYCAPS_COMMAND_LIST)
-            ))
-      
-        # Next render the legends (for multi-material, non-transparent legends)
-        if args.legends:
-            with ThreadPoolExecutor() as executor:
+        # Render keycaps with carved out legends (for single-material printing)
+        with tqdm_logging():
+            with ThreadPoolExecutor(max_workers=NUM_PROC/2) as executor:
                 list(tqdm(
-                    executor.map(legend_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
-                    total=len(KEYCAPS_COMMAND_LIST)
-                ))
+                    executor.map(keycap_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
+                    total=len(KEYCAPS_COMMAND_LIST),
+            ))
+        
+      
+        # Render keycaps with legends (for multi-material printing)
+        if args.legends:
+            # TODO: it should run keycaps or legends -> not both
+            with tqdm_logging():
+                with ThreadPoolExecutor(max_workers=NUM_PROC/2) as executor:
+                    list(tqdm(
+                        executor.map(legend_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
+                        total=len(KEYCAPS_COMMAND_LIST),
+                    ))
+        
+        logger.success(Style.BRIGHT + "Finished rendering keycaps!" + Style.RESET_ALL)
+
 
 # TODO: find the best number of cores -> 4 still some room, 12 100% usage (but is it faster than 4? maybe not due to overhead)
+# 1 ->
+# 6 -> 
+# 12 -> 

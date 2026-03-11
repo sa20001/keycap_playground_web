@@ -1,4 +1,6 @@
-flask
+# Logger
+loguru
+
 # Progress bar
 tqdm
 

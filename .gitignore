@@ -8,6 +8,8 @@ __pycache__/
 
 # Generated keycap files
 generated/
+*.csg
+tmp.*/
 
 # Distribution / packaging
 .Python

@@ -27,10 +27,15 @@ import json
 import argparse
 from copy import deepcopy
 from subprocess import getstatusoutput
+from concurrent.futures import ThreadPoolExecutor
+from itertools import repeat
+from tqdm import tqdm
+
 # 3rd party stuff
 from colorama import Fore, Back, Style
 from colorama import init as color_init
 color_init()
+
 # Our own stuff
 from src.libraries import Keycap
 
@@ -604,7 +609,7 @@ class gem_7U(gem_alphas):
         if not self.name.startswith('7U_'):
             self.name = f"7U_{self.name}"
 
-KEYCAPS = [
+KEYCAPS_COMMAND_LIST = [ # list of all commands to generate the keycaps
     # 1U keys
     gem_base(name="1U_blank"),
     gem_tilde(name="tilde", legends=["`", "", "~"]),
@@ -883,8 +888,48 @@ def print_keycaps():
     """
     print(Style.BRIGHT +
           f"Here's all the keycaps we can render:\n" + Style.RESET_ALL)
-    keycap_names = ", ".join(a.name for a in KEYCAPS)
+    keycap_names = ", ".join(a.name for a in KEYCAPS_COMMAND_LIST)
     print(f"{keycap_names}")
+
+def keycap_generator(keycap, args):
+    keycap.output_path = f"{args.out}"
+    if not args.force:
+        if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
+            print(Style.BRIGHT +
+                f"{args.out}/{keycap.name}.{keycap.file_type} exists; skipping..."
+                + Style.RESET_ALL)
+            return
+    print(Style.BRIGHT +
+        f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
+        + Style.RESET_ALL)
+    print(keycap)
+    returnCode, output = getstatusoutput(str(keycap))
+    if returnCode == 0: # Success!
+        print(f"{args.out}/{keycap.name}.{keycap.file_type} rendered successfully")
+
+def legend_generator(legend, args):
+    if legend.legends == [""]:
+        return # No actual legends
+    legend.name = f"{legend.name}_legends"
+    legend.output_path = f"{args.out}"
+    legend.render = ["legends"]
+    # Change it to .stl since PrusaSlicer doesn't like .3mf
+    # for "parts" for unknown reasons...
+    # legend.file_type = "stl" # TODO no .stl
+    if not args.force:
+        if os.path.exists(f"{args.out}/{legend.name}.{legend.file_type}"):
+            print(Style.BRIGHT +
+                f"{args.out}/{legend.name}.{legend.file_type} exists; skipping..."
+                + Style.RESET_ALL)
+            return
+    print(Style.BRIGHT +
+        f"Rendering {args.out}/{legend.name}.{legend.file_type}..."
+        + Style.RESET_ALL)
+    print(legend)
+    returnCode, output = getstatusoutput(str(legend))
+    if returnCode == 0: # Success!
+        print(f"{args.out}/{legend.name}.{legend.file_type} rendered successfully")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -897,10 +942,10 @@ if __name__ == "__main__":
         help='Forcibly re-render keycaps even if they already exist.')
     parser.add_argument('--legends',
         required=False, action='store_true',
-        help=f'If True, generate a separate set of {FILE_TYPE} files for legends.')
+        help=f'Generate a separate set of {FILE_TYPE} files for legends. Useful for multi-material printing.')
     parser.add_argument('--keycaps',
         required=False, action='store_true',
-        help='If True, prints out the names of all keycaps we can render.')
+        help='Prints out the names of all keycaps we can render.')
     parser.add_argument('names',
         nargs='*', metavar="name",
         help='Optional name of specific keycap you wish to render')
@@ -908,8 +953,6 @@ if __name__ == "__main__":
     #print(args)
     if len(sys.argv) == 1:
         parser.print_help()
-        print("")
-        print_keycaps()
         sys.exit(1)
     if args.keycaps:
         print_keycaps()
@@ -923,7 +966,7 @@ if __name__ == "__main__":
     if args.names: # Just render the specified keycaps
         matched = False
         for name in args.names:
-            for keycap in KEYCAPS:
+            for keycap in KEYCAPS_COMMAND_LIST:
                 if keycap.name.lower() == name.lower():
                     keycap.output_path = f"{args.out}"
                     matched = True
@@ -940,8 +983,8 @@ if __name__ == "__main__":
                             f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
                             + Style.RESET_ALL)
                         print(keycap)
-                        retcode, output = getstatusoutput(str(keycap))
-                        if retcode == 0: # Success!
+                        returnCode, output = getstatusoutput(str(keycap))
+                        if returnCode == 0: # Success!
                             print(
                                 f"{args.out}/{keycap.name}.{keycap.file_type} "
                                 f"rendered successfully")
@@ -960,8 +1003,8 @@ if __name__ == "__main__":
                             f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
                             + Style.RESET_ALL)
                         print(keycap)
-                        retcode, output = getstatusoutput(str(keycap))
-                        if retcode == 0: # Success!
+                        returnCode, output = getstatusoutput(str(keycap))
+                        if returnCode == 0: # Success!
                             print(
                                 f"{args.out}/{keycap.name}.{keycap.file_type} "
                                 f"rendered successfully")
@@ -969,42 +1012,18 @@ if __name__ == "__main__":
             print(f"Cound not find a keycap named {name}")
     else:
         # First render the keycaps
-        for keycap in KEYCAPS:
-            keycap.output_path = f"{args.out}"
-            if not args.force:
-                if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
-                    print(Style.BRIGHT +
-                        f"{args.out}/{keycap.name}.{keycap.file_type} exists; skipping..."
-                        + Style.RESET_ALL)
-                    continue
-            print(Style.BRIGHT +
-                f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
-                + Style.RESET_ALL)
-            print(keycap)
-            retcode, output = getstatusoutput(str(keycap))
-            if retcode == 0: # Success!
-                print(f"{args.out}/{keycap.name}.{keycap.file_type} rendered successfully")
+        with ThreadPoolExecutor() as executor:
+            list(tqdm(
+                executor.map(keycap_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
+                total=len(KEYCAPS_COMMAND_LIST)
+            ))
+      
         # Next render the legends (for multi-material, non-transparent legends)
         if args.legends:
-            for legend in KEYCAPS:
-                if legend.legends == [""]:
-                    continue # No actual legends
-                legend.name = f"{legend.name}_legends"
-                legend.output_path = f"{args.out}"
-                legend.render = ["legends"]
-                # Change it to .stl since PrusaSlicer doesn't like .3mf
-                # for "parts" for unknown reasons...
-                # legend.file_type = "stl" # TODO no .stl
-                if not args.force:
-                    if os.path.exists(f"{args.out}/{legend.name}.{legend.file_type}"):
-                        print(Style.BRIGHT +
-                            f"{args.out}/{legend.name}.{legend.file_type} exists; skipping..."
-                            + Style.RESET_ALL)
-                        continue
-                print(Style.BRIGHT +
-                    f"Rendering {args.out}/{legend.name}.{legend.file_type}..."
-                    + Style.RESET_ALL)
-                print(legend)
-                retcode, output = getstatusoutput(str(legend))
-                if retcode == 0: # Success!
-                    print(f"{args.out}/{legend.name}.{legend.file_type} rendered successfully")
+            with ThreadPoolExecutor() as executor:
+                list(tqdm(
+                    executor.map(legend_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
+                    total=len(KEYCAPS_COMMAND_LIST)
+                ))
+
+# TODO: find the best number of cores -> 4 still some room, 12 100% usage (but is it faster than 4? maybe not due to overhead)

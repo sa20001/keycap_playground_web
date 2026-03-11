@@ -1,2 +1,5 @@
 flask
+# Progress bar
+tqdm
+
 colorama

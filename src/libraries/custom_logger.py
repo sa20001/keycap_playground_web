@@ -56,9 +56,6 @@ def logger_init():
     else:
         logger.warning(f"Logs directory '{logsPath}' not mapped. File logging is disabled.")
 
-logger_init() # Initialize the logger when the module is imported
-
-
 @contextmanager
 def tqdm_logging():
 

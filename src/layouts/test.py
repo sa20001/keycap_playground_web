@@ -43,8 +43,10 @@ color_init()
 
 # Our own stuff
 from src.libraries import Keycap
-from src.libraries import logger_init # Import and run logger initialization
 from src.libraries import tqdm_logging # Import tqdm logging context manager
+from src import init_proj
+
+init_proj() # Initialize the project
 
 KEY_UNIT = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE = 0.8 # Space between keycaps
@@ -949,7 +951,7 @@ if __name__ == "__main__":
         help='Forcibly re-render keycaps even if they already exist.')
     parser.add_argument('--legends',
         required=False, action='store_true',
-        help=f'Generate a separate set of {FILE_TYPE} files for legends. Useful for multi-material printing.')
+        help=f'Generate a separate set of {FILE_TYPE} files for the legends.')
     parser.add_argument('--keycaps',
         required=False, action='store_true',
         help='Prints out the names of all keycaps we can render.')
@@ -1018,7 +1020,7 @@ if __name__ == "__main__":
         if not matched:
             logger.warning(f"Could not find a keycap named {name}")
     else:
-        # Render keycaps with carved out legends (for single-material printing)
+        # Render keycaps with carved out legends
         with tqdm_logging():
             with ThreadPoolExecutor(max_workers=NUM_PROC/2) as executor:
                 list(tqdm(
@@ -1027,7 +1029,7 @@ if __name__ == "__main__":
             ))
         
       
-        # Render keycaps with legends (for multi-material printing)
+        # Render legends
         if args.legends:
             # TODO: it should run keycaps or legends -> not both
             with tqdm_logging():

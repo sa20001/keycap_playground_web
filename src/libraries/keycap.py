@@ -1,11 +1,8 @@
-#!/usr/bin/env python3
-
 """
 Contains the Keycap class which makes it easy to script the generation of
 keycaps using the Keycap Playground.
 """
 
-import shutil
 import json
 from pathlib import Path
 from typing import Any, List, Optional
@@ -14,19 +11,7 @@ USE_COLORSCAD: bool = True # TODO temp option, find more elegant solution for th
 KEY_UNIT: float = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE: float = 0.8 # Space between keycaps
 
-class OpenSCADException(Exception):
-    """
-    Raised when OpenSCAD can't be found or it's not working correctly.
-    """
-    pass
-
-class ColorscadException(Exception):
-    """
-    Raised when colorscad and 3mfmerge can't be found or are not working correctly.
-    """
-    pass
-
-class Keycap(object):
+class Keycap:
     """
     A convenient abstraction for specifying a keycap's details.  The most useful
     way to use this class is to subclass it to make your own "base" class
@@ -83,7 +68,7 @@ class Keycap(object):
         key_profile: str = "riskeycap",
         key_length: float = KEY_UNIT - BETWEENSPACE,
         key_width: float = KEY_UNIT - BETWEENSPACE,
-        key_rotation: List[float] = [0, 0, 0],
+        key_rotation: List[int] = [0, 0, 0],
         key_height: float = 8,
         key_top_difference: float = 5,
         key_top_x: float = 0,
@@ -254,12 +239,6 @@ class Keycap(object):
         """
         Returns the OpenSCAD command line to use to generate this keycap.
         """
-
-        if shutil.which("openscad") is None:
-            raise OpenSCADException("OpenSCAD executable not found in PATH.")
-        
-        if (shutil.which("colorscad") or shutil.which("3mfmerge")) is None:
-            raise ColorscadException("ColorSCAD executable not found in PATH.")
 
         first_part = (
             f"openscad {self.openscad_args} -o "

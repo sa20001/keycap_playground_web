@@ -53,6 +53,8 @@ ENV LD_LIBRARY_PATH="/opt/openscad/lib:${LD_LIBRARY_PATH}"
 # python dependencies
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements_dev.txt 
+# TODO remove requirements_dev.txt from release image
 
 # Copy colorscad binaries from builder
 COPY --from=builder /tmp/colorscad/colorscad.sh /usr/local/bin/colorscad

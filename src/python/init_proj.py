@@ -1,5 +1,5 @@
 import shutil
-from src.libraries import logger_init
+from .libraries import logger_init
 from loguru import logger
 
 class OpenSCADException(Exception):

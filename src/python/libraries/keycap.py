@@ -5,7 +5,14 @@ keycaps using the Keycap Playground.
 
 import json
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Optional
+
+PLAYGROUND_PATH = Path("src/scad_scripts/keycap_playground.scad")
+print(f"Using Keycap Playground OpenSCAD file at: {PLAYGROUND_PATH}")
+
+if not PLAYGROUND_PATH.exists(follow_symlinks=False):
+    raise FileNotFoundError(f"Keycap Playground OpenSCAD file not found at {PLAYGROUND_PATH}. Please make sure it exists and is in the correct location.")
+
 
 USE_COLORSCAD: bool = True # TODO temp option, find more elegant solution for this in the future
 KEY_UNIT: float = 19.05 # Square that makes up the entire space of a key
@@ -64,11 +71,11 @@ class Keycap:
     def __init__(
         self,
         name: Optional[str] = None,
-        render: List[str] = ["keycap", "stem"],
+        render: list[str] = ["keycap", "stem"],
         key_profile: str = "riskeycap",
         key_length: float = KEY_UNIT - BETWEENSPACE,
         key_width: float = KEY_UNIT - BETWEENSPACE,
-        key_rotation: List[int] = [0, 0, 0],
+        key_rotation: list[float] = [0.0, 0.0, 0.0],
         key_height: float = 8,
         key_top_difference: float = 5,
         key_top_x: float = 0,
@@ -101,8 +108,8 @@ class Keycap:
         stem_inside_tolerance: float = 0.2,
         stem_outside_tolerance_x: float = 0.05,
         stem_outside_tolerance_y: float = 0.05,
-        stem_side_supports: List[int] = [0, 0, 0, 0],
-        stem_locations: List[List[float]] = [[0, 0, 0]],
+        stem_side_supports: list[int] = [0, 0, 0, 0],
+        stem_locations: list[list[float]] = [[0.0, 0.0, 0.0]],
         stem_sides_wall_thickness: float = 0.65,
         stem_snap_fit: bool = False,
         stem_walls_inset: float = 1.05,
@@ -112,17 +119,17 @@ class Keycap:
         homing_dot_x: float = 0,
         homing_dot_y: float = -2,
         homing_dot_z: float = -0.35,  # How far it sticks out
-        legends: List[str] = [""],
-        fonts: List[str] = [],
-        font_sizes: List[float] = [],
-        trans: List[List[float]] = [[0, 0, 0]],
-        trans2: List[List[float]] = [[0, 0, 0]],
-        rotation: List[List[float]] = [[0, 0, 0]],
-        rotation2: List[List[float]] = [[0, 0, 0]],
-        scale: List[List[float]] = [[1, 1, 1]],
-        underset: List[List[float]] = [[0, 0, 0]],
+        legends: list[str] = [""],
+        fonts: list[str] = [],
+        font_sizes: list[float] = [],
+        trans: list[list[float]] = [[0.0, 0.0, 0.0]],
+        trans2: list[list[float]] = [[0.0, 0.0, 0.0]],
+        rotation: list[list[float]] = [[0.0, 0.0, 0.0]],
+        rotation2: list[list[float]] = [[0.0, 0.0, 0.0]],
+        scale: list[list[float]] = [[1.0, 1.0, 1.0]],
+        underset: list[list[float]] = [[0.0, 0.0, 0.0]],
         legend_carved: bool = False,
-        keycap_playground_path: Path = Path("./keycap_playground.scad"),
+        keycap_playground_path: Path = Path(PLAYGROUND_PATH),
         file_type: str = "3mf",
         output_path: Path = Path("."),
     ) -> None:
@@ -199,7 +206,7 @@ class Keycap:
     # TODO: look into it
     # NOTE: This doesn't seem to work right for unknown reasons so you'll want
     #       to generate the quote keycap by hand on the command line.
-    def quote(self, legends: List[str]) -> str:
+    def quote(self, legends: list[str]) -> str:
         """
         Checks for the edge case of a single quote (') legend and converts it
         into `"'"'"'"` so that bash will pass it correctly to OpenSCAD via

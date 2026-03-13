@@ -28,7 +28,7 @@ def logger_init():
     if verbose:
         # 1 Console: TRACE and up (e.g., for full debug mode)
         consoleLoggerList.append(add_logger(
-            sys.stdout,
+            sink=sys.stdout,
             level="TRACE",
             colorize=True,
             format="<cyan>{time:HH:mm:ss}</cyan> | <level>{level: <8}</level> | "

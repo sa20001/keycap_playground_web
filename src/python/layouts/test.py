@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # type: ignore
 
 """
@@ -30,7 +29,6 @@ from subprocess import getstatusoutput
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 from tqdm import tqdm
-from tqdm.contrib.logging import logging_redirect_tqdm
 from loguru import logger
 import os
 
@@ -42,9 +40,9 @@ from colorama import init as color_init
 color_init()
 
 # Our own stuff
-from src.libraries import Keycap
-from src.libraries import tqdm_logging # Import tqdm logging context manager
-from src import init_proj
+from ..libraries import Keycap
+from ..libraries import tqdm_logging # Import tqdm logging context manager
+from .. import init_proj
 
 init_proj() # Initialize the project
 
@@ -972,77 +970,79 @@ if __name__ == "__main__":
               + Style.RESET_ALL)
         os.mkdir(args.out)
     logger.info(Style.BRIGHT + f"Outputting to: {args.out}" + Style.RESET_ALL)
-    if args.names: # Just render the specified keycaps
-        matched = False
-        for name in args.names:
-            for keycap in KEYCAPS_COMMAND_LIST:
-                if keycap.name.lower() == name.lower():
-                    keycap.output_path = f"{args.out}"
-                    matched = True
-                    exists = False
-                    if not args.force:
-                        if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
-                            logger.info(Style.BRIGHT +
-                                f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
-                                f"skipping..."
-                                + Style.RESET_ALL)
-                            exists = True
-                    if not exists:
-                        logger.info(Style.BRIGHT +
-                            f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
-                            + Style.RESET_ALL)
-                        logger.debug(keycap)
-                        returnCode, output = getstatusoutput(str(keycap))
-                        if returnCode == 0: # Success!
-                            logger.success(
-                                f"{args.out}/{keycap.name}.{keycap.file_type} "
-                                f"rendered successfully")
-                    if args.legends:
-                        keycap.name = f"{keycap.name}_legends"
-                        # Change it to .stl since PrusaSlicer doesn't like .3mf
-                        # for "parts" for unknown reasons...
-                        # keycap.file_type = "stl" # TODO no .stl
-                        if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
-                            logger.info(Style.BRIGHT +
-                                f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
-                                f"skipping..."
-                                + Style.RESET_ALL)
-                            continue
-                        logger.info(Style.BRIGHT +
-                            f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
-                            + Style.RESET_ALL)
-                        logger.debug(keycap)
-                        returnCode, output = getstatusoutput(str(keycap))
-                        if returnCode == 0: # Success!
-                            logger.success(
-                                f"{args.out}/{keycap.name}.{keycap.file_type} "
-                                f"rendered successfully")
-        if not matched:
-            logger.warning(f"Could not find a keycap named {name}")
-    else:
+
+    # if args.names: # Just render the specified keycaps
+    #     matched = False
+    #     for name in args.names:
+    #         for keycap in KEYCAPS_COMMAND_LIST:
+    #             if keycap.name.lower() == name.lower():
+    #                 keycap.output_path = f"{args.out}"
+    #                 matched = True
+    #                 exists = False
+    #                 if not args.force:
+    #                     if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
+    #                         logger.info(Style.BRIGHT +
+    #                             f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
+    #                             f"skipping..."
+    #                             + Style.RESET_ALL)
+    #                         exists = True
+    #                 if not exists:
+    #                     logger.info(Style.BRIGHT +
+    #                         f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
+    #                         + Style.RESET_ALL)
+    #                     logger.debug(keycap)
+    #                     returnCode, output = getstatusoutput(str(keycap))
+    #                     if returnCode == 0: # Success!
+    #                         logger.success(
+    #                             f"{args.out}/{keycap.name}.{keycap.file_type} "
+    #                             f"rendered successfully")
+    #                 if args.legends:
+    #                     keycap.name = f"{keycap.name}_legends"
+    #                     # Change it to .stl since PrusaSlicer doesn't like .3mf
+    #                     # for "parts" for unknown reasons...
+    #                     # keycap.file_type = "stl" # TODO no .stl
+    #                     if os.path.exists(f"{args.out}/{keycap.name}.{keycap.file_type}"):
+    #                         logger.info(Style.BRIGHT +
+    #                             f"{args.out}/{keycap.name}.{keycap.file_type} exists; "
+    #                             f"skipping..."
+    #                             + Style.RESET_ALL)
+    #                         continue
+    #                     logger.info(Style.BRIGHT +
+    #                         f"Rendering {args.out}/{keycap.name}.{keycap.file_type}..."
+    #                         + Style.RESET_ALL)
+    #                     logger.debug(keycap)
+    #                     returnCode, output = getstatusoutput(str(keycap))
+    #                     if returnCode == 0: # Success!
+    #                         logger.success(
+    #                             f"{args.out}/{keycap.name}.{keycap.file_type} "
+    #                             f"rendered successfully")
+    #     if not matched:
+    #         logger.warning(f"Could not find a keycap named {name}")
+    # else:
         # Render keycaps with carved out legends
+    with tqdm_logging():
+        with ThreadPoolExecutor(max_workers=NUM_PROC/2) as executor:
+            list(tqdm(
+                executor.map(keycap_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
+                total=len(KEYCAPS_COMMAND_LIST),
+        ))
+    
+    
+    # Render legends
+    if args.legends:
+        # TODO: it generate only legends -> not both
         with tqdm_logging():
             with ThreadPoolExecutor(max_workers=NUM_PROC/2) as executor:
                 list(tqdm(
-                    executor.map(keycap_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
+                    executor.map(legend_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
                     total=len(KEYCAPS_COMMAND_LIST),
-            ))
-        
-      
-        # Render legends
-        if args.legends:
-            # TODO: it should run keycaps or legends -> not both
-            with tqdm_logging():
-                with ThreadPoolExecutor(max_workers=NUM_PROC/2) as executor:
-                    list(tqdm(
-                        executor.map(legend_generator, KEYCAPS_COMMAND_LIST, repeat(args)),
-                        total=len(KEYCAPS_COMMAND_LIST),
-                    ))
+                ))
         
         logger.success(Style.BRIGHT + "Finished rendering keycaps!" + Style.RESET_ALL)
 
 
-# TODO: find the best number of cores -> 4 still some room, 12 100% usage (but is it faster than 4? maybe not due to overhead)
+# TODO: find the best number of cores
 # 1 ->
+# 4 ->
 # 6 -> 
 # 12 -> 

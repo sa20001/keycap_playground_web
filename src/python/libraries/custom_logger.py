@@ -4,22 +4,21 @@ from loguru import logger
 from pathlib import Path
 from contextlib import contextmanager
 from tqdm import tqdm
-from typing import List, Any, Tuple
+from typing import Any
+import time
 
 # Remove default logger configuration
 logger.remove()
 logsPath = "./logs"
 verbose = False
 
-LOGGER_LIST:List[Tuple[Any, Any]] = []
-consoleLoggerList:List[int]= []
+LOGGER_LIST:dict[int, tuple[Any, Any]] = {}
+CONSOLE_LOGGER_LIST:list[int]= []
 
 def add_logger(*args:Any, **kwargs:Any) -> int:
-    LOGGER_LIST.append((args, kwargs))
-    return logger.add(*args, **kwargs)
-
-def restore_logger(*args:Any, **kwargs:Any):
-    logger.add(*args, **kwargs)
+    logID = logger.add(*args, **kwargs)
+    LOGGER_LIST.update({logID:(args, kwargs)})
+    return logID
 
 def logger_init():
     # ─────────────────────────────
@@ -27,7 +26,7 @@ def logger_init():
     # ─────────────────────────────
     if verbose:
         # 1 Console: TRACE and up (e.g., for full debug mode)
-        consoleLoggerList.append(add_logger(
+        CONSOLE_LOGGER_LIST.append(add_logger(
             sys.stdout,
             level="TRACE",
             colorize=True,
@@ -36,7 +35,7 @@ def logger_init():
         ))
     else:
         # 2 Console: INFO and up (for higher-level messages, could have a cleaner format)
-        consoleLoggerList.append(add_logger(sink=sys.stdout, level="INFO", colorize=True,
+        CONSOLE_LOGGER_LIST.append(add_logger(sink=sys.stdout, level="INFO", colorize=True,
                 format="<green>{time:HH:mm:ss}</green> | <level>{message}</level>"))
 
     logger.success("Console logger successfully initialized.")
@@ -56,28 +55,28 @@ def logger_init():
     else:
         logger.warning(f"Logs directory '{logsPath}' not mapped. File logging is disabled.")
 
+
+def _update_sink(sink:Any):
+    '''Helper function to update the sink of all console loggers'''
+    consList = list(CONSOLE_LOGGER_LIST) # shallow copy of console logger IDs to iterate over
+    CONSOLE_LOGGER_LIST.clear()
+    for id in consList:
+        logger.remove(id) # Remove the console logger to prevent duplicate outputs during tqdm context
+        tqdmLogger = LOGGER_LIST[id] # Get the original logger configuration for this console logger
+        tqdmLogger[1]["sink"] = sink # Change the sink to use tqdm.write
+        CONSOLE_LOGGER_LIST.append(add_logger(*tqdmLogger[0], **tqdmLogger[1])) # Re-add the logger with the updated sink for tqdm context
+
+
 @contextmanager
 def tqdm_logging():
 
-    global logger
-
-    for id in consoleLoggerList:
-        logger.remove(id) # Remove the console logger to prevent duplicate outputs during tqdm context
-        tqdmLogger = LOGGER_LIST[id-1] # Get the original logger configuration for this console logger
-        tqdmLogger[1]["sink"] = lambda msg: tqdm.write(msg, end="") # type: ignore # Change the sink to use tqdm.write
-        restore_logger(*tqdmLogger[0], **tqdmLogger[1]) # Re-add the logger with the updated sink for tqdm context
-
+    _update_sink(lambda msg: tqdm.write(msg, end="")) # type: ignore
     try:
         yield
     finally:
-        logger.remove() # Remove all loggers
-
-        # Restore loggers
-        for x in LOGGER_LIST:
-            restore_logger(*x[0], **x[1])
-        
+        time.sleep(1) # Small delay to ensure all tqdm outputs are flushed before restoring loggers
+        _update_sink(sys.stdout)  
         logger.trace("Restored logger after tqdm logging context.")
-
 
 # # Example logs
 # logger.trace("This is a trace message")

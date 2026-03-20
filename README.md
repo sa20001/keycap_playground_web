@@ -5,6 +5,17 @@ This has been forked from the original Linux implementation and rewritten to in 
 
 ## How to use
 
+### Init the repo
+Clone the repo
+```
+git clone https://github.com/sa20001/keycap_playground_web.git
+cd keycap_playground_web
+```
+initialize and update all the submodules
+```
+git submodule update --init --recursive
+```
+
 ### Run
 Enter the container
 ```

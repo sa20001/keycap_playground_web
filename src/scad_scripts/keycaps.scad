@@ -3,15 +3,11 @@
 use <utils.scad>
 use <legends.scad>
 
-// CONSTANTS
-KEY_UNIT = 19.05; // Square that makes up the entire space of a key
-
 // Draws the keycap without legends (because we need to do an intersection() of the keycap+legends to make sure legends conform to the correct shape)
 module _poly_keycap(
   height = 9.0,
   length = 18,
   width = 18,
-  wall_thickness = 1.25,
   top_difference = 6,
   top_x = 0,
   top_y = 0,
@@ -21,13 +17,9 @@ module _poly_keycap(
   dish_x = 0,
   dish_y = 0,
   dish_z = -0.75,
-  dish_thickness = 2,
   dish_fn = 32,
   dish_corner_fn = 64,
   dish_tilt_curve = false,
-  stem_clips = false,
-  stem_walls_inset = 0,
-  stem_walls_tolerance = 0.25,
   polygon_layers = 5,
   polygon_layer_rotation = 10,
   polygon_curve = 0,
@@ -38,7 +30,6 @@ module _poly_keycap(
   dish_division_x = 4,
   dish_division_y = 1, // Fancy schmancy control over spherical inverted dishes
   dish_invert = false,
-  debug = false
 ) {
   layer_x_adjust = top_x / polygon_layers;
   layer_y_adjust = top_y / polygon_layers;
@@ -586,13 +577,12 @@ module poly_keycap(
   rotate(key_rotation) {
     difference() {
       _poly_keycap(
-        height=height, length=length, width=width, wall_thickness=wall_thickness,
+        height=height, length=length, width=width,
         top_difference=top_difference, dish_tilt=dish_tilt,
-        dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-        stem_walls_inset=stem_walls_inset,
+        dish_tilt_curve=dish_tilt_curve,
         top_x=top_x, top_y=top_y, dish_depth=dish_depth,
         dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-        dish_thickness=dish_thickness, dish_fn=dish_fn,
+        dish_fn=dish_fn,
         dish_corner_fn=dish_corner_fn,
         polygon_layers=polygon_layers, polygon_layer_rotation=polygon_layer_rotation,
         polygon_edges=polygon_edges, polygon_curve=polygon_curve,
@@ -630,15 +620,13 @@ module poly_keycap(
                               translate([0, 0, -height + dish_depth - dish_z])
                                 _poly_keycap(
                                   height=height, length=length, width=width,
-                                  wall_thickness=wall_thickness,
                                   top_difference=top_difference, dish_tilt=dish_tilt,
-                                  dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-                                  stem_walls_inset=stem_walls_inset,
+                                  dish_tilt_curve=dish_tilt_curve,
                                   top_x=top_x, top_y=top_y, dish_depth=dish_depth,
                                   dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
                                   dish_division_x=dish_division_x,
                                   dish_division_y=dish_division_y,
-                                  dish_thickness=dish_thickness + 0.1, dish_fn=dish_fn,
+                                  dish_fn=dish_fn,
                                   dish_corner_fn=dish_corner_fn,
                                   polygon_layers=polygon_layers,
                                   polygon_layer_rotation=polygon_layer_rotation,
@@ -664,15 +652,13 @@ module poly_keycap(
                                 translate([0, 0, -height + dish_depth - dish_z])
                                   _poly_keycap(
                                     height=height, length=length, width=width,
-                                    wall_thickness=wall_thickness,
                                     top_difference=top_difference, dish_tilt=dish_tilt,
-                                    dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-                                    stem_walls_inset=stem_walls_inset,
+                                    dish_tilt_curve=dish_tilt_curve,
                                     top_x=top_x, top_y=top_y, dish_depth=dish_depth,
                                     dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
                                     dish_division_x=dish_division_x,
                                     dish_division_y=dish_division_y,
-                                    dish_thickness=dish_thickness + 0.1, dish_fn=dish_fn,
+                                    dish_fn=dish_fn,
                                     dish_corner_fn=dish_corner_fn,
                                     polygon_layers=polygon_layers,
                                     polygon_layer_rotation=polygon_layer_rotation,
@@ -686,16 +672,14 @@ module poly_keycap(
                             }
                 _poly_keycap(
                   height=height, length=length, width=width,
-                  wall_thickness=wall_thickness,
                   top_difference=top_difference,
                   dish_tilt=dish_tilt,
-                  dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-                  stem_walls_inset=stem_walls_inset,
+                  dish_tilt_curve=dish_tilt_curve,
                   top_x=top_x, top_y=top_y, dish_depth=dish_depth,
                   dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
                   dish_division_x=dish_division_x,
                   dish_division_y=dish_division_y,
-                  dish_thickness=dish_thickness + 0.1, dish_fn=dish_fn,
+                  dish_fn=dish_fn,
                   dish_corner_fn=dish_corner_fn,
                   polygon_layers=polygon_layers,
                   polygon_layer_rotation=polygon_layer_rotation,
@@ -715,14 +699,13 @@ module poly_keycap(
         translate([0, 0, -0.001]) {
           _poly_keycap(
             height=height - wall_thickness, length=length - wall_thickness * 2,
-            width=width - wall_thickness * 2, wall_thickness=wall_thickness,
+            width=width - wall_thickness * 2,
             top_difference=top_difference,
             dish_tilt=dish_tilt,
-            dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-            stem_walls_inset=stem_walls_inset,
+            dish_tilt_curve=dish_tilt_curve,
             top_x=top_x, top_y=top_y, dish_depth=dish_depth,
             dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-            dish_thickness=dish_thickness, dish_fn=dish_fn,
+            dish_fn=dish_fn,
             dish_corner_fn=dish_corner_fn,
             polygon_layers=polygon_layers,
             polygon_layer_rotation=polygon_layer_rotation,

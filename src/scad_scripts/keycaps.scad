@@ -561,58 +561,27 @@ module poly_keycap(
       tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
 
       // Take care of the legends (if any)
-      for (l = legend_list) {
-        legend = l[0];
-        font = l[1];
-        font_size = l[2];
-        trans = l[3];
-        rotation = l[4];
-        trans2 = l[5];
-        rotation2 = l[6];
-        l_scale = l[7];
-        underset = l[8];
+      if (legend_list[0]) {
+        for (l = legend_list) {
+          legend = l[0];
+          font = l[1];
+          font_size = l[2];
+          trans = l[3];
+          rotation = l[4];
+          trans2 = l[5];
+          rotation2 = l[6];
+          l_scale = l[7];
+          underset = l[8];
 
-        if (visualize_legends) {
-          %translate(underset) {
-            translate(trans2) rotate(rotation2)
-                translate(trans) rotate(rotation)
-                    scale(l_scale)
-                      rotate([tilt_above_curved, 0, 0])
-                        color([0.5, 0.5, 0.5, 0.75]) difference() {
-                            draw_legend(legend, font_size, font, height + legend_inverted_dish_adjustment);
-                            // Make sure the preview matches the curve of the dish on the bottom
-                            if (legend_carved) {
-                              translate([0, 0, -height + dish_depth - dish_z])
-                                _poly_keycap(
-                                  height=height, length=length, width=width,
-                                  top_difference=top_difference, dish_tilt=dish_tilt,
-                                  dish_tilt_curve=dish_tilt_curve,
-                                  top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                                  dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                                  dish_division_x=dish_division_x,
-                                  dish_division_y=dish_division_y,
-                                  dish_fn=dish_fn,
-                                  dish_corner_fn=dish_corner_fn,
-                                  polygon_layers=polygon_layers,
-                                  polygon_layer_rotation=polygon_layer_rotation,
-                                  polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                                  dish_type=dish_type, corner_radius=corner_radius,
-                                  corner_radius_curve=corner_radius_curve,
-                                  polygon_rotation=polygon_rotation,
-                                  dish_invert=dish_invert
-                                );
-                            }
-                          }
-          }
-        } else {
-          // NOTE: This translate([0,0,0.1]) call is just to fix preview rendering
-          translate(underset) translate([0, 0, 0.1]) intersection() {
-                translate(trans2) rotate(rotation2)
-                    translate(trans) rotate(rotation)
-                        scale(l_scale)
-                          rotate([tilt_above_curved, 0, 0])
-                            difference() {
+          if (visualize_legends) {
+            %translate(underset) {
+              translate(trans2) rotate(rotation2)
+                  translate(trans) rotate(rotation)
+                      scale(l_scale)
+                        rotate([tilt_above_curved, 0, 0])
+                          color([0.5, 0.5, 0.5, 0.75]) difference() {
                               draw_legend(legend, font_size, font, height + legend_inverted_dish_adjustment);
+                              // Make sure the preview matches the curve of the dish on the bottom
                               if (legend_carved) {
                                 translate([0, 0, -height + dish_depth - dish_z])
                                   _poly_keycap(
@@ -635,26 +604,59 @@ module poly_keycap(
                                   );
                               }
                             }
-                _poly_keycap(
-                  height=height, length=length, width=width,
-                  top_difference=top_difference,
-                  dish_tilt=dish_tilt,
-                  dish_tilt_curve=dish_tilt_curve,
-                  top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                  dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                  dish_division_x=dish_division_x,
-                  dish_division_y=dish_division_y,
-                  dish_fn=dish_fn,
-                  dish_corner_fn=dish_corner_fn,
-                  polygon_layers=polygon_layers,
-                  polygon_layer_rotation=polygon_layer_rotation,
-                  polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                  dish_type=dish_type, corner_radius=corner_radius,
-                  corner_radius_curve=corner_radius_curve,
-                  polygon_rotation=polygon_rotation,
-                  dish_invert=dish_invert
-                );
-              }
+            }
+          } else {
+            // NOTE: This translate([0,0,0.1]) call is just to fix preview rendering
+            translate(underset) translate([0, 0, 0.1]) intersection() {
+                  translate(trans2) rotate(rotation2)
+                      translate(trans) rotate(rotation)
+                          scale(l_scale)
+                            rotate([tilt_above_curved, 0, 0])
+                              difference() {
+                                draw_legend(legend, font_size, font, height + legend_inverted_dish_adjustment);
+                                if (legend_carved) {
+                                  translate([0, 0, -height + dish_depth - dish_z])
+                                    _poly_keycap(
+                                      height=height, length=length, width=width,
+                                      top_difference=top_difference, dish_tilt=dish_tilt,
+                                      dish_tilt_curve=dish_tilt_curve,
+                                      top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                                      dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                                      dish_division_x=dish_division_x,
+                                      dish_division_y=dish_division_y,
+                                      dish_fn=dish_fn,
+                                      dish_corner_fn=dish_corner_fn,
+                                      polygon_layers=polygon_layers,
+                                      polygon_layer_rotation=polygon_layer_rotation,
+                                      polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                                      dish_type=dish_type, corner_radius=corner_radius,
+                                      corner_radius_curve=corner_radius_curve,
+                                      polygon_rotation=polygon_rotation,
+                                      dish_invert=dish_invert
+                                    );
+                                }
+                              }
+                  _poly_keycap(
+                    height=height, length=length, width=width,
+                    top_difference=top_difference,
+                    dish_tilt=dish_tilt,
+                    dish_tilt_curve=dish_tilt_curve,
+                    top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                    dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                    dish_division_x=dish_division_x,
+                    dish_division_y=dish_division_y,
+                    dish_fn=dish_fn,
+                    dish_corner_fn=dish_corner_fn,
+                    polygon_layers=polygon_layers,
+                    polygon_layer_rotation=polygon_layer_rotation,
+                    polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                    dish_type=dish_type, corner_radius=corner_radius,
+                    corner_radius_curve=corner_radius_curve,
+                    polygon_rotation=polygon_rotation,
+                    dish_invert=dish_invert
+                  );
+                }
+          }
         }
       }
       // Interior cutout (i.e. make room inside the keycap)

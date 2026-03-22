@@ -364,31 +364,33 @@ module poly_keycap_iso_enter(
       tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
 
       // Take care of the legends (if any)
-      for (l = legend_list) {
+      if (legend_list[0]) {
+        for (l = legend_list) {
 
-        legend = l[0];
-        font = l[1];
-        font_size = l[2];
-        trans = l[3];
-        rotation = l[4];
-        trans2 = l[5];
-        rotation2 = l[6];
-        l_scale = l[7];
-        underset = l[8];
+          legend = l[0];
+          font = l[1];
+          font_size = l[2];
+          trans = l[3];
+          rotation = l[4];
+          trans2 = l[5];
+          rotation2 = l[6];
+          l_scale = l[7];
+          underset = l[8];
 
-        if (visualize_legends) {
-          %legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
-            color([0.5, 0.5, 0.5, 0.75])
-              draw_legend(legend, font_size, font, height);
-          }
-        } else {
-          // NOTE: This translate([0,0,1]) call is just to fix preview rendering
-          translate(underset) translate([0, 0, 1]) intersection() {
-                legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
-                  draw_legend(legend, font_size, font, height);
+          if (visualize_legends) {
+            %legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
+              color([0.5, 0.5, 0.5, 0.75])
+                draw_legend(legend, font_size, font, height);
+            }
+          } else {
+            // NOTE: This translate([0,0,1]) call is just to fix preview rendering
+            translate(underset) translate([0, 0, 1]) intersection() {
+                  legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
+                    draw_legend(legend, font_size, font, height);
+                  }
+                  easy_iso_enter_shape();
                 }
-                easy_iso_enter_shape();
-              }
+          }
         }
       }
 

@@ -1,0 +1,1282 @@
+{
+    "profile": "think",
+    "layout": "ISO",
+    "font": "ChakraPetch-Bold.ttf",
+    "font_size": 5,
+    "rows": [
+        {
+            "row": 1,
+            "units": [
+                {
+                    "widthUnit": "U1",
+                    "base_layer": {
+                        "translation": {
+                            "y": 2.5
+                        }
+                    },
+                    "shift_layer": {
+                        "font_size": 3.5,
+                        "translation": {
+                            "y": -1.5
+                        },
+                        "halign": "center"
+                    },
+                    "keys": [
+                        {
+                            "base": "Esc",
+                            "row_index": 0
+                        },
+                        {
+                            "base": "F1",
+                            "shift": "DEV",
+                            "row_index": 1
+                        },
+                        {
+                            "base": "F2",
+                            "row_index": 2
+                        },
+                        {
+                            "base": "F3",
+                            "row_index": 3
+                        },
+                        {
+                            "base": "F4",
+                            "shift": "OS",
+                            "row_index": 4
+                        },
+                        {
+                            "base": "F5",
+                            "row_index": 5
+                        },
+                        {
+                            "base": "F6",
+                            "row_index": 6
+                        },
+                        {
+                            "base": "F7",
+                            "row_index": 7
+                        },
+                        {
+                            "base": "F8",
+                            "row_index": 8
+                        },
+                        {
+                            "base": "F9",
+                            "row_index": 9
+                        },
+                        {
+                            "base": "F10",
+                            "row_index": 10
+                        },
+                        {
+                            "base": "F11",
+                            "row_index": 11
+                        },
+                        {
+                            "base": "F12",
+                            "row_index": 12
+                        },
+                        {
+                            "base": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.75,
+                                    "translation": {
+                                        "y": 1.7
+                                    }
+                                }
+                            },
+                            "row_index": 13
+                        },
+                        {
+                            "base": "Del",
+                            "row_index": 14
+                        },
+                        {
+                            "base": {
+                                "value": "=",
+                                "override": {
+                                    "font_size": 8,
+                                    "halign": "left",
+                                    "translation": {
+                                        "x": -4.0,
+                                        "y": 4.0
+                                    }
+                                }
+                            },
+                            "shift": {
+                                "value": "calc.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "x": -1.8,
+                                        "y": -0.5
+                                    }
+                                }
+                            },
+                            "row_index": 15
+                        },
+                        {
+                            "base": {
+                                "value": "(",
+                                "override": {
+                                    "halign": "left",
+                                    "translation": {
+                                        "x": -4.0
+                                    }
+                                }
+                            },
+                            "row_index": 16
+                        },
+                        {
+                            "base": {
+                                "value": ")",
+                                "override": {
+                                    "halign": "left",
+                                    "translation": {
+                                        "x": -4.0
+                                    }
+                                }
+                            },
+                            "row_index": 17
+                        },
+                        {
+                            "base": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.75,
+                                    "translation": {
+                                        "y": 0.2,
+                                        "x": 0.7
+                                    },
+                                    "rotation": {
+                                        "z": 180
+                                    }
+                                }
+                            },
+                            "row_index": 18
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "row": 2,
+            "units": [
+                {
+                    "widthUnit": "U1",
+                    "base_layer": {
+                        "translation": {
+                            "x": -2.7,
+                            "y": 0.5,
+                            "z": 0
+                        }
+                    },
+                    "shift_layer": {
+                        "font_size": 3.5,
+                        "translation": {
+                            "x": -2.7,
+                            "y": 4.5,
+                            "z": 0
+                        }
+                    },
+                    "altgr_layer": {
+                        "font_size": 3.5,
+                        "translation": {
+                            "x": 1.0,
+                            "y": -0.8,
+                            "z": 0
+                        },
+                        "halign": "left"
+                    },
+                    "keys": [
+                        {
+                            "base": "\\",
+                            "shift": {
+                                "value": "|",
+                                "override": {
+                                    "font_size": 3
+                                }
+                            },
+                            "row_index": 0
+                        },
+                        {
+                            "base": "1",
+                            "shift": "!",
+                            "row_index": 1
+                        },
+                        {
+                            "base": "2",
+                            "shift": "\"",
+                            "row_index": 2
+                        },
+                        {
+                            "base": "3",
+                            "shift": "£",
+                            "row_index": 3
+                        },
+                        {
+                            "base": "4",
+                            "shift": "$",
+                            "row_index": 4
+                        },
+                        {
+                            "base": "5",
+                            "shift": "%",
+                            "altgr": "€",
+                            "row_index": 5
+                        },
+                        {
+                            "base": "6",
+                            "shift": {
+                                "value": "&.svg",
+                                "override": {
+                                    "font_size": 0.29,
+                                    "translation": {
+                                        "y": 5.05
+                                    }
+                                }
+                            },
+                            "row_index": 6
+                        },
+                        {
+                            "base": "7",
+                            "shift": "/",
+                            "row_index": 7
+                        },
+                        {
+                            "base": "8",
+                            "shift": "(",
+                            "row_index": 8
+                        },
+                        {
+                            "base": "9",
+                            "shift": ")",
+                            "row_index": 9
+                        },
+                        {
+                            "base": "0",
+                            "shift": {
+                                "value": "=",
+                                "override": {
+                                    "font_size": 6,
+                                    "translation": {
+                                        "y": 4.8
+                                    }
+                                }
+                            },
+                            "row_index": 10
+                        },
+                        {
+                            "base": "'",
+                            "shift": "?",
+                            "altgr": {
+                                "value": "`",
+                                "override": {
+                                    "font_size": 6.5,
+                                    "halign": "left",
+                                    "translation": {
+                                        "y": -2.0
+                                    }
+                                }
+                            },
+                            "row_index": 11
+                        },
+                        {
+                            "base": "ì",
+                            "shift": "^",
+                            "altgr": {
+                                "value": "~",
+                                "override": {
+                                    "font_size": 4.5,
+                                    "halign": "left",
+                                    "translation": {
+                                        "y": -0.8
+                                    }
+                                }
+                            },
+                            "row_index": 12
+                        },
+                        {
+                            "base": {
+                                "value": "Num",
+                                "override": {
+                                    "font_size": 3.5,
+                                    "translation": {
+                                        "x": -5.0,
+                                        "y": 3.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "Lock",
+                                "override": {
+                                    "font_size": 3.5,
+                                    "translation": {
+                                        "x": -5.0,
+                                        "y": 0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 14
+                        },
+                        {
+                            "base": {
+                                "value": "/",
+                                "override": {
+                                    "translation": {
+                                        "x": -3,
+                                        "y": 2.5
+                                    }
+                                }
+                            },
+                            "row_index": 15
+                        },
+                        {
+                            "base": {
+                                "value": "*",
+                                "override": {
+                                    "font_size": 9,
+                                    "translation": {
+                                        "x": -3,
+                                        "y": 1.45
+                                    }
+                                }
+                            },
+                            "row_index": 16
+                        },
+                        {
+                            "base": {
+                                "value": "-",
+                                "override": {
+                                    "font_size": 9,
+                                    "translation": {
+                                        "x": -3,
+                                        "y": 4.2
+                                    }
+                                }
+                            },
+                            "row_index": 17
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U2",
+                    "keys": [
+                        {
+                            "base": {
+                                "value": "backspace_arrow.svg",
+                                "override": {
+                                    "font_size": 1.25,
+                                    "translation": {
+                                        "x": 5,
+                                        "y": 1.5
+                                    },
+                                    "rotation": {
+                                        "z": 45
+                                    }
+                                }
+                            },
+                            "row_index": 13
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "row": 3,
+            "units": [
+                {
+                    "widthUnit": "U1",
+                    "base_layer": {
+                        "translation": {
+                            "x": -4,
+                            "y": 3.0
+                        },
+                        "halign": "left"
+                    },
+                    "keys": [
+                        {
+                            "base": "Q",
+                            "row_index": 1
+                        },
+                        {
+                            "base": "W",
+                            "row_index": 2
+                        },
+                        {
+                            "base": "E",
+                            "row_index": 3
+                        },
+                        {
+                            "base": "R",
+                            "row_index": 4
+                        },
+                        {
+                            "base": "T",
+                            "row_index": 5
+                        },
+                        {
+                            "base": "Y",
+                            "row_index": 6
+                        },
+                        {
+                            "base": "U",
+                            "row_index": 7
+                        },
+                        {
+                            "base": "I",
+                            "row_index": 8
+                        },
+                        {
+                            "base": "O",
+                            "row_index": 9
+                        },
+                        {
+                            "base": "P",
+                            "row_index": 10
+                        },
+                        {
+                            "base": {
+                                "value": "è",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "È",
+                                "override": {
+                                    "font_size": 3.5,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 3.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "altgr": {
+                                "value": "[",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": 2.5,
+                                        "y": -1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift_altgr": {
+                                "value": "{",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": 2.5,
+                                        "y": 3.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 11
+                        },
+                        {
+                            "base": {
+                                "value": "+",
+                                "override": {
+                                    "translation": {
+                                        "x": -5,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "*",
+                                "override": {
+                                    "font_size": 8,
+                                    "translation": {
+                                        "x": -5.0,
+                                        "y": 1.8
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "altgr": {
+                                "value": "]",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": 2.5,
+                                        "y": -1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift_altgr": {
+                                "value": "}",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": 2.5,
+                                        "y": 3.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 12
+                        },
+                        {
+                            "base": "7",
+                            "shift": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "y": -1.0
+                                    }
+                                }
+                            },
+                            "row_index": 14
+                        },
+                        {
+                            "base": "8",
+                            "shift": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "y": -1.25
+                                    },
+                                    "rotation": {
+                                        "z": -45
+                                    }
+                                }
+                            },
+                            "row_index": 15
+                        },
+                        {
+                            "base": "9",
+                            "shift": {
+                                "value": "page_arr.svg",
+                                "override": {
+                                    "font_size": 0.65,
+                                    "translation": {
+                                        "y": -1.25
+                                    }
+                                }
+                            },
+                            "row_index": 16
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U1",
+                    "heightUnit": "U2",
+                    "base_layer": {
+                        "font_size": 6.5,
+                        "translation": {
+                            "y": 14
+                        }
+                    },
+                    "keys": [
+                        {
+                            "base": "+",
+                            "row_index": 17,
+                            "spillRow": [
+                                4,
+                                17
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U15",
+                    "base_layer": {
+                        "translation": {
+                            "x": -5,
+                            "y": 4.0,
+                            "z": 0
+                        }
+                    },
+                    "shift_layer": {
+                        "font_size": 0.5,
+                        "translation": {
+                            "x": 6,
+                            "y": 4.0,
+                            "z": 0
+                        },
+                        "rotation": {
+                            "z": 180
+                        }
+                    },
+                    "keys": [
+                        {
+                            "base": {
+                                "value": "tab.svg",
+                                "override": {
+                                    "font_size": 0.8,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 1.5
+                                    }
+                                }
+                            },
+                            "row_index": 0
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "ISO_ENTER",
+                    "base_layer": {
+                        "font_size": 1,
+                        "translation": {
+                            "x": 0,
+                            "y": 9.0
+                        }
+                    },
+                    "keys": [
+                        {
+                            "base": "enter-arrow.svg",
+                            "row_index": 13,
+                            "spillRow": [
+                                4,
+                                13
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "row": 4,
+            "units": [
+                {
+                    "widthUnit": "U1",
+                    "base_layer": {
+                        "font_size": 5,
+                        "translation": {
+                            "x": -4,
+                            "y": 3.0,
+                            "z": 0
+                        },
+                        "rotation": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "halign": "left"
+                    },
+                    "keys": [
+                        {
+                            "base": "A",
+                            "row_index": 1
+                        },
+                        {
+                            "base": "S",
+                            "row_index": 2
+                        },
+                        {
+                            "base": "D",
+                            "row_index": 3
+                        },
+                        {
+                            "base": "F",
+                            "row_index": 4
+                        },
+                        {
+                            "base": "G",
+                            "row_index": 5
+                        },
+                        {
+                            "base": "H",
+                            "row_index": 6
+                        },
+                        {
+                            "base": "J",
+                            "row_index": 7
+                        },
+                        {
+                            "base": "K",
+                            "row_index": 8
+                        },
+                        {
+                            "base": "L",
+                            "row_index": 9
+                        },
+                        {
+                            "base": {
+                                "value": "ò",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "altgr": {
+                                "value": "@",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": 1.0,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 10
+                        },
+                        {
+                            "base": {
+                                "value": "à",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "°",
+                                "override": {
+                                    "font_size": 6,
+                                    "translation": {
+                                        "x": -5.0,
+                                        "y": 1.8
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "altgr": {
+                                "value": "#",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": 1.0,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 11
+                        },
+                        {
+                            "base": {
+                                "value": "ù",
+                                "override": {
+                                    "font_size": 4.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": -0.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "é",
+                                "override": {
+                                    "font_size": 3.5,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 3.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 12
+                        },
+                        {
+                            "base": "4",
+                            "shift": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "y": -1.0
+                                    },
+                                    "rotation": {
+                                        "z": 45
+                                    }
+                                }
+                            },
+                            "row_index": 14
+                        },
+                        {
+                            "base": "5",
+                            "row_index": 15
+                        },
+                        {
+                            "base": "6",
+                            "shift": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "y": -1.0
+                                    },
+                                    "rotation": {
+                                        "z": -135
+                                    }
+                                }
+                            },
+                            "row_index": 16
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U175",
+                    "base_layer": {
+                        "font_size": 0.8,
+                        "translation": {
+                            "x": -8,
+                            "y": 2.0
+                        }
+                    },
+                    "keys": [
+                        {
+                            "base": "capslock.svg",
+                            "row_index": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "row": 5,
+            "units": [
+                {
+                    "widthUnit": "U1",
+                    "base_layer": {
+                        "font_size": 5,
+                        "translation": {
+                            "x": -4,
+                            "y": 3.0
+                        },
+                        "halign": "left"
+                    },
+                    "keys": [
+                        {
+                            "base": {
+                                "value": "<",
+                                "override": {
+                                    "translation": {
+                                        "y": 0.0
+                                    }
+                                }
+                            },
+                            "shift": {
+                                "value": ">",
+                                "override": {
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 4.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 1
+                        },
+                        {
+                            "base": "Z",
+                            "row_index": 2
+                        },
+                        {
+                            "base": "X",
+                            "row_index": 3
+                        },
+                        {
+                            "base": "C",
+                            "row_index": 4
+                        },
+                        {
+                            "base": "V",
+                            "row_index": 5
+                        },
+                        {
+                            "base": "B",
+                            "row_index": 6
+                        },
+                        {
+                            "base": "N",
+                            "row_index": 7
+                        },
+                        {
+                            "base": "M",
+                            "row_index": 8
+                        },
+                        {
+                            "base": {
+                                "value": ",",
+                                "override": {
+                                    "font_size": 6.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": ";",
+                                "override": {
+                                    "font_size": 6.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 4.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 9
+                        },
+                        {
+                            "base": {
+                                "value": ".",
+                                "override": {
+                                    "font_size": 6.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": ":",
+                                "override": {
+                                    "font_size": 6.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 4.5
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 10
+                        },
+                        {
+                            "base": {
+                                "value": "-",
+                                "override": {
+                                    "font_size": 7.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "_",
+                                "override": {
+                                    "font_size": 8.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 7.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 11
+                        },
+                        {
+                            "base": {
+                                "value": "nav_arr.svg",
+                                "override": {
+                                    "font_size": 0.7,
+                                    "translation": {
+                                        "x": 0.0,
+                                        "y": 3.5
+                                    }
+                                }
+                            },
+                            "row_index": 13
+                        },
+                        {
+                            "base": "1",
+                            "shift": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "y": -1.0
+                                    },
+                                    "rotation": {
+                                        "z": 180
+                                    }
+                                }
+                            },
+                            "row_index": 14
+                        },
+                        {
+                            "base": "2",
+                            "shift": {
+                                "value": "arrow_northwest.svg",
+                                "override": {
+                                    "font_size": 0.5,
+                                    "translation": {
+                                        "y": -1.25
+                                    },
+                                    "rotation": {
+                                        "z": -225
+                                    }
+                                }
+                            },
+                            "row_index": 15
+                        },
+                        {
+                            "base": "3",
+                            "shift": {
+                                "value": "page_arr.svg",
+                                "override": {
+                                    "font_size": 0.65,
+                                    "translation": {
+                                        "y": -1.25
+                                    },
+                                    "rotation": {
+                                        "z": 180
+                                    }
+                                }
+                            },
+                            "row_index": 16
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U125",
+                    "keys": [
+                        {
+                            "base": {
+                                "value": "shift.svg",
+                                "override": {
+                                    "font_size": 0.7,
+                                    "translation": {
+                                        "x": -3,
+                                        "y": 3.5
+                                    }
+                                }
+                            },
+                            "row_index": 0
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U175",
+                    "keys": [
+                        {
+                            "base": {
+                                "value": "shift.svg",
+                                "override": {
+                                    "font_size": 0.7,
+                                    "translation": {
+                                        "y": 3.5
+                                    }
+                                }
+                            },
+                            "row_index": 12
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "row": 6,
+            "units": [
+                {
+                    "widthUnit": "U125",
+                    "base_layer": {
+                        "translation": {
+                            "y": 2.5,
+                            "x": -5.5
+                        },
+                        "halign": "left"
+                    },
+                    "keys": [
+                        {
+                            "base": "Ctrl",
+                            "row_index": 0
+                        },
+                        {
+                            "base": "Win",
+                            "row_index": 1
+                        },
+                        {
+                            "base": "Alt",
+                            "row_index": 2
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U625",
+                    "keys": [
+                        {
+                            "row_index": 3
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U1",
+                    "base_layer": {
+                        "font_size": 3.5,
+                        "translation": {
+                            "y": 2.5
+                        },
+                        "halign": "center"
+                    },
+                    "keys": [
+                        {
+                            "base": "AltGr",
+                            "row_index": 4
+                        },
+                        {
+                            "base": "Fn",
+                            "row_index": 5
+                        },
+                        {
+                            "base": "Print",
+                            "shift": {
+                                "value": "screen.svg",
+                                "override": {
+                                    "font_size": 0.4,
+                                    "translation": {
+                                        "x": -2.9,
+                                        "y": -1.0
+                                    }
+                                }
+                            },
+                            "row_index": 6
+                        },
+                        {
+                            "base": {
+                                "value": "nav_arr.svg",
+                                "override": {
+                                    "font_size": 0.7,
+                                    "translation": {
+                                        "x": -1.0,
+                                        "y": 1.5
+                                    },
+                                    "rotation": {
+                                        "z": 90
+                                    }
+                                }
+                            },
+                            "row_index": 7
+                        },
+                        {
+                            "base": {
+                                "value": "nav_arr.svg",
+                                "override": {
+                                    "font_size": 0.7,
+                                    "translation": {
+                                        "x": 0.0,
+                                        "y": 1.0
+                                    },
+                                    "rotation": {
+                                        "z": 180
+                                    }
+                                }
+                            },
+                            "row_index": 8
+                        },
+                        {
+                            "base": {
+                                "value": "nav_arr.svg",
+                                "override": {
+                                    "font_size": 0.7,
+                                    "translation": {
+                                        "x": 1.0,
+                                        "y": 1.5
+                                    },
+                                    "rotation": {
+                                        "z": -90
+                                    }
+                                }
+                            },
+                            "row_index": 9
+                        },
+                        {
+                            "base": {
+                                "value": "0",
+                                "override": {
+                                    "font_size": 5.0,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": 3.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "Ins",
+                                "override": {
+                                    "font_size": 3.5,
+                                    "translation": {
+                                        "x": -4,
+                                        "y": -1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 10
+                        },
+                        {
+                            "base": {
+                                "value": ".",
+                                "override": {
+                                    "font_size": 6.0,
+                                    "translation": {
+                                        "x": -4,
+                                        "y": 4.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "shift": {
+                                "value": "Del",
+                                "override": {
+                                    "font_size": 3.5,
+                                    "translation": {
+                                        "x": -5,
+                                        "y": -1.0
+                                    },
+                                    "halign": "left"
+                                }
+                            },
+                            "row_index": 11
+                        }
+                    ]
+                },
+                {
+                    "widthUnit": "U1",
+                    "heightUnit": "U2",
+                    "base_layer": {
+                        "font_size": 3.5,
+                        "translation": {
+                            "y": 13.5
+                        }
+                    },
+                    "keys": [
+                        {
+                            "base": "Enter",
+                            "row_index": 12,
+                            "spillRow": [
+                                5,
+                                17
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

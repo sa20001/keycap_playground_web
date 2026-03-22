@@ -1,8 +1,17 @@
 services:
-  keycapplayground:
-    container_name: keycapplayground
-    build: .
-    # no ports published as per request
+  keycap_playground_web:
+    container_name: keycap_playground_web
+    build:
+      context: .
     volumes:
-      - .:/app
-    # restart policy can be added if desired
+      - ./generated:/app/generated
+      - ./templates:/app/templates
+
+  viewer:
+    container_name: keycap_playground_viewer
+    build:
+      context: ./viewer
+    ports:
+      - "5173:5173"
+    depends_on:
+      - keycap_playground_web

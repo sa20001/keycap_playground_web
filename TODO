@@ -1,0 +1,7 @@
+- Make/update documentation of functions
+- Check all TODOs
+- Package in docker and make compose
+- Make readMe documentation
+- Freeze python requirements
+- Add license
+- Profiling and find bottlenecks

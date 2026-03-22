@@ -1,6 +1,6 @@
 {
     "recommendations": [
-        "gruntfuggly.todo-tree",
+        "FanaticPythoner.better-todo-tree",
         "ms-python.vscode-pylance",
         "vivaxy.vscode-conventional-commits"
     ]

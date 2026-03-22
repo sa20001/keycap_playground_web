@@ -11,6 +11,9 @@ generated/
 *.csg
 tmp.*/
 
+# Js/Ts folders
+node_modules/
+
 # Distribution / packaging
 .Python
 build/

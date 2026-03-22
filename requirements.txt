@@ -4,4 +4,13 @@ loguru
 # Progress bar
 tqdm
 
-colorama
+# For fonts
+matplotlib
+
+# CAD
+cadquery
+cq-editor
+
+# Web UI
+fastapi
+uvicorn

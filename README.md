@@ -1,71 +1,124 @@
-# keycap_playground for Windows
-The Keycap Playground is a parametric OpenSCAD keycap generator made for generating keycaps of all shapes and sizes (and profiles)
+# Keycap Playground — CadQuery
 
-This has been forked from the original Linux implementation and rewritten to in Docker
+A fast, parametric keycap and keyboard generator built with
+[CadQuery](https://github.com/CadQuery/cadquery), designed with **ISO keyboards**
+and FDM printing in mind.
 
-## How to use
+This project started as a reimplementation of the ideas behind
+[riskable Keycap Playground](https://github.com/riskable/keycap_playground), but replaces
+the OpenSCAD-based generation pipeline with CadQuery and multiprocessing.
 
-### Init the repo
-Clone the repo
+The result is a complete pipeline from a keyboard template to 3MF PrusaSlicer ready files.
+
+## Features
+
+- **ISO keyboard support**
+  - Parametric ISO Enter
+  - Designed for layouts beyond ANSI-only workflows
+- **Fast generation**
+  - CadQuery-based geometry generation
+  - Multiprocessing for independent keycaps
+  - A complete layout can be generated in roughly **15 seconds** depending on
+    the layout and hardware.
+- **Completely obliterates OpenSCAD performance.**
+- **Proper CAD geometry**
+  - CadQuery operations make it possible to create geometry
+    that was difficult or impractical to express in OpenSCAD, like **fillets**.
+- **Custom keyboard templates**
+  - Define an entire keyboard/layout rather than generating individual keys
+  - Custom key sizes and positioning
+- **Parametric keycap profiles**
+  - Different keycap shapes and profiles
+  - Per-key parameters
+- **Legends**
+  - Full legend support for flat keycaps
+  - Experimental/limited support for sculpted keycaps
+- **PrusaSlicer preprocessing**
+  - Automatically add support blockers
+  - Compute adaptive layer-height information
+  - Assign extruders to parts for multicolor printing
+- **Docker-based workflow**
+  - Reproducible environment
+  - No need to manually configure the CAD toolchain
+- **Browser-based 3D viewer**
+  - Preview generated CadQuery models in a Three.js-based viewer
+- **3MF output**
+  - Generate printable keycap geometry
+
+## Why another keycap generator?
+
+There are already several excellent keycap generators.
+
+This project exists because they didn't quite fit the workflow I needed.
+
+The original Keycap Playground was based on OpenSCAD. While powerful, generating
+and iterating over complete keyboard layouts was **very, very slow**.
+
+OpenSCAD also became a significant limitation when working on the actual keycap
+geometry. In particular, the lack of native fillet operations was a major pain
+when trying to create rounded, printable geometry.
+
+At some point, I decided that repeatedly fighting OpenSCAD was less productive
+than changing the CAD engine.
+
+So I moved the geometry generation to **CadQuery**.
+
+That brought proper CAD operations such as fillets, much faster generation through
+multiprocessing, and a Python-based environment that is much easier to extend
+with custom keyboard layouts and printing automation.
+
+And while I was at it, I finally gave ISO keyboards some love.
+
+I wanted something that could do this:
+
+```text
+Keyboard template
+       ↓
+Fast keycap generation
+       ↓
+ISO support + CAD operations
+       ↓
+Display results
+       ↓
+Export if satisfied
+       ↓
+PrusaSlicer preprocessing
+       ↓
+Ready for FDM printing
 ```
-git clone https://github.com/sa20001/keycap_playground_web.git
-cd keycap_playground_web
-```
-initialize and update all the submodules
-```
-git submodule update --init --recursive
-```
 
-### Run
-Enter the container
-```
-docker compose run --rm keycapplayground /bin/bash
-```
+## Limitations / Known Issues
 
-To view all options run
+This project is still a work in progress. Some parts of the original OpenSCAD implementation have not been fully ported.
 
-```
-python -m src.python.layouts.test
-```
+- **Keycap profiles**
+  - The porting of the profiles from the original OpenSCAD implementation is
+    currently limited. At the moment, the CadQuery implementation includes a custom profile with a
+    flat surface.
+  - More complex sculpted/dished profiles have not been fully ported.
+  - The sculpted keycap code is currently incomplete and may be broken.
+  - I deliberately did not prioritize implementing the more complex profiles because the results from my FDM printing tests were not good enough to justify spending more time on them.
 
-To generate all keycaps defined in `test` along with the .stl files for legends run
+- **Web UI**
+  - The web UI is currently a prototype and was largely vibecoded.
+  - There are several optimizations still needed, particularly around loading
+    and displaying generated objects.
+  - Large layouts can therefore take longer to load and display than they
+    ideally should.
 
-```
-python -m src.python.layouts.test --legends --out generated
-```
+- **Performance / optimization**
+  - There are still various areas that could be optimized.
+  - Most of the currently identified optimization work is tracked in the
+    project's TODOs.
 
-This will place all .stl files in the `/generated` directory
+## Contributing
 
+This project is still evolving, and there is plenty left to improve.
 
-## How it works
+If you want to help with profiles, geometry, performance, the web UI, PrusaSlicer integration, or anything else, **any help is appreciated!**
 
-Basic rundown for the two main files relevant to the end user. 
-
-### gem_full.py
-
-Contains the definitions for all the keycaps to be generated.  
-Use this file to define and generate a set of keycaps of your own. For a better understanding of how everything works i'd recommend you to start with playing around in keycap_playground.scad 
-
-Heres an example line  
-`gem_double_legends(name="quote", legends=["'", "", '\\u0022']),`
-
-`gem_double_legends`  
-Keycap class, changes within the class will be made to all keycaps within that class.  
-
-`name="quote"`  
-Name of the keycap
-
-`legends=["'", "", '\\u0022'])`  
-Defines the keycap legends, some legends like in this case " needs to be written with their unicode instead. 
-
-https://www.babelstone.co.uk/Unicode/whatisit.html
-Can be used to find what unicode is needed 
+Issues, improvements, ideas, and pull requests are all welcome.
 
 
-### keycap_playground.scad
-
-The OpenSCAD library that does all the heavy lifting, can be run by itself to open "the playground"
-
-A video by the original creator on how it works can be found here.
-
-https://www.youtube.com/watch?v=WDlRZMvisA4&t=1s
+## License
+This project is licensed under the [MIT License](LICENSE).

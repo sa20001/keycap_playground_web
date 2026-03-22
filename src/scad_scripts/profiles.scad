@@ -53,11 +53,8 @@ module DSA_keycap(
   // NOTE: The 0-index values are ignored (there's no row 0 in DSA)
   row_height = dish_invert ? 6.3914 + height_extra : 7.3914 + height_extra; // One less if we're generating a spacebar
   // NOTE: 7.3914 is from the Signature Plastics DSA spec which has .291 inches
-  if (row < 1) {
-    warning("We only support rows 1 for DSA profile caps!");
-  }
-  if (row > 1) {
-    warning("We only support row 1 for DSA profile caps!");
+  if (row != 1) {
+    warning("Only row 1 is supported for DSA profile caps.");
   }
   //    width = 18.41; // 0.725 inches
   dish_type = "sphere";
@@ -745,10 +742,7 @@ module KAT_keycap(
   uniform_wall_thickness = false
 ) {
   // FYI: I know that the curve up the side of the keycap is a little off...  If anyone knows how to calculate the correct curve for KAT profile let me know and I'll fix it!
-  if (row < 1) {
-    warning("We only support rows 1-5 for KAT profile caps!");
-  }
-  if (row > 5) {
+  if (row < 1 || row > 5) {
     warning("We only support rows 1-5 for KAT profile caps!");
   }
   // NOTE: KAT profile actually mandates 1.658mm wall thickness but I'm not going to force the user to use that
@@ -971,11 +965,8 @@ module KAM_keycap(
   uniform_wall_thickness = false
 ) {
   row_height = dish_invert ? 8.05 : 9.05; // One less if we're generating a spacebar
-  if (row < 1) {
-    warning("We only support rows 1 for DSA profile caps!");
-  }
-  if (row > 1) {
-    warning("We only support row 1 for DSA profile caps!");
+  if (row != 1) {
+    warning("Only row 1 is supported for KAM profile caps.");
   }
   dish_type = dish_invert ? "cylinder" : "sphere"; // KAM spacebars actually use cylindrical tops
   dish_z = 0;
@@ -1191,11 +1182,8 @@ module riskeycap(
   adjusted_height_extra = length < KEY_UNIT * 1.25 ? height_extra : height_extra + 0.35;
   adjusted_height = dish_invert ? 6.5 + adjusted_height_extra : 8.2 + adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
   adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
-  if (row < 1) {
-    warning("We only support rows 1 for Riskeycap profile caps!");
-  }
-  if (row > 1) {
-    warning("We only support row 1 for Riskeycap profile caps!");
+  if (row != 1) {
+    warning("Only row 1 is supported for Riskeycap profile caps.");
   }
   dish_type = "sphere";
   dish_z = 0;
@@ -1424,11 +1412,8 @@ module GEM_keycap(
   adjusted_height_extra = length < KEY_UNIT * 1.25 ? height_extra : height_extra + 0.35;
   adjusted_height = dish_invert ? 6.5 + adjusted_height_extra : 8.2 + adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
   adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
-  if (row < 1) {
-    warning("We only support rows 1 for GEM profile caps!");
-  }
-  if (row > 1) {
-    warning("We only support row 1 for GEM profile caps!");
+  if (row != 1) {
+    warning("Only row 1 is supported for GEM profile caps.");
   }
   dish_type = "sphere";
   dish_z = 0;
@@ -1658,11 +1643,8 @@ module XDA_keycap(
 ) {
   // NOTE: The 0-index values are ignored (there's no row 0 in XDA)
   row_height = dish_invert ? 8.1 + height_extra : 9.1 + height_extra; // One less if we're generating a spacebar
-  if (row < 1) {
-    warning("We only support rows 1 for XDA profile caps!");
-  }
-  if (row > 1) {
-    warning("We only support row 1 for XDA profile caps!");
+  if (row != 1) {
+    warning("Only row 1 is supported for XDA profile caps.");
   }
   dish_type = "sphere";
   dish_z = 0;

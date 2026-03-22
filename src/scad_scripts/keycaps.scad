@@ -477,16 +477,6 @@ module _poly_keycap(
     dish_invert       - when true, creates an inverted (convex) dish suitable for spacebars
 
     legends           - array of strings to render (e.g. ["A"], ["1","!"])
-    legend_font_sizes - per-legend font size array
-    legend_fonts      - per-legend font names (supports font:style syntax)
-    legend_carved     - if true, legends are carved to match the dish curvature
-    legend_trans      - per-legend translate
-    legend_trans2     - second translate applied after rotation (useful for side legends)
-    legend_scale      - per-legend scale [x,y,z]
-    legend_rotation   - per-legend rotation before translate2
-    legend_rotation2  - second rotation applied after translate2
-    legend_underset   - per-legend [x,y,z] offset which is applied *after* legend placement
-                        (useful for underset/backlit legends)
 
     polygon_layers    - how many stacked hull layers to build the keycap shell
     polygon_layer_rotation - rotation applied between layers (for twist effects)
@@ -517,7 +507,6 @@ module poly_keycap(
   dish_tilt_curve = false,
   stem_clips = false,
   stem_walls_inset = 0,
-  stem_walls_tolerance = 0.25,
   dish_depth = 1,
   dish_x = 0,
   dish_y = 0,
@@ -527,16 +516,8 @@ module poly_keycap(
   dish_corner_fn = 64,
   dish_division_x = 4,
   dish_division_y = 1, // Fancy schmancy control over spherical inverted dishes
-  legends = [""],
-  legend_font_sizes = [6],
-  legend_fonts = ["Roboto"],
+  legend_list = [""],
   legend_carved = false,
-  legend_trans = [[0, 0, 0]],
-  legend_trans2 = [[0, 0, 0]],
-  legend_scale = [[1, 1, 1]],
-  legend_rotation = [[0, 0, 0]],
-  legend_rotation2 = [[0, 0, 0]],
-  legend_underset = [[0, 0, 0]],
   polygon_layers = 5,
   polygon_layer_rotation = 10,
   polygon_curve = 0,
@@ -553,27 +534,13 @@ module poly_keycap(
   polygon_rotation = false,
   key_rotation = [0, 0, 0],
   dish_invert = false,
-  uniform_wall_thickness = true,
-  debug = false
+  uniform_wall_thickness = true
 ) {
   layer_tilt_adjust = dish_tilt / polygon_layers;
   // Inverted dish means we need to make the legend a little taller
   legend_inverted_dish_adjustment = dish_invert ? dish_depth * 1.25 : 0;
   inverted_dish_adjustment = dish_invert ? dish_depth : 0;
-  if (debug) {
-    // NOTE: Tried to divide these up into logical sections; all related elements should be on one line
-    echo(height=height, length=length, width=width);
-    echo(wall_thickness=wall_thickness, top_difference=top_difference, top_x=top_x, top_y=top_y);
-    echo(dish_tilt=dish_tilt, dish_depth=dish_depth, dish_x=dish_x, dish_y=dish_y, dish_z=dish_z, dish_thickness=dish_thickness, dish_fn=dish_fn, dish_type=dish_type, dish_invert=dish_invert);
-    // Really don't need to have this spit out 90% of the time...  Just uncomment if you really need to see loads and loads and LOADS of debug:
-    //        echo(legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts);
-    //        echo(legend_trans=legend_trans, legend_trans2=legend_trans2);
-    //        echo(legend_rotation=legend_rotation, legend_rotation2=legend_rotation2);
-    echo(polygon_layers=polygon_layers, polygon_layer_rotation=polygon_layer_rotation, polygon_rotation=polygon_rotation, polygon_curve=polygon_curve, polygon_edges=polygon_edges, corner_radius=corner_radius, corner_radius_curve=corner_radius_curve);
-    // These should be obvious enough that you don't need to see their values spit out in the console:
-    //        echo(visualize_legends=visualize_legends, key_rotation=key_rotation);
-    echo(stem_clips=stem_clips, stem_walls_inset=stem_walls_inset);
-  }
+
   rotate(key_rotation) {
     difference() {
       _poly_keycap(
@@ -592,21 +559,19 @@ module poly_keycap(
         dish_invert=dish_invert
       );
       tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
-      // Take care of the legends
-      for (i = [0:1:len(legends) - 1]) {
-        legend = legends[i] ? legends[i] : "";
-        rotation = legend_rotation[i] ? legend_rotation[i] : (legend_rotation[0] ? legend_rotation[0] : [0, 0, 0]);
-        rotation2 = legend_rotation2[i] ? legend_rotation2[i] : (legend_rotation2[0] ? legend_rotation2[0] : [0, 0, 0]);
-        trans = legend_trans[i] ? legend_trans[i] : (legend_trans[0] ? legend_trans[0] : [0, 0, 0]);
-        trans2 = legend_trans2[i] ? legend_trans2[i] : (legend_trans2[0] ? legend_trans2[0] : [0, 0, 0]);
-        font_size = legend_font_sizes[i] ? legend_font_sizes[i] : legend_font_sizes[0];
-        font = legend_fonts[i] ? legend_fonts[i] : (legend_fonts[0] ? legend_fonts[0] : "Roboto");
-        l_scale = legend_scale[i] ? legend_scale[i] : legend_scale[0];
-        underset =
-          legend_underset[i] ? legend_underset[i]
-          : (
-            legend_underset[0] ? legend_underset[0] : [0, 0, 0]
-          );
+
+      // Take care of the legends (if any)
+      for (l = legend_list) {
+        legend = l[0];
+        font = l[1];
+        font_size = l[2];
+        trans = l[3];
+        rotation = l[4];
+        trans2 = l[5];
+        rotation2 = l[6];
+        l_scale = l[7];
+        underset = l[8];
+
         if (visualize_legends) {
           %translate(underset) {
             translate(trans2) rotate(rotation2)

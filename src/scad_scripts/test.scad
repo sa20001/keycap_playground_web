@@ -177,7 +177,6 @@ HOMING_DOT_Y = -KEY_WIDTH / 4; // Default: Move it down towards the front a bit
 HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
 // NOTE: ADA specifies 0.5mm as the ideal braille dot height so that's what I recommend for homing dots too!  Though, 0.3mm seems to be reasonably "feelable" in my testing.  Experiment!
 
-
 LEGEND_LIST = [
   make_legend(
     symbol="A",
@@ -203,8 +202,7 @@ LEGEND_LIST = [
     underset=[0, 0, 0]
   ),
 ];
-
-
+LEGEND_CARVED = false; // Makes it so the bottom of the legend matches the shape of the dish (in case you want to translate() it up to the top of the keycap to finely control its depth).  Slows down rendering quite a bit so unless you have a specific need you'd best keep it set to false.
 
 // When generating a whole row of keys at a time (e.g. on the command line) use this ROW variable:
 //ROW = [];
@@ -221,30 +219,22 @@ ROW_SPACING = KEY_UNIT; // You can change this to something like "KEY_HEIGHT+3" 
       That would generate all those keys and save them in a single .stl named qwertyiop.stl
 */
 
-// DEBUGGING FEATURES
-DEBUG = false; // Set this to true if you want poly_keycap() to spit out all it's variables in the console
-
 // YOU CAN IGNORE EVERYTHING BELOW THIS POINT (unless you're curious how it works)
 
 // Generates a keycap using global variables but you can override the legends (for generating whole rows at a time)
 module key_using_globals(legends) {
-  _legends = legends ? legends : LEGENDS;
+  _legends = legends ? legends : LEGEND_LIST;
   poly_keycap(
     height=KEY_HEIGHT, length=KEY_LENGTH, width=KEY_WIDTH,
     wall_thickness=WALL_THICKNESS, top_difference=KEY_TOP_DIFFERENCE,
     dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE,
     stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-    stem_walls_tolerance=STEM_WALLS_TOLERANCE,
     top_x=KEY_TOP_X, top_y=KEY_TOP_Y, dish_depth=DISH_DEPTH,
     dish_x=DISH_X, dish_y=DISH_Y, dish_z=DISH_Z,
     dish_thickness=DISH_THICKNESS, dish_fn=DISH_FN,
     dish_corner_fn=DISH_CORNER_FN,
-    legends=_legends, legend_font_sizes=LEGEND_FONT_SIZES,
+    legend_list=_legends,
     legend_carved=LEGEND_CARVED,
-    legend_fonts=LEGEND_FONTS, legend_trans=LEGEND_TRANS,
-    legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
-    legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-    legend_underset=LEGEND_UNDERSET,
     polygon_layers=POLYGON_LAYERS, polygon_layer_rotation=POLYGON_LAYER_ROTATION,
     polygon_edges=POLYGON_EDGES, polygon_curve=POLYGON_CURVE,
     dish_type=DISH_TYPE,
@@ -254,7 +244,7 @@ module key_using_globals(legends) {
     homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
     homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
     key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-    debug=DEBUG, uniform_wall_thickness=UNIFORM_WALL_THICKNESS
+    uniform_wall_thickness=UNIFORM_WALL_THICKNESS
   );
 }
 
@@ -266,7 +256,6 @@ module key_without_legends() {
     wall_thickness=WALL_THICKNESS, top_difference=KEY_TOP_DIFFERENCE,
     dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE,
     stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-    stem_walls_tolerance=STEM_WALLS_TOLERANCE,
     top_x=KEY_TOP_X, top_y=KEY_TOP_Y, dish_depth=DISH_DEPTH,
     dish_x=DISH_X, dish_y=DISH_Y, dish_z=DISH_Z,
     dish_thickness=DISH_THICKNESS, dish_fn=DISH_FN,
@@ -281,7 +270,7 @@ module key_without_legends() {
     homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
     visualize_legends=VISUALIZE_LEGENDS, polygon_rotation=POLYGON_ROTATION,
     key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-    debug=DEBUG, uniform_wall_thickness=UNIFORM_WALL_THICKNESS
+    uniform_wall_thickness=UNIFORM_WALL_THICKNESS
   );
 }
 
@@ -490,19 +479,24 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           DSA_keycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
             polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS
           );
         }
       } else if (KEY_PROFILE == "dcs") {
@@ -517,21 +511,27 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           DCS_keycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
-            polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
+            visualize_legends=VISUALIZE_LEGENDS
           );
         }
+        // TODO DSS missing
       } else if (KEY_PROFILE == "kat") {
         just_legends(
           height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
@@ -544,19 +544,24 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           KAT_keycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
             polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS
           );
         }
       } else if (KEY_PROFILE == "kam") {
@@ -571,19 +576,24 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           KAM_keycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
             polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS
           );
         }
       } else if (KEY_PROFILE == "riskeycap") {
@@ -598,19 +608,24 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           riskeycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
             polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS
           );
         }
       } else if (KEY_PROFILE == "gem") {
@@ -625,19 +640,24 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           GEM_keycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
             polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS
           );
         }
       } else if (KEY_PROFILE == "xda") {
@@ -652,19 +672,24 @@ module handle_render(what, legends) {
           legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION
         ) {
           XDA_keycap(
-            row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+            row=KEY_ROW,
+            length=KEY_LENGTH,
+            width=KEY_WIDTH,
             height_extra=KEY_HEIGHT_EXTRA,
             wall_thickness=WALL_THICKNESS,
             polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+            dish_fn=DISH_FN,
+            dish_thickness=DISH_THICKNESS,
             dish_corner_fn=DISH_CORNER_FN,
             visualize_legends=VISUALIZE_LEGENDS,
             homing_dot_length=HOMING_DOT_LENGTH,
             homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+            homing_dot_x=HOMING_DOT_X,
+            homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+            key_rotation=KEY_ROTATION,
+            dish_invert=DISH_INVERT,
+            uniform_wall_thickness=UNIFORM_WALL_THICKNESS
           );
         }
       } else {
@@ -1031,153 +1056,205 @@ module handle_render(what, legends) {
 
     keycapRenderType(renderType=what) {
       if (KEY_PROFILE == "dsa") {
-        gen_DSA_keycap();
+        DSA_keycap(
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
+          polygon_layers=POLYGON_LAYERS,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
+          dish_thickness=DISH_THICKNESS,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
+          homing_dot_z=HOMING_DOT_Z,
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
+        );
       } else if (KEY_PROFILE == "dcs") {
         DCS_keycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-          corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
+          corner_radius=CORNER_RADIUS,
+          polygon_layers=POLYGON_LAYERS,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
         );
       } else if (KEY_PROFILE == "dss") {
         DSS_keycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-          corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
+          corner_radius=CORNER_RADIUS,
+          polygon_layers=POLYGON_LAYERS,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
       } else if (KEY_PROFILE == "kat") {
         KAT_keycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
           polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS, homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
       } else if (KEY_PROFILE == "kam") {
         KAM_keycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
           polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
       } else if (KEY_PROFILE == "riskeycap") {
         riskeycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
           polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
       } else if (KEY_PROFILE == "gem") {
         GEM_keycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
           polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
       } else if (KEY_PROFILE == "xda") {
         XDA_keycap(
-          row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
-          stem_walls_tolerance=STEM_WALLS_TOLERANCE,
-          legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
-          legend_fonts=LEGEND_FONTS,
-          legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-          legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
-          legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+          row=KEY_ROW,
+          length=KEY_LENGTH,
+          width=KEY_WIDTH,
+          height_extra=KEY_HEIGHT_EXTRA,
+          wall_thickness=WALL_THICKNESS,
+          stem_clips=STEM_SNAP_FIT,
+          stem_walls_inset=STEM_WALLS_INSET,
+          legend_list=legends,
+          legend_carved=LEGEND_CARVED,
           polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+          dish_fn=DISH_FN,
+          dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
-          homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+          visualize_legends=VISUALIZE_LEGENDS,
+          homing_dot_length=HOMING_DOT_LENGTH,
+          homing_dot_width=HOMING_DOT_WIDTH,
+          homing_dot_x=HOMING_DOT_X,
+          homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG
+          key_rotation=KEY_ROTATION,
+          dish_invert=DISH_INVERT,
+          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
       } else {
         // If no built-in profile is selected
@@ -1429,9 +1506,10 @@ module handle_render(what, legends) {
 
 // RENDER = ["custom"];
 // RENDER = ["%keycap", "stem"];
-// RENDER = ["legends"];
+// RENDER = ["keycap", "legends"];
 // RENDER = ["keycap"];
-RENDER = ["%keycap"];
+// RENDER = ["%keycap"];
+KEY_PROFILE = "kam"; // [riskeycap, gem, dsa, dcs, dss, kat, kam]
 
 module render_keycap(stuff_to_render) {
   for (what_to_render = stuff_to_render) {
@@ -1461,7 +1539,7 @@ module render_keycap(stuff_to_render) {
       }
     } else if (what_to_render == "custom") {
     } else {
-      handle_render(what_to_render, legends=LEGENDS); // Normal rendering of a single keycap
+      handle_render(what_to_render, legends=LEGEND_LIST); // Normal rendering of a single keycap
     }
   }
 }

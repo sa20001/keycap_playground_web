@@ -4,6 +4,12 @@
 
 # Changelog
 
+## 2.0.0-alpha
+- Removed incomplete features
+- Added iso enter
+- Streamlined parameters for modules
+- Single parameter for legends
+
 ## 1.10.1
 - Improved corner wall thickness accuracy when `UNIFORM_WALL_THICKNESS=true`.
 - Fixed a bug where `STEM_SUPPORT_DISTANCE` wasn't being passed through when specifying a keycap profile (e.g., "riskeycap").

@@ -402,7 +402,7 @@ module poly_keycap_iso_enter(
   }
 }
 
-// Example usage:
+// // Example usage:
 // {
 //   // Width of a standard "key unit" (how much space a "key" takes up in total). Probably don't want to change this.
 //   KEY_UNIT = 19.05; // Square that makes up the entire space of a key
@@ -448,33 +448,60 @@ module poly_keycap_iso_enter(
 //   CORNER_RADIUS = 1; // Radius of the outside corners of the keycap (the base of the keycap)
 //   CORNER_RADIUS_CURVE = 3; // If you want the corner radius to get bigger as it goes up (WARNING: Set this too high and you'll end up with missing bits of your keycap! Check the height when messing with this)
 
+//   // LEGENDS
+//   LEGEND_LIST = [
+//     make_legend(
+//       symbol="A",
+//       font="Overpass Nerd Font",
+//       size=5.5,
+//       trans=[-0.1, 0, 0],
+//       rot=[0, 0, 0],
+//       trans2=[0, 0, 0],
+//       rot2=[0, 0, 0],
+//       legend_scale=[1, 1, 1],
+//       underset=[0, 0, 0]
+//     ),
+
+//     make_legend(
+//       symbol="!",
+//       font="Overpass Nerd Font",
+//       size=4,
+//       trans=[4.15, 3, 1],
+//       rot=[0, 0, 0],
+//       trans2=[0, 0, 0],
+//       rot2=[0, 0, 0],
+//       legend_scale=[1, 1, 1],
+//       underset=[0, 0, 0]
+//     ),
+//   ];
+
 //   // DEBUGGING FEATURES
 //   VISUALIZE_LEGENDS = false; // Set to true to have the legends appear via %
 
-// // Render a basic 1U keycap.
-// poly_keycap_iso_enter(
-//   height=KEY_HEIGHT,
-//   length=KEY_LENGTH,
-//   wall_thickness=WALL_THICKNESS,
-//   top_difference=KEY_TOP_DIFFERENCE,
-//   dish_tilt=DISH_TILT,
-//   dish_tilt_curve=DISH_TILT_CURVE,
-//   skew_top_x=KEY_TOP_X,
-//   skew_top_y=KEY_TOP_Y,
-//   dish_depth=DISH_DEPTH,
-//   dish_x=DISH_X,
-//   dish_y=DISH_Y,
-//   dish_z=DISH_Z,
-//   dish_thickness=DISH_THICKNESS,
-//   dish_fn=DISH_FN,
-//   corner_fn=DISH_CORNER_FN,
-//   legend_list=LEGEND_LIST,
-//   polygon_layers=POLYGON_LAYERS,
-//   dish_type=DISH_TYPE,
-//   corner_radius_base=CORNER_RADIUS,
-//   corner_radius_top=CORNER_RADIUS_CURVE,
-//   visualize_legends=VISUALIZE_LEGENDS,
-//   key_rotation=KEY_ROTATION,
-//   skinny_enter=true
-// );
+//   // Render a basic 1U keycap.
+//   poly_keycap_iso_enter(
+//     height=KEY_HEIGHT,
+//     length=KEY_LENGTH,
+//     wall_thickness=WALL_THICKNESS,
+//     top_difference=KEY_TOP_DIFFERENCE,
+//     dish_tilt=DISH_TILT,
+//     dish_tilt_curve=DISH_TILT_CURVE,
+//     skew_top_x=KEY_TOP_X,
+//     skew_top_y=KEY_TOP_Y,
+//     dish_depth=DISH_DEPTH,
+//     dish_x=DISH_X,
+//     dish_y=DISH_Y,
+//     dish_z=DISH_Z,
+//     dish_thickness=DISH_THICKNESS,
+//     dish_fn=DISH_FN,
+//     corner_fn=DISH_CORNER_FN,
+//     legend_list=LEGEND_LIST,
+//     polygon_layers=POLYGON_LAYERS,
+//     dish_type=DISH_TYPE,
+//     corner_radius_base=CORNER_RADIUS,
+//     corner_radius_top=CORNER_RADIUS_CURVE,
+//     visualize_legends=VISUALIZE_LEGENDS,
+//     key_rotation=KEY_ROTATION,
+//     skinny_enter=true
+//   );
 // }

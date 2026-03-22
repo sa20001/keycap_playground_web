@@ -96,3 +96,80 @@ function polygon_slice_reverse(step, amplitude, total_steps = 10) = (1 - (total_
 //squarish_rpoly(xy1=[0.1,0.1], xy2=[40,40], h=10, r=0.2, center=true);
 // Flat sides example:
 //squarish_rpoly(xy1=[10,10], xy2=[18,18], h=10, r=1, center=true, $fn=4);
+
+/*
+LEGEND_DATA
+Each entry defines a single legend and its properties.
+
+Format:
+[text, font, size, trans, rot, trans2, rot2, scale, underset]
+
+Parameters:
+0: symbol (string)
+   The character(s) to render (e.g. "A", "!", "⏎").
+
+1: font (string)
+   Font name used for the legend.
+   Example: "Overpass Nerd Font", "Roboto", "Noto".
+  "Arial Black:style=Regular", // Position/index must match the index in LEGENDS
+  "Franklin Gothic Medium:style=Regular" // Normal-ish keycap legend font
+  "Gotham Rounded:style=Bold", // Looks similar to the SA Dasher font
+  Favorite fonts for legends: Roboto, Aharoni, Ubuntu, Cabin, Noto, Code2000, Franklin Gothic Medium
+  Tip: "Noto" and "Code2000" have nearly every emoji/special/funky unicode chars
+
+2: size (number)
+   Font size of the legend.
+
+3: trans (vec3)
+   Primary translation [x, y, z] in mm.
+   Controls main positioning on the keycap surface.
+
+4: rot (vec3)
+   Primary rotation [x, y, z] in degrees.
+   Usually used for simple orientation.
+
+5: trans2 (vec3)
+   Secondary translation used for positioning legends on key sides.
+
+6: rot2 (vec3)
+   Secondary rotation used orienting legends on key sides.
+
+7: legend_scale (vec3)
+   Scaling factor [x, y, z].
+   Allows stretching or shrinking the legend on a particular axis.
+
+8: underset (vec3)
+   Used to make legends partially or completely *invisible* until backlit.
+   
+   Usage notes:
+   - For backlit legends, the offset moves the legend down while 
+     keeping it perfectly shaped to the keycap dish.
+   - The legend and stem should be printed in transparent material
+     so light can pass through.
+   - Consider to apply a modifier mesh (or similar) in your slicer to make sure that at
+     least one layer underneath the keycap gets printed in a *very* opaque material 
+     (e.g. black) so as to maximize the amount of contrast for your legend.
+   - Setting DISH_THICKNESS as thin as possible reduces the amount
+     of plastic the light must pass through, improving legend visibility.
+
+Notes:
+Transform order is:
+  1. scale(legend_scale)
+  2. rotate(rot)
+  3. translate(trans)
+  4. rotate(rot2)
+  5. translate(trans2)
+  6. translate(underset)
+*/
+function make_legend(
+  symbol = "",
+  font = "Roboto",
+  size = 5,
+  trans = [0, 0, 0],
+  rot = [0, 0, 0],
+  trans2 = [0, 0, 0],
+  rot2 = [0, 0, 0],
+  legend_scale = [1, 1, 1],
+  underset = [0, 0, 0]
+) =
+  [symbol, font, size, trans, rot, trans2, rot2, legend_scale, underset];

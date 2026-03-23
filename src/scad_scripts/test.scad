@@ -21,6 +21,7 @@
 // TODO: Make presets for things like, "spacebar6.25", "shift2.25", "tab1.5" etc
 // TODO: Add support for adding a bevel/rounded edge to the top of keycaps.
 // TODO: Finish whole-keyboard generation support.
+// TODO: BUG profile+legend: kat, dss, 
 
 use <keycaps.scad>
 use <stems.scad>
@@ -1123,6 +1124,7 @@ RENDER = ["keycap", "legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
 KEY_PROFILE = "xda"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
+
 
 module render_keycap(stuff_to_render) {
   for (what_to_render = stuff_to_render) {

@@ -7,8 +7,9 @@
 ## 2.0.0-alpha
 - Removed incomplete features
 - Added iso enter
-- Streamlined parameters for modules
+- Streamlined parameters for keycap modules
 - Single parameter for legends
+- Streamlined stem generation
 
 ## 1.10.1
 - Improved corner wall thickness accuracy when `UNIFORM_WALL_THICKNESS=true`.

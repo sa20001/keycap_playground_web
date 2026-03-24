@@ -149,6 +149,13 @@ STEM_CORNER_RADIUS = STEM_TYPE == "alps" ? ALPS_STEM_CORNER_RADIUS : BOX_CHERRY_
 // NOTE ABOUT STEM STRENGTH AND ACCURACY: Printing stems upright/flat with a 0.4mm nozzle is troublesome.  They work OK but they're usually quite tight.  It's better to print keys on their side (front or left/right) so that the layer lines run at an angle to the switch stem; they end up more accurate *and* much, much stronger.
 STEM_INSET = 1; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
 STEM_FLAT_SUPPORT = false; // Add built-in support for the stem when printing flat (if inset)
+
+if (STEM_FLAT_SUPPORT && STEM_INSET > 0) {
+  if (KEY_ROTATION[0] != 0 || KEY_ROTATION[1] != 0) {
+    warning("If you're rotating the keycap you probably want STEM_FLAT_SUPPORT=false");
+  }
+}
+
 STEM_SIDE_SUPPORT_THICKNESS = 1; // 1 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
 STEM_SIDE_SUPPORTS = [0, 1, 0, 0]; // Left, right, front, back
@@ -1118,13 +1125,13 @@ module handle_render(what, legends) {
 }
 
 // RENDER = ["custom"];
-// RENDER = ["%keycap", "stem"];
-RENDER = ["keycap", "legends"];
+// // RENDER = ["%keycap", "stem"];
+RENDER = ["stem"];
+// RENDER = ["keycap", "legends"];
 // RENDER = ["legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
 KEY_PROFILE = "xda"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
-
 
 module render_keycap(stuff_to_render) {
   for (what_to_render = stuff_to_render) {

@@ -1,6 +1,6 @@
 include <BOSL2/std.scad>
 use <legends.scad>
-
+use <utils.scad>
 /*
 * This function returns the iso enter path
 * 
@@ -295,7 +295,6 @@ module poly_keycap_iso_enter(
   corner_radius_base = 0.5,
   corner_radius_top = 0,
   visualize_legends = false,
-  key_rotation = [0, 0, 0],
   skinny_enter = false,
 ) {
   layer_tilt_adjust = dish_tilt / polygon_layers;
@@ -334,73 +333,70 @@ module poly_keycap_iso_enter(
                 rotate([tilt_above_curved, 0, 0])
                   children();
   }
+  difference() {
+    //(i.e. shell operation)
 
-  rotate(key_rotation) {
-    difference() {
-      //(i.e. shell operation)
+    _poly_keycap_iso_enter(
+      // Generate main shape
+      height=height,
+      base_u=length,
+      top_difference=top_difference,
+      dish_tilt=dish_tilt,
+      dish_tilt_curve=dish_tilt_curve,
+      skew_top_x=skew_top_x,
+      skew_top_y=skew_top_y,
+      dish_depth=dish_depth,
+      dish_x=dish_x,
+      dish_y=dish_y,
+      dish_z=dish_z,
+      dish_fn=dish_fn,
+      corner_fn=corner_fn,
+      polygon_layers=polygon_layers,
+      dish_type=dish_type,
+      corner_radius_base=corner_radius_base,
+      corner_radius_top=corner_radius_top,
+      skinny_enter=skinny_enter
+    );
 
-      _poly_keycap_iso_enter(
-        // Generate main shape
-        height=height,
-        base_u=length,
-        top_difference=top_difference,
-        dish_tilt=dish_tilt,
-        dish_tilt_curve=dish_tilt_curve,
-        skew_top_x=skew_top_x,
-        skew_top_y=skew_top_y,
-        dish_depth=dish_depth,
-        dish_x=dish_x,
-        dish_y=dish_y,
-        dish_z=dish_z,
-        dish_fn=dish_fn,
-        corner_fn=corner_fn,
-        polygon_layers=polygon_layers,
-        dish_type=dish_type,
-        corner_radius_base=corner_radius_base,
-        corner_radius_top=corner_radius_top,
-        skinny_enter=skinny_enter
-      );
+    tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
 
-      tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
+    // Take care of the legends (if any)
+    if (legend_list[0]) {
+      for (l = legend_list) {
 
-      // Take care of the legends (if any)
-      if (legend_list[0]) {
-        for (l = legend_list) {
+        legend = l[0];
+        font = l[1];
+        font_size = l[2];
+        trans = l[3];
+        rotation = l[4];
+        trans2 = l[5];
+        rotation2 = l[6];
+        l_scale = l[7];
+        underset = l[8];
 
-          legend = l[0];
-          font = l[1];
-          font_size = l[2];
-          trans = l[3];
-          rotation = l[4];
-          trans2 = l[5];
-          rotation2 = l[6];
-          l_scale = l[7];
-          underset = l[8];
-
-          if (visualize_legends) {
-            %legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
-              color([0.5, 0.5, 0.5, 0.75])
-                draw_legend(legend, font_size, font, height);
-            }
-          } else {
-            // NOTE: This translate([0,0,1]) call is just to fix preview rendering
-            translate(underset) translate([0, 0, 1]) intersection() {
-                  legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
-                    draw_legend(legend, font_size, font, height);
-                  }
-                  easy_iso_enter_shape();
-                }
+        if (visualize_legends) {
+          %legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
+            color([0.5, 0.5, 0.5, 0.75])
+              draw_legend(legend, font_size, font, height);
           }
+        } else {
+          // NOTE: This translate([0,0,1]) call is just to fix preview rendering
+          translate(underset) translate([0, 0, 1]) intersection() {
+                legend_transformations(underset, trans2, rotation2, trans, rotation, l_scale, tilt_above_curved) {
+                  draw_legend(legend, font_size, font, height);
+                }
+                easy_iso_enter_shape();
+              }
         }
       }
-
-      // Interior cutout
-      translate([0, 0, -wall_thickness])
-        offset3d(r=-wall_thickness, size=2.5 * length) {
-          // Generate interior shape that will be later subtracted from main shape
-          easy_iso_enter_shape(polygon_layers / 2); // low layer, we need the general shape only
-        }
     }
+
+    // Interior cutout
+    translate([0, 0, -wall_thickness])
+      offset3d(r=-wall_thickness, size=2.5 * length) {
+        // Generate interior shape that will be later subtracted from main shape
+        easy_iso_enter_shape(polygon_layers / 2); // low layer, we need the general shape only
+      }
   }
 }
 
@@ -416,9 +412,6 @@ module poly_keycap_iso_enter(
 //   // NOTE: You *can* just set KEY_LENGTH/KEY_WIDTH to something simple e.g. 18
 //   KEY_LENGTH = (KEY_UNIT * 1 - BETWEENSPACE); // The X (NOTE: Increase DISH_FN if you make this >1U!)
 //   // NOTE: If using a profile make sure KEY_LENGTH matches the profile's KEY_WIDTH for 1U keycaps!
-//   //KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
-//   KEY_ROTATION = [0, 110.1, 90]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.  For GEM use:
-//   //KEY_ROTATION = [0,108.6,90];
 //   // NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 //   KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 //   KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
@@ -503,7 +496,6 @@ module poly_keycap_iso_enter(
 //     corner_radius_base=CORNER_RADIUS,
 //     corner_radius_top=CORNER_RADIUS_CURVE,
 //     visualize_legends=VISUALIZE_LEGENDS,
-//     key_rotation=KEY_ROTATION,
 //     skinny_enter=true
 //   );
 // }

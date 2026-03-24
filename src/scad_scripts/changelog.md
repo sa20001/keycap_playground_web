@@ -10,6 +10,7 @@
 - Streamlined parameters for keycap modules
 - Single parameter for legends
 - Streamlined stem generation
+- removed key_rotation parameter and put as final transformation
 
 ## 1.10.1
 - Improved corner wall thickness accuracy when `UNIFORM_WALL_THICKNESS=true`.

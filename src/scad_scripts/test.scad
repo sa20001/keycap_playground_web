@@ -28,7 +28,6 @@ use <stems.scad>
 use <legends.scad>
 use <utils.scad>
 use <profiles.scad>
-use <iso_enter.scad>
 
 // Rendering resolution (32 is usually good enough)
 $fn = 32; // Mostly only applies to legends/fonts but increase as needed for greater resolution
@@ -86,6 +85,7 @@ KEY_WIDTH = (KEY_UNIT * 1 - BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDE
 // NOTE: When making longer keycaps you may need to increase KEY_HEIGHT slightly in order for the height to be accurate.  I recommend giving it an extra 0.3mm per extra unit of length so 2U would be +0.3, 3U would be +0.6, etc BUT DOUBLE CHECK IT.  Do a side profile view and look at the ruler or render it and double-check the height in your slicer.
 //KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
 KEY_ROTATION = [0, 110.1, 90]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.  For GEM use:
+// Riskeycap to print on it's side use: KEY_ROTATION = [0,110.1,0];
 //KEY_ROTATION = [0,108.6,90];
 // NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
@@ -251,7 +251,7 @@ module key_using_globals(legends) {
     visualize_legends=VISUALIZE_LEGENDS, polygon_rotation=POLYGON_ROTATION,
     homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
     homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
-    key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
+    dish_invert=DISH_INVERT,
     uniform_wall_thickness=UNIFORM_WALL_THICKNESS
   );
 }
@@ -277,7 +277,7 @@ module key_without_legends() {
     homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
     homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
     visualize_legends=VISUALIZE_LEGENDS, polygon_rotation=POLYGON_ROTATION,
-    key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
+    dish_invert=DISH_INVERT,
     uniform_wall_thickness=UNIFORM_WALL_THICKNESS
   );
 }
@@ -309,7 +309,6 @@ module stem_using_globals() {
       side_supports=STEM_SIDE_SUPPORTS,
       support_distance=STEM_SUPPORT_DISTANCE,
       locations=STEM_LOCATIONS,
-      key_rotation=KEY_ROTATION,
       dish_invert=DISH_INVERT,
       dish_x=DISH_X,
       dish_y=DISH_Y,
@@ -354,7 +353,6 @@ module stem_using_globals() {
       side_supports=STEM_SIDE_SUPPORTS,
       support_distance=STEM_SUPPORT_DISTANCE,
       locations=STEM_LOCATIONS,
-      key_rotation=KEY_ROTATION,
       dish_invert=DISH_INVERT,
       dish_x=DISH_X,
       dish_y=DISH_Y,
@@ -396,7 +394,6 @@ module stem_using_globals() {
       side_supports=STEM_SIDE_SUPPORTS,
       support_distance=STEM_SUPPORT_DISTANCE,
       locations=STEM_LOCATIONS,
-      key_rotation=KEY_ROTATION,
       dish_invert=DISH_INVERT,
       dish_x=DISH_X,
       dish_y=DISH_Y,
@@ -435,7 +432,6 @@ module stem_top_using_globals() {
     wall_inset=STEM_WALLS_INSET,
     wall_tolerance=STEM_WALLS_TOLERANCE,
     top_x=KEY_TOP_X, top_y=KEY_TOP_Y,
-    key_rotation=KEY_ROTATION,
     dish_invert=DISH_INVERT,
     dish_type=DISH_TYPE,
     dish_x=DISH_X,
@@ -482,8 +478,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=false,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         ) {
           generate_keycap(
             row=KEY_ROW,
@@ -501,7 +496,6 @@ module handle_render(what, legends) {
             homing_dot_x=HOMING_DOT_X,
             homing_dot_y=HOMING_DOT_Y,
             homing_dot_z=HOMING_DOT_Z,
-            key_rotation=KEY_ROTATION,
             dish_invert=DISH_INVERT,
             uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
             key_profile=KEY_PROFILE
@@ -513,8 +507,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         ) {
           key_without_legends();
         }
@@ -546,7 +539,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -555,8 +547,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "dcs") {
@@ -586,7 +577,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -595,8 +585,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "dss") {
@@ -626,7 +615,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -635,8 +623,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "kat") {
@@ -666,7 +653,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -675,8 +661,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "kam") {
@@ -704,7 +689,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -713,8 +697,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "riskeycap") {
@@ -743,7 +726,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -752,8 +734,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "gem") {
@@ -782,7 +763,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -791,8 +771,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else if (KEY_PROFILE == "xda") {
@@ -821,7 +800,6 @@ module handle_render(what, legends) {
           outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
           inside_tolerance=STEM_INSIDE_TOLERANCE,
           locations=STEM_LOCATIONS,
-          key_rotation=KEY_ROTATION,
           hollow=STEM_HOLLOW,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS
         );
@@ -830,8 +808,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     } else {
@@ -842,8 +819,7 @@ module handle_render(what, legends) {
           dish_tilt=DISH_TILT,
           dish_tilt_curve=DISH_TILT_CURVE,
           polygon_layers=POLYGON_LAYERS,
-          legend_list=legends,
-          key_rotation=KEY_ROTATION
+          legend_list=legends
         );
       }
     }
@@ -871,7 +847,6 @@ module handle_render(what, legends) {
           homing_dot_x=HOMING_DOT_X,
           homing_dot_y=HOMING_DOT_Y,
           homing_dot_z=HOMING_DOT_Z,
-          key_rotation=KEY_ROTATION,
           dish_invert=DISH_INVERT,
           uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
           key_profile=KEY_PROFILE
@@ -907,7 +882,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -937,7 +911,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -967,7 +940,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -997,7 +969,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -1026,7 +997,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -1055,7 +1025,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -1084,7 +1053,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -1113,7 +1081,6 @@ module handle_render(what, legends) {
         outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         inside_tolerance=STEM_INSIDE_TOLERANCE,
         locations=STEM_LOCATIONS,
-        key_rotation=KEY_ROTATION,
         hollow=STEM_HOLLOW,
         uniform_wall_thickness=UNIFORM_WALL_THICKNESS
       );
@@ -1126,8 +1093,8 @@ module handle_render(what, legends) {
 
 // RENDER = ["custom"];
 // // RENDER = ["%keycap", "stem"];
-RENDER = ["stem"];
-// RENDER = ["keycap", "legends"];
+// RENDER = ["stem"];
+RENDER = ["keycap", "legends", "stem"];
 // RENDER = ["legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
@@ -1166,4 +1133,5 @@ module render_keycap(stuff_to_render) {
   }
 }
 
-render_keycap(RENDER);
+rotate(KEY_ROTATION)
+  render_keycap(RENDER);

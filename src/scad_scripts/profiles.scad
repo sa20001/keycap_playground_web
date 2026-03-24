@@ -395,38 +395,14 @@ module DSA_stem(
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=key_height + height_extra,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=dish_depth,
-      dish_thickness=dish_thickness,
-      top_difference=top_difference,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
-      dish_z=dish_z,
-      polygon_layers=polygon_layers,
-      polygon_curve=4.5,
-      dish_invert=dish_invert,
-      dish_type=dish_type,
-      depth=depth, dish_tilt=0,
-      top_thickness=top_thickness,
-      key_corner_radius=key_corner_radius,
-      corner_radius_curve=corner_radius_curve,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
+      corner_radius=corner_radius,
+      depth=depth,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -525,37 +501,14 @@ module DCS_stem(row = 2, stem_type = "box_cherry", key_length = 18.15, key_width
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=row_height[row] + height_extra,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=dish_depth,
-      dish_thickness=adjusted_dish_thickness,
-      top_difference=top_difference,
-      dish_invert=dish_invert,
-      polygon_layers=polygon_layers,
-      dish_type=dish_type,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
+      corner_radius=corner_radius,
       depth=depth,
-      dish_tilt=dish_tilt[row],
-      dish_z=dish_z[row],
-      top_thickness=top_thickness,
-      key_corner_radius=key_corner_radius,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -651,39 +604,14 @@ module DSS_stem(row = 2, stem_type = "box_cherry", key_length = 18.24, key_width
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=adjusted_row_height,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=dish_depth,
-      dish_thickness=dish_thicknesses[row],
-      top_difference=top_difference,
-      dish_type=dish_type,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
-      dish_invert=dish_invert,
-      polygon_layers=polygon_layers,
-      polygon_curve=4,
-      dish_z=dish_z[row],
-      dish_y=dish_y[row],
+      corner_radius=corner_radius,
       depth=depth,
-      dish_tilt=dish_tilt[row],
-      top_thickness=top_thickness,
-      key_corner_radius=key_corner_radius,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -777,43 +705,18 @@ module KAT_stem(row = 1, stem_type = "box_cherry", key_height = 9.15, key_length
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      key_height=key_height
+      key_height=row_height[row] + height_extra
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=row_height[row] + height_extra,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=dish_depth,
-      dish_thickness=dish_thickness,
-      top_difference=top_difference,
-      dish_type=dish_type,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
-      dish_invert=dish_invert,
-      polygon_layers=polygon_layers,
-      polygon_curve=7,
-      dish_y=dish_y[row],
-      dish_z=dish_z[row],
+      corner_radius=corner_radius,
       depth=depth,
-      dish_tilt=dish_tilt[row],
-      top_thickness=top_thickness,
-      key_corner_radius=key_corner_radius,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=kat_top_y[row],
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -904,38 +807,14 @@ module KAM_stem(stem_type = "box_cherry", key_height = 9.05, key_length = 18.3, 
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=row_height + height_extra,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=dish_depth,
-      dish_thickness=dish_thickness,
-      top_difference=top_difference,
-      dish_invert=dish_invert,
-      polygon_layers=polygon_layers,
-      polygon_curve=4.5,
-      dish_type=dish_type,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
+      corner_radius=corner_radius,
       depth=depth,
-      dish_tilt=0,
-      top_thickness=top_thickness,
-      key_corner_radius=key_corner_radius,
-      corner_radius_curve=corner_radius_curve,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -1025,43 +904,14 @@ module riskeystem(stem_type = "box_cherry", key_height = 8.2, key_length = 18.25
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=adjusted_height + height_extra,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=adjusted_dish_depth,
-      dish_thickness=dish_thickness,
-      top_difference=top_difference,
-      dish_invert=dish_invert,
-      dish_x=dish_x,
-      dish_y=dish_y,
-      dish_z=dish_z,
-      polygon_layers=polygon_layers,
-      polygon_layer_rotation=polygon_layer_rotation,
-      polygon_edges=polygon_edges,
-      polygon_curve=polygon_curve,
-      dish_type=dish_type,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
-      key_corner_radius=key_corner_radius, // Of the keycap
-      corner_radius_curve=corner_radius_curve,
+      corner_radius=corner_radius,
       depth=depth,
-      dish_tilt=0,
-      top_thickness=top_thickness,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -1163,43 +1013,14 @@ module GEM_stem(stem_type = "box_cherry", key_height = 8.2, key_length = 18.25, 
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=adjusted_height + height_extra,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=adjusted_dish_depth,
-      dish_thickness=dish_thickness,
-      top_difference=top_difference,
-      dish_invert=dish_invert,
-      dish_x=dish_x,
-      dish_y=dish_y,
-      dish_z=dish_z,
-      polygon_layers=polygon_layers,
-      polygon_layer_rotation=polygon_layer_rotation,
-      polygon_edges=polygon_edges,
-      polygon_curve=polygon_curve,
-      dish_type=dish_type,
-      dish_fn=dish_fn,
-      dish_corner_fn=adjusted_dish_corner_fn,
-      key_corner_radius=key_corner_radius, // Of the keycap
-      corner_radius_curve=corner_radius_curve,
+      corner_radius=corner_radius,
       depth=depth,
-      dish_tilt=0,
-      top_thickness=top_thickness,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      key_height=key_height
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -1298,39 +1119,14 @@ module XDA_stem(stem_type = "box_cherry", key_height = 7.3914, key_length = 18.4
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=row_height,
-      key_length=key_length,
-      key_width=key_width,
-      dish_depth=dish_depth,
-      dish_thickness=dish_thickness,
-      top_difference=top_difference,
-      dish_fn=dish_fn,
-      dish_corner_fn=dish_corner_fn,
-      dish_z=dish_z,
-      polygon_layers=polygon_layers,
-      polygon_curve=5,
-      dish_invert=dish_invert,
-      dish_type=dish_type,
+      key_height=key_height,
       depth=depth,
-      dish_tilt=0,
-      top_thickness=top_thickness,
-      key_corner_radius=key_corner_radius,
-      corner_radius_curve=corner_radius_curve,
-      wall_thickness=wall_thickness,
-      wall_extra=wall_extra,
-      wall_inset=wall_inset,
-      wall_tolerance=wall_tolerance,
-      top_x=top_x,
-      top_y=top_y,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
       support_distance=support_distance,
-      locations=locations,
-      side_support_thickness=side_support_thickness,
-      side_supports=side_supports,
-      uniform_wall_thickness=uniform_wall_thickness
+      corner_radius=corner_radius
     );
   } else if (stem_type == "alps") {
     stem_alps(

@@ -282,44 +282,8 @@ module key_without_legends() {
   );
 }
 
-// Renders a stem and stabilizers using global values
-module stem_using_globals() {
-  // TODO: Support more stem types
-  if (STEM_TYPE == "box_cherry") {
-    stem_box_cherry(
-      corner_radius=CORNER_RADIUS,
-      depth=STEM_HEIGHT,
-      outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-      outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-      inside_tolerance=STEM_INSIDE_TOLERANCE,
-      inset=STEM_INSET,
-      flat_support=STEM_FLAT_SUPPORT,
-      support_distance=STEM_SUPPORT_DISTANCE
-    );
-  } else if (STEM_TYPE == "round_cherry") {
-    stem_round_cherry(
-      corner_radius=CORNER_RADIUS,
-      depth=STEM_HEIGHT,
-      outside_tolerance=STEM_OUTSIDE_TOLERANCE_X,
-      inside_tolerance=STEM_INSIDE_TOLERANCE,
-      inset=STEM_INSET,
-      flat_support=STEM_FLAT_SUPPORT,
-      support_distance=STEM_SUPPORT_DISTANCE
-    );
-  } else if (STEM_TYPE == "alps") {
-    stem_alps(
-      corner_radius=ALPS_STEM_CORNER_RADIUS,
-      depth=STEM_HEIGHT,
-      outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-      outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-      inset=STEM_INSET,
-      flat_support=STEM_FLAT_SUPPORT,
-      support_distance=STEM_SUPPORT_DISTANCE
-    );
-  }
-}
-
 module stem_top_using_globals() {
+  // Used by underset mask
   stem_top(
     KEY_HEIGHT + KEY_HEIGHT_EXTRA,
     KEY_LENGTH,
@@ -357,15 +321,19 @@ module stem_top_using_globals() {
 // This takes care of rendering whatever's configured via RENDER:
 module handle_render(what, legends) {
 
+  keycapColor = "white";
+  transparentKeycapColor = "red";
+  stemColor = "purple";
+
   module keycapRenderType(renderType) {
     if (renderType == "keycap") {
-      color("white") {
+      color(keycapColor) {
         render() {
           children();
         }
       }
     } else {
-      color("red", alpha=0.1)
+      color(transparentKeycapColor, alpha=0.1)
         %render() {
           children();
         }
@@ -727,7 +695,6 @@ module handle_render(what, legends) {
       }
     }
   } else if (what == "keycap" || what == "%keycap") {
-
     keycapRenderType(renderType=what) {
       if (KEY_PROFILE != "") {
         generate_keycap(
@@ -760,237 +727,18 @@ module handle_render(what, legends) {
       }
     }
   } else if (what == "stem") {
-    color("white") if (KEY_PROFILE == "dsa") {
-      DSA_stem(
+    color(stemColor)
+      generate_stem(
         stem_type=STEM_TYPE,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN,
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
+        stem_corner_radius=STEM_CORNER_RADIUS,
+        stem_height=STEM_HEIGHT,
+        stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
+        stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
+        stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
+        stem_inset=STEM_INSET,
+        stem_flat_support=STEM_FLAT_SUPPORT,
+        stem_support_distance=STEM_SUPPORT_DISTANCE,
       );
-    } else if (KEY_PROFILE == "dcs") {
-      DCS_stem(
-        row=KEY_ROW,
-        stem_type=STEM_TYPE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        inset=0, // Not enough room for inset with DCS
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN,
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else if (KEY_PROFILE == "dss") {
-      DSS_stem(
-        row=KEY_ROW,
-        stem_type=STEM_TYPE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN,
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else if (KEY_PROFILE == "kat") {
-      KAT_stem(
-        row=KEY_ROW,
-        stem_type=STEM_TYPE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN,
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else if (KEY_PROFILE == "kam") {
-      KAM_stem(
-        stem_type=STEM_TYPE,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN,
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else if (KEY_PROFILE == "riskeycap") {
-      riskeystem(
-        stem_type=STEM_TYPE,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN,
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else if (KEY_PROFILE == "gem") {
-      GEM_stem(
-        stem_type=STEM_TYPE,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN, // Ignored (always 4)
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else if (KEY_PROFILE == "xda") {
-      XDA_stem(
-        stem_type=STEM_TYPE,
-        wall_thickness=WALL_THICKNESS,
-        wall_extra=STEM_SIDES_WALL_THICKNESS,
-        wall_inset=STEM_WALLS_INSET,
-        wall_tolerance=STEM_WALLS_TOLERANCE,
-        key_length=KEY_LENGTH,
-        key_width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        inset=STEM_INSET,
-        depth=STEM_HEIGHT,
-        dish_thickness=DISH_THICKNESS,
-        dish_invert=DISH_INVERT,
-        dish_fn=DISH_FN,
-        dish_corner_fn=DISH_CORNER_FN, // Ignored (always 4)
-        corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
-        flat_support=STEM_FLAT_SUPPORT,
-        support_distance=STEM_SUPPORT_DISTANCE,
-        side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-        side_supports=STEM_SIDE_SUPPORTS,
-        outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        inside_tolerance=STEM_INSIDE_TOLERANCE,
-        locations=STEM_LOCATIONS,
-        hollow=STEM_HOLLOW,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-      );
-    } else {
-      // Use globals
-      stem_using_globals();
-    }
   }
 }
 
@@ -1001,8 +749,8 @@ module handle_render(what, legends) {
 // RENDER = ["legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
-KEY_PROFILE = "xda"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
-STEM_TYPE = "alps"; // [box_cherry, round_cherry, alps, stem_top]
+KEY_PROFILE = "dss"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
+STEM_TYPE = "round_cherry"; // [box_cherry, round_cherry, alps, stem_top]
 
 module render_keycap(stuff_to_render) {
   for (what_to_render = stuff_to_render) {

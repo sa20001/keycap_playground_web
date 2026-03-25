@@ -55,7 +55,7 @@ module cherry_cross(depth = 4, tolerance = 0.1, flare_base = true) {
 
 // TODO stem_support can be used for as upper part for stems? see if it makes sense to reuse this code
 // Generates *just* the top part of the stem that goes under the keycap (mostly for making underset legends)
-// NOTE: corner_radius is ignored (but key_corner_radius is used)
+// NOTE: stem_corner_radius is ignored (but key_corner_radius is used)
 module stem_top(
   key_height,
   key_length,
@@ -85,7 +85,7 @@ module stem_top(
   dish_division_y = 1,
   polygon_edges = 4,
   dish_type = "cylinder",
-  corner_radius = 0.5,
+  stem_corner_radius = 0.5,
   corner_radius_curve = 0,
   polygon_rotation = false,
   dish_invert = false,
@@ -115,7 +115,7 @@ module stem_top(
           polygon_edges=polygon_edges, polygon_curve=polygon_curve,
           dish_type=dish_type,
           dish_division_x=dish_division_x, dish_division_y=dish_division_y,
-          corner_radius=key_corner_radius / 2,
+          stem_corner_radius=key_corner_radius / 2,
           corner_radius_curve=corner_radius_curve,
           polygon_rotation=polygon_rotation,
           dish_invert=dish_invert
@@ -137,7 +137,7 @@ module stem_top(
               polygon_edges=polygon_edges, polygon_curve=polygon_curve,
               dish_type=dish_type,
               dish_division_x=dish_division_x, dish_division_y=dish_division_y,
-              corner_radius=key_corner_radius / 2,
+              stem_corner_radius=key_corner_radius / 2,
               corner_radius_curve=corner_radius_curve,
               polygon_rotation=polygon_rotation,
               dish_invert=dish_invert
@@ -159,7 +159,7 @@ module stem_top(
               polygon_edges=polygon_edges, polygon_curve=polygon_curve,
               dish_type=dish_type,
               dish_division_x=dish_division_x, dish_division_y=dish_division_y,
-              corner_radius=key_corner_radius / 2,
+              stem_corner_radius=key_corner_radius / 2,
               corner_radius_curve=corner_radius_curve,
               polygon_rotation=polygon_rotation,
               dish_invert=dish_invert
@@ -202,15 +202,27 @@ module stem_top(
   }
 }
 
+/*
+Generates a Cherry MX-style box stem.
+
+Parameters:
+- stem_height: Stem insertion depth into the keycap, in mm.
+- outside_tolerance_x/y: outside tolerance for the cross section of the stem.
+- inside_tolerance: tolerance for the cross section of the stem that inserts into the keycap.
+- stem_inset: how far the stem is inset from the keycap border.
+- stem_flat_support: When true, generates removable support for printing the keycap with stem on print plate.
+- support_distance: Vertical gap between the stem and support tabs, in mm.
+- stem_corner_radius: fillet radius the stem angles
+*/
 module stem_box_cherry(
-  depth = 4,
+  stem_height = 4,
   outside_tolerance_x = 0.2,
   outside_tolerance_y = 0.2,
   inside_tolerance = 0.25,
-  inset = 0,
-  flat_support = true,
+  stem_inset = 0,
+  stem_flat_support = true,
   support_distance = 0.2,
-  corner_radius = 0.5,
+  stem_corner_radius = 0.5,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
   // key_height,
@@ -254,47 +266,47 @@ module stem_box_cherry(
 
   // Generate the top part of the stem that connects to the underside of the keycap
   difference() {
-    translate([0, 0, depth / 2 + inset])
-      squarish_rpoly(xy=[length, width], h=depth, r=corner_radius, center=true);
-    translate([0, 0, inset])
+    translate([0, 0, stem_height / 2 + stem_inset])
+      squarish_rpoly(xy=[length, width], h=stem_height, r=stem_corner_radius, center=true);
+    translate([0, 0, stem_inset])
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
   }
 
-  stem_topper_height = depth;
-  translate([0, 0, stem_topper_height / 2 + inset + depth]) {
+  stem_topper_height = stem_height;
+  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
     squarish_rpoly(
       xy1=[length, width],
       xy2=[length, width],
       h=stem_topper_height,
-      r=corner_radius, center=true
+      r=stem_corner_radius, center=true
     );
   }
 
   color("#005500") // Green
-  if (flat_support && inset > 0) {
+  if (stem_flat_support && stem_inset > 0) {
     support_dia = 7; // Size of the removable "flat thing" (bigger == easier to grab/remove with a tool)
     // Generate the support bits that go under the stem
     translate([0, 0, -support_distance]) difference() {
         // Generate the little corner bits
-        translate([0, 0, inset / 2 + support_distance / 2])
-          squarish_rpoly(xy=[length, width], h=inset - support_distance, r=corner_radius, center=true);
-        translate([0, 0, inset / 2])
-          squarish_rpoly(xy=[length - extrusion_width * 2, width - extrusion_width * 2], h=inset + 1, r=corner_radius, center=true);
-        translate([0, 0, inset / 2])
-          cube([3, 20, inset + 1], center=true);
-        translate([0, 0, inset / 2])
-          cube([20, 3, inset + 1], center=true);
+        translate([0, 0, stem_inset / 2 + support_distance / 2])
+          squarish_rpoly(xy=[length, width], h=stem_inset - support_distance, r=stem_corner_radius, center=true);
+        translate([0, 0, stem_inset / 2])
+          squarish_rpoly(xy=[length - extrusion_width * 2, width - extrusion_width * 2], h=stem_inset + 1, r=stem_corner_radius, center=true);
+        translate([0, 0, stem_inset / 2])
+          cube([3, 20, stem_inset + 1], center=true);
+        translate([0, 0, stem_inset / 2])
+          cube([20, 3, stem_inset + 1], center=true);
       }
     difference() {
       // Generate the center bit
-      cylinder(d=3.5, h=inset - support_distance, $fn=32);
-      cylinder(d=1.85, h=inset * 4, center=true, $fn=32);
+      cylinder(d=3.5, h=stem_inset - support_distance, $fn=32);
+      cylinder(d=1.85, h=stem_inset * 4, center=true, $fn=32);
     }
     // Add a flat thing at the bottom that makes it easy to pull the supports off
-    translate([0, 0, (inset / 2 + 0.01) / 2]) difference() {
+    translate([0, 0, (stem_inset / 2 + 0.01) / 2]) difference() {
         // 0.01 is to work around a bug
-        cube([support_dia, support_dia, inset / 2 + 0.01], center=true);
-        cylinder(d=3, h=inset / 2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
+        cube([support_dia, support_dia, stem_inset / 2 + 0.01], center=true);
+        cylinder(d=3, h=stem_inset / 2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
       }
   }
 
@@ -352,7 +364,7 @@ module stem_box_cherry(
   //           dish_type=dish_type,
   //           dish_division_x=dish_division_x,
   //           dish_division_y=dish_division_y,
-  //           corner_radius=key_corner_radius,
+  //           stem_corner_radius=key_corner_radius,
   //           corner_radius_curve=corner_radius_curve,
   //           polygon_rotation=polygon_rotation,
   //           dish_invert=dish_invert,
@@ -398,7 +410,7 @@ module stem_box_cherry(
   //         dish_type=dish_type,
   //         dish_division_x=dish_division_x,
   //         dish_division_y=dish_division_y,
-  //         corner_radius=key_corner_radius,
+  //         stem_corner_radius=key_corner_radius,
   //         corner_radius_curve=corner_radius_curve,
   //         polygon_rotation=polygon_rotation,
   //         dish_invert=dish_invert,
@@ -409,14 +421,26 @@ module stem_box_cherry(
   // }
 }
 
+/*
+Generates a Cherry MX-style round stem.
+
+Parameters:
+- stem_height: Stem insertion depth into the keycap, in mm.
+- outside_tolerance: outside tolerance for the cross section of the stem.
+- inside_tolerance: inside tolerance for the cross section of the stem.
+- stem_inset: how far the stem is inset from the keycap border.
+- stem_flat_support: When true, generates removable support for printing the keycap with stem on print plate.
+- support_distance: Vertical gap between the stem and support tabs, in mm.
+- stem_corner_radius: fillet radius the stem angles
+*/
 module stem_round_cherry(
-  depth = 4,
+  stem_height = 4,
   outside_tolerance = 0.2,
   inside_tolerance = 0.25,
-  inset = 0,
-  flat_support = true,
+  stem_inset = 0,
+  stem_flat_support = true,
   support_distance = 0.2,
-  corner_radius = 0.5,
+  stem_corner_radius = 0.5,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
   // key_height,
@@ -463,14 +487,14 @@ module stem_round_cherry(
 
   // Generate the top part of the stem that connects to the underside of the keycap
   difference() {
-    translate([0, 0, depth / 2 + inset])
-      cylinder(d=CHERRY_CYLINDER_DIAMETER - outside_tolerance, h=depth, center=true);
-    translate([0, 0, inset])
+    translate([0, 0, stem_height / 2 + stem_inset])
+      cylinder(d=CHERRY_CYLINDER_DIAMETER - outside_tolerance, h=stem_height, center=true);
+    translate([0, 0, stem_inset])
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
   }
 
-  stem_topper_height = depth;
-  translate([0, 0, stem_topper_height / 2 + inset + depth]) {
+  stem_topper_height = stem_height;
+  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
     cylinder(
       d=CHERRY_CYLINDER_DIAMETER - outside_tolerance,
       h=stem_topper_height,
@@ -479,33 +503,33 @@ module stem_round_cherry(
   }
 
   color("#005500") // Green
-  if (flat_support && inset > 0) {
+  if (stem_flat_support && stem_inset > 0) {
     translate([0, 0, -support_distance]) difference() {
         // Generate the little corner bits
-        translate([0, 0, inset / 2 + support_distance / 2])
-          squarish_rpoly(xy=[length, width], h=inset - support_distance, r=corner_radius, center=true);
-        translate([0, 0, inset / 2])
-          squarish_rpoly(xy=[length - extrusion_width * 3, width - extrusion_width * 3], h=inset + 1, r=corner_radius, center=true);
-        translate([0, 0, inset / 2])
-          cube([1, 20, inset + 1], center=true);
-        translate([0, 0, inset / 2])
-          cube([20, 1, inset + 1], center=true);
-        translate([0, 0, inset / 2])
+        translate([0, 0, stem_inset / 2 + support_distance / 2])
+          squarish_rpoly(xy=[length, width], h=stem_inset - support_distance, r=stem_corner_radius, center=true);
+        translate([0, 0, stem_inset / 2])
+          squarish_rpoly(xy=[length - extrusion_width * 3, width - extrusion_width * 3], h=stem_inset + 1, r=stem_corner_radius, center=true);
+        translate([0, 0, stem_inset / 2])
+          cube([1, 20, stem_inset + 1], center=true);
+        translate([0, 0, stem_inset / 2])
+          cube([20, 1, stem_inset + 1], center=true);
+        translate([0, 0, stem_inset / 2])
           rotate([0, 0, 45])
-            cube([20, 1, inset + 1], center=true);
-        translate([0, 0, inset / 2])
+            cube([20, 1, stem_inset + 1], center=true);
+        translate([0, 0, stem_inset / 2])
           rotate([0, 0, -45])
-            cube([20, 1, inset + 1], center=true);
+            cube([20, 1, stem_inset + 1], center=true);
       }
     difference() {
       // Generate the center bit
-      cylinder(d=3.5, h=inset - support_distance, $fn=32);
-      cylinder(d=1.85, h=inset * 4, center=true, $fn=32);
+      cylinder(d=3.5, h=stem_inset - support_distance, $fn=32);
+      cylinder(d=1.85, h=stem_inset * 4, center=true, $fn=32);
     }
     // Add a flat thing at the bottom that makes it easy to pull the supports off
-    translate([0, 0, inset / 4]) difference() {
-        cube([support_dia, support_dia, inset / 2], center=true);
-        cylinder(d=3, h=inset / 2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
+    translate([0, 0, stem_inset / 4]) difference() {
+        cube([support_dia, support_dia, stem_inset / 2], center=true);
+        cylinder(d=3, h=stem_inset / 2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
       }
   }
 
@@ -561,7 +585,7 @@ module stem_round_cherry(
   //           dish_type=dish_type,
   //           dish_division_x=dish_division_x,
   //           dish_division_y=dish_division_y,
-  //           corner_radius=key_corner_radius,
+  //           stem_corner_radius=key_corner_radius,
   //           corner_radius_curve=corner_radius_curve,
   //           polygon_rotation=polygon_rotation,
   //           dish_invert=dish_invert,
@@ -604,7 +628,7 @@ module stem_round_cherry(
   //         dish_type=dish_type,
   //         dish_division_x=dish_division_x,
   //         dish_division_y=dish_division_y,
-  //         corner_radius=key_corner_radius,
+  //         stem_corner_radius=key_corner_radius,
   //         corner_radius_curve=corner_radius_curve,
   //         polygon_rotation=polygon_rotation,
   //         dish_invert=dish_invert,
@@ -615,13 +639,24 @@ module stem_round_cherry(
   // }
 }
 
+/*
+Generates a Alps-style stem.
+
+Parameters:
+- stem_height: Stem insertion depth into the keycap, in mm.
+- outside_tolerance_x/y: outside tolerance for the cross section of the stem.
+- stem_inset: how far the stem is inset from the keycap border.
+- stem_flat_support: When true, generates removable support for printing the keycap with stem on print plate.
+- support_distance: Vertical gap between the stem and support tabs, in mm.
+- stem_corner_radius: fillet radius the stem angles
+*/
 module stem_alps(
-  depth = 3.5,
-  corner_radius = 0.25,
+  stem_height = 3.5,
+  stem_corner_radius = 0.25,
   outside_tolerance_x = 0.2,
   outside_tolerance_y = 0.2,
-  inset = 0,
-  flat_support = true,
+  stem_inset = 0,
+  stem_flat_support = true,
   support_distance = 0.2,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
@@ -668,54 +703,54 @@ module stem_alps(
   // Generate the top part of the stem that connects to the underside of the keycap
   difference() {
     // Alps stem
-    translate([0, 0, depth / 2 + inset])
+    translate([0, 0, stem_height / 2 + stem_inset])
       squarish_rpoly(
         xy1=[length, width],
         xy2=[length, width],
-        h=depth,
-        r=corner_radius, center=true
+        h=stem_height,
+        r=stem_corner_radius, center=true
       );
   }
 
-  stem_topper_height = depth;
+  stem_topper_height = stem_height;
   // Alps stem topper
   translate(
     [
       0,
       0,
-      stem_topper_height / 2 + inset + depth,
+      stem_topper_height / 2 + stem_inset + stem_height,
     ]
   )
     squarish_rpoly(
       xy1=[length, width],
       xy2=[length, width],
       h=stem_topper_height,
-      r=corner_radius, center=true
+      r=stem_corner_radius, center=true
     );
 
   color("#005500") // Green
-  if (flat_support && inset > 0) {
+  if (stem_flat_support && stem_inset > 0) {
     // Generate the support bits that go under the stem
     translate([0, 0, -support_distance]) difference() {
         // Generate the little corner bits
-        translate([0, 0, inset / 2 + support_distance / 2])
-          squarish_rpoly(xy=[length, width], h=inset - support_distance, r=corner_radius, center=true);
-        translate([0, 0, inset / 2])
-          squarish_rpoly(xy=[length - extrusion_width * 2, width - extrusion_width * 2], h=inset + 1, r=corner_radius, center=true);
-        translate([0, 0, inset / 2])
-          cube([3, 20, inset + 1], center=true);
-        translate([0, 0, inset / 2])
-          cube([20, 3, inset + 1], center=true);
+        translate([0, 0, stem_inset / 2 + support_distance / 2])
+          squarish_rpoly(xy=[length, width], h=stem_inset - support_distance, r=stem_corner_radius, center=true);
+        translate([0, 0, stem_inset / 2])
+          squarish_rpoly(xy=[length - extrusion_width * 2, width - extrusion_width * 2], h=stem_inset + 1, r=stem_corner_radius, center=true);
+        translate([0, 0, stem_inset / 2])
+          cube([3, 20, stem_inset + 1], center=true);
+        translate([0, 0, stem_inset / 2])
+          cube([20, 3, stem_inset + 1], center=true);
       }
     difference() {
       // Generate the center bit
-      cylinder(d=3.5, h=inset - support_distance, $fn=32);
-      cylinder(d=1.85, h=inset * 4, center=true, $fn=32);
+      cylinder(d=3.5, h=stem_inset - support_distance, $fn=32);
+      cylinder(d=1.85, h=stem_inset * 4, center=true, $fn=32);
     }
     // Add a flat thing at the bottom that makes it easy to pull the supports off
-    translate([0, 0, inset / 4]) difference() {
-        cube([support_dia, support_dia, inset / 2], center=true);
-        cylinder(d=3, h=inset / 2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
+    translate([0, 0, stem_inset / 4]) difference() {
+        cube([support_dia, support_dia, stem_inset / 2], center=true);
+        cylinder(d=3, h=stem_inset / 2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
       }
   }
 
@@ -769,7 +804,7 @@ module stem_alps(
   //           dish_division_x=dish_division_x,
   //           dish_division_y=dish_division_y,
   //           polygon_edges=polygon_edges,
-  //           corner_radius=key_corner_radius,
+  //           stem_corner_radius=key_corner_radius,
   //           corner_radius_curve=corner_radius_curve,
   //           polygon_rotation=polygon_rotation,
   //           dish_invert=dish_invert,
@@ -813,7 +848,7 @@ module stem_alps(
   //         dish_division_x=dish_division_x,
   //         dish_division_y=dish_division_y,
   //         polygon_edges=polygon_edges,
-  //         corner_radius=key_corner_radius,
+  //         stem_corner_radius=key_corner_radius,
   //         corner_radius_curve=corner_radius_curve,
   //         polygon_rotation=polygon_rotation,
   //         dish_invert=dish_invert,
@@ -867,7 +902,7 @@ module stem_support(
   dish_division_y = 1,
   polygon_edges = 4,
   dish_type = "cylinder",
-  corner_radius = 0.5,
+  stem_corner_radius = 0.5,
   corner_radius_curve = 0,
   polygon_rotation = false,
   dish_invert = false,
@@ -890,7 +925,7 @@ module stem_support(
   // Inverted dish needs to go up a bit
   inverted_dish_adjustment = dish_invert ? wall_thickness : 0;
   // When not using uniform_wall_thickness, this is used to figure out how much extra space the corner radius takes up at the top of the keycap so the stem doesn't stick out the sides:
-  corner_radius_factor = ( (corner_radius * corner_radius_curve / polygon_layers) * polygon_layers) / 1.5;
+  corner_radius_factor = ( (stem_corner_radius * corner_radius_curve / polygon_layers) * polygon_layers) / 1.5;
   difference() {
     // NOTE: The side supports are actually attached to the sides so they stay firm while printing... They're easy enough to cut off afterwards with flush cutters.
     translate([0, 0, -0.001])
@@ -912,7 +947,7 @@ module stem_support(
         polygon_edges=polygon_edges, polygon_curve=polygon_curve,
         dish_type=dish_type,
         dish_division_x=dish_division_x, dish_division_y=dish_division_y,
-        corner_radius=key_corner_radius / 2,
+        stem_corner_radius=key_corner_radius / 2,
         corner_radius_curve=corner_radius_curve,
         polygon_rotation=polygon_rotation,
         dish_invert=dish_invert

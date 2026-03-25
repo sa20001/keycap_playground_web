@@ -360,40 +360,36 @@ module generate_stem(
 
   if (stem_type == "box_cherry") {
     stem_box_cherry(
-      corner_radius=stem_corner_radius,
-      depth=stem_height,
+      stem_corner_radius=stem_corner_radius,
+      stem_height=stem_height,
       outside_tolerance_x=stem_outside_tolerance_x,
       outside_tolerance_y=stem_outside_tolerance_y,
       inside_tolerance=stem_inside_tolerance,
-      inset=stem_inset,
-      flat_support=stem_flat_support,
+      stem_inset=stem_inset,
+      stem_flat_support=stem_flat_support,
       support_distance=stem_support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
       corner_radius=stem_corner_radius,
-      depth=stem_height,
+      stem_height=stem_height,
       outside_tolerance=stem_outside_tolerance_x,
       inside_tolerance=stem_inside_tolerance,
-      inset=stem_inset,
-      flat_support=stem_flat_support,
+      stem_inset=stem_inset,
+      stem_flat_support=stem_flat_support,
       support_distance=stem_support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
-      corner_radius=stem_corner_radius,
-      depth=stem_height,
+      stem_corner_radius=stem_corner_radius,
+      stem_height=stem_height,
       outside_tolerance_x=stem_outside_tolerance_x,
       outside_tolerance_y=stem_outside_tolerance_y,
-      inset=stem_inset,
-      flat_support=stem_flat_support,
+      stem_inset=stem_inset,
+      stem_flat_support=stem_flat_support,
       support_distance=stem_support_distance
     );
   } else {
     warning(str("Stem type not recognized: ", stem_type));
   }
 }
-
-// 1890 lines of code before optimization
-// 1711 after creating keycap helper module
-// 395 after creating stem helper module

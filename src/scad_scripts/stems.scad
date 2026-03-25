@@ -211,9 +211,9 @@ module stem_box_cherry(
   flat_support = true,
   support_distance = 0.2,
   corner_radius = 0.5,
-  key_height,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
+  // key_height,
   // key_length,
   // key_width,
   // dish_depth = 1,
@@ -248,7 +248,7 @@ module stem_box_cherry(
   // polygon_rotation = false,
   // dish_invert = false
 ) {
-  extrusion_width = 0.45;
+  extrusion_width = 0.45; // TODO TEMP (for now)
   length = CHERRY_CYLINDER_DIAMETER - outside_tolerance_x * 2;
   width = CHERRY_CYLINDER_DIAMETER - outside_tolerance_y * 2;
 
@@ -260,7 +260,7 @@ module stem_box_cherry(
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
   }
 
-  stem_topper_height = key_height - depth - inset;
+  stem_topper_height = depth;
   translate([0, 0, stem_topper_height / 2 + inset + depth]) {
     squarish_rpoly(
       xy1=[length, width],
@@ -410,7 +410,6 @@ module stem_box_cherry(
 }
 
 module stem_round_cherry(
-  key_height,
   depth = 4,
   outside_tolerance = 0.2,
   inside_tolerance = 0.25,
@@ -420,6 +419,7 @@ module stem_round_cherry(
   corner_radius = 0.5,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
+  // key_height,
   // uniform_wall_thickness = false,
   // dish_invert = false,
   // polygon_rotation = false,
@@ -455,7 +455,7 @@ module stem_round_cherry(
   // polygon_edges = 4,
   // dish_type = "cylinder"
 ) {
-  extrusion_width = 0.45;
+  extrusion_width = 0.45; // TODO TEMP (for now)
   length = CHERRY_CYLINDER_DIAMETER - outside_tolerance;
   width = CHERRY_CYLINDER_DIAMETER - outside_tolerance;
   support_dia = 7; // Size of the removable "flat thing" (bigger == easier to grab/remove with a tool)
@@ -469,7 +469,7 @@ module stem_round_cherry(
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
   }
 
-  stem_topper_height = key_height - depth - inset;
+  stem_topper_height = depth;
   translate([0, 0, stem_topper_height / 2 + inset + depth]) {
     cylinder(
       d=CHERRY_CYLINDER_DIAMETER - outside_tolerance,
@@ -661,7 +661,7 @@ module stem_alps(
   // dish_invert = false,
   // uniform_wall_thickness = false
 ) {
-  extrusion_width = 0.45; // TEMP (for now)
+  extrusion_width = 0.45; // TODO TEMP (for now)
   length = ALPS_STEM_LENGTH - outside_tolerance_x * 2;
   width = ALPS_STEM_WIDTH - outside_tolerance_y * 2;
 

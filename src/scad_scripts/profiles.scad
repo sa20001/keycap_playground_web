@@ -390,8 +390,7 @@ module DSA_stem(
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -401,8 +400,7 @@ module DSA_stem(
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -468,8 +466,7 @@ module DCS_stem(row = 2, stem_type = "box_cherry", key_length = 18.15, key_width
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -479,8 +476,7 @@ module DCS_stem(row = 2, stem_type = "box_cherry", key_length = 18.15, key_width
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -544,8 +540,7 @@ module DSS_stem(row = 2, stem_type = "box_cherry", key_length = 18.24, key_width
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -555,8 +550,7 @@ module DSS_stem(row = 2, stem_type = "box_cherry", key_length = 18.24, key_width
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -620,8 +614,7 @@ module KAT_stem(row = 1, stem_type = "box_cherry", key_height = 9.15, key_length
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=row_height[row] + height_extra
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -631,8 +624,7 @@ module KAT_stem(row = 1, stem_type = "box_cherry", key_height = 9.15, key_length
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -689,8 +681,7 @@ module KAM_stem(stem_type = "box_cherry", key_height = 9.05, key_length = 18.3, 
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -700,8 +691,7 @@ module KAM_stem(stem_type = "box_cherry", key_height = 9.05, key_length = 18.3, 
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -758,8 +748,7 @@ module riskeystem(stem_type = "box_cherry", key_height = 8.2, key_length = 18.25
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -769,8 +758,7 @@ module riskeystem(stem_type = "box_cherry", key_height = 8.2, key_length = 18.25
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -834,8 +822,7 @@ module GEM_stem(stem_type = "box_cherry", key_height = 8.2, key_length = 18.25, 
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
@@ -845,8 +832,7 @@ module GEM_stem(stem_type = "box_cherry", key_height = 8.2, key_length = 18.25, 
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "alps") {
     stem_alps(
@@ -907,12 +893,10 @@ module XDA_stem(stem_type = "box_cherry", key_height = 7.3914, key_length = 18.4
       inside_tolerance=inside_tolerance,
       inset=inset,
       flat_support=flat_support,
-      support_distance=support_distance,
-      key_height=key_height
+      support_distance=support_distance
     );
   } else if (stem_type == "round_cherry") {
     stem_round_cherry(
-      key_height=key_height,
       depth=depth,
       outside_tolerance=outside_tolerance_x,
       inside_tolerance=inside_tolerance,

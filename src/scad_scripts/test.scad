@@ -294,8 +294,7 @@ module stem_using_globals() {
       inside_tolerance=STEM_INSIDE_TOLERANCE,
       inset=STEM_INSET,
       flat_support=STEM_FLAT_SUPPORT,
-      support_distance=STEM_SUPPORT_DISTANCE,
-      key_height=KEY_HEIGHT + KEY_HEIGHT_EXTRA
+      support_distance=STEM_SUPPORT_DISTANCE
     );
   } else if (STEM_TYPE == "round_cherry") {
     stem_round_cherry(
@@ -305,8 +304,7 @@ module stem_using_globals() {
       inside_tolerance=STEM_INSIDE_TOLERANCE,
       inset=STEM_INSET,
       flat_support=STEM_FLAT_SUPPORT,
-      support_distance=STEM_SUPPORT_DISTANCE,
-      key_height=KEY_HEIGHT + KEY_HEIGHT_EXTRA
+      support_distance=STEM_SUPPORT_DISTANCE
     );
   } else if (STEM_TYPE == "alps") {
     stem_alps(

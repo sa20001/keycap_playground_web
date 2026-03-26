@@ -241,14 +241,12 @@ module key_using_globals(legends) {
     dish_x=DISH_X, dish_y=DISH_Y, dish_z=DISH_Z,
     dish_thickness=DISH_THICKNESS, dish_fn=DISH_FN,
     dish_corner_fn=DISH_CORNER_FN,
-    legend_list=_legends,
-    legend_carved=LEGEND_CARVED,
     polygon_layers=POLYGON_LAYERS, polygon_layer_rotation=POLYGON_LAYER_ROTATION,
     polygon_edges=POLYGON_EDGES, polygon_curve=POLYGON_CURVE,
     dish_type=DISH_TYPE,
     dish_division_x=DISH_INVERT_DIVISION_X, dish_division_y=DISH_INVERT_DIVISION_Y,
     corner_radius=CORNER_RADIUS, corner_radius_curve=CORNER_RADIUS_CURVE,
-    visualize_legends=VISUALIZE_LEGENDS, polygon_rotation=POLYGON_ROTATION,
+    polygon_rotation=POLYGON_ROTATION,
     homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
     homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
     dish_invert=DISH_INVERT,
@@ -257,7 +255,7 @@ module key_using_globals(legends) {
 }
 
 // Generates a keycap using global variables without legends so we can do an intersection() that generates the legends as an independent object
-module key_without_legends() {
+module key_without_legends() { // TODO: does it still make sense to make distinction between  with/without legends?
   // NOTE: Removed a few arguments that won't impact this module's purpose (just to save space)
   poly_keycap(
     height=KEY_HEIGHT, length=KEY_LENGTH, width=KEY_WIDTH,
@@ -276,7 +274,7 @@ module key_without_legends() {
     corner_radius_curve=CORNER_RADIUS_CURVE,
     homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
     homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
-    visualize_legends=VISUALIZE_LEGENDS, polygon_rotation=POLYGON_ROTATION,
+    polygon_rotation=POLYGON_ROTATION,
     dish_invert=DISH_INVERT,
     uniform_wall_thickness=UNIFORM_WALL_THICKNESS
   );
@@ -705,13 +703,10 @@ module handle_render(what, legends) {
           wall_thickness=WALL_THICKNESS,
           stem_clips=STEM_SNAP_FIT,
           stem_walls_inset=STEM_WALLS_INSET,
-          legend_list=legends,
-          legend_carved=LEGEND_CARVED,
           polygon_layers=POLYGON_LAYERS,
           dish_fn=DISH_FN,
           dish_corner_fn=DISH_CORNER_FN,
           dish_thickness=DISH_THICKNESS,
-          visualize_legends=VISUALIZE_LEGENDS,
           homing_dot_length=HOMING_DOT_LENGTH,
           homing_dot_width=HOMING_DOT_WIDTH,
           homing_dot_x=HOMING_DOT_X,
@@ -749,8 +744,8 @@ module handle_render(what, legends) {
 // RENDER = ["legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
-KEY_PROFILE = "dss"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
-STEM_TYPE = "round_cherry"; // [box_cherry, round_cherry, alps, stem_top]
+KEY_PROFILE = "riskeycap"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
+STEM_TYPE = "box_cherry"; // [box_cherry, round_cherry, alps, stem_top]
 
 module render_keycap(stuff_to_render) {
   for (what_to_render = stuff_to_render) {
@@ -785,5 +780,163 @@ module render_keycap(stuff_to_render) {
   }
 }
 
+// rotate(KEY_ROTATION)
+// render_keycap(RENDER);
+
+HOMING_DOT_LENGTH = 3; // Set to something like "3" for a good, easy-to-feel "dot"
+HOMING_DOT_WIDTH = 1; // Default: 1
+HOMING_DOT_Z = 1; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
+module bigTest() {
+
+  module keycapHelper(shape_only = undef) {
+    assert(shape_only != undef, "shape_only variable must be set to true or false");
+    generate_keycap(
+      row=KEY_ROW,
+      length=KEY_LENGTH,
+      width=KEY_WIDTH,
+      height_extra=KEY_HEIGHT_EXTRA,
+      wall_thickness=WALL_THICKNESS,
+      stem_clips=STEM_SNAP_FIT,
+      stem_walls_inset=STEM_WALLS_INSET,
+      polygon_layers=POLYGON_LAYERS,
+      dish_fn=DISH_FN,
+      dish_corner_fn=DISH_CORNER_FN,
+      dish_thickness=DISH_THICKNESS,
+      homing_dot_length=HOMING_DOT_LENGTH,
+      homing_dot_width=HOMING_DOT_WIDTH,
+      homing_dot_x=HOMING_DOT_X,
+      homing_dot_y=HOMING_DOT_Y,
+      homing_dot_z=HOMING_DOT_Z,
+      dish_invert=DISH_INVERT,
+      uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
+      key_profile=KEY_PROFILE,
+      shape_only=shape_only
+    );
+  }
+
+  module stem_helper() {
+    generate_stem(
+      stem_type=STEM_TYPE,
+      stem_corner_radius=STEM_CORNER_RADIUS,
+      stem_height=STEM_HEIGHT,
+      stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
+      stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
+      stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
+      stem_inset=STEM_INSET,
+      stem_flat_support=STEM_FLAT_SUPPORT,
+      stem_support_distance=STEM_SUPPORT_DISTANCE,
+    );
+  }
+
+  cubeX = 100;
+  cubeY = 100;
+  bigCubeZ = 100;
+  // Create the stem and a big cube above it
+  module A_Shape() {
+    union() {
+      stem_helper();
+      stemTopZ = STEM_INSET + STEM_HEIGHT;
+      stemCubeZ = bigCubeZ / 2 - stemTopZ;
+      translZ = stemTopZ + stemCubeZ / 2; // Move it up so it's not intersecting with the stem
+      translate([0, 0, translZ])
+        cube([cubeX, cubeY, stemCubeZ], center=true);
+
+      // TODO: should implement topper to save material?
+      // We avoid the thicker keycap by making the stem higher and we put the cube over there
+      // BOX CHERRY TOPPER
+      // stem_topper_height = stem_height;
+      // translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
+      //   squarish_rpoly(
+      //     xy1=[length, width],
+      //     xy2=[length, width],
+      //     h=stem_topper_height,
+      //     r=stem_corner_radius, center=true
+      //   );
+      // }
+
+      // ROUND CHERRY TOPPER
+      //   stem_topper_height = stem_height;
+      // translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
+      //   cylinder(
+      //     d=CHERRY_CYLINDER_DIAMETER - outside_tolerance,
+      //     h=stem_topper_height,
+      //     center=true
+      //   );
+      // }
+
+      // ALPS TOPPER
+      // stem_topper_height = stem_height;
+      // translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height])
+      //   squarish_rpoly(
+      //     xy1=[length, width],
+      //     xy2=[length, width],
+      //     h=stem_topper_height,
+      //     r=stem_corner_radius, center=true
+      //   );
+    }
+  }
+
+  // Create the negative space of the keycap shape
+  module B_Shape() {
+    difference() {
+      cube([cubeX, cubeY, bigCubeZ], center=true);
+      keycapHelper(shape_only=true);
+    }
+  }
+
+  // Get the keycap intersected with the stem with all construction cubes removed
+  module C_Shape() {
+    union() {
+      keycapHelper(shape_only=false);
+      difference() {
+        A_Shape();
+        intersection() {
+          A_Shape();
+          B_Shape();
+        }
+      }
+    }
+  }
+
+  // Get the legends as separate geometry
+  // TODO: can be optimized?
+  module D_Shape() {
+    just_legends(
+      height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
+      dish_tilt=DISH_TILT,
+      dish_tilt_curve=false,
+      polygon_layers=POLYGON_LAYERS,
+      legend_list=LEGEND_LIST
+    ) {
+      generate_keycap(
+        row=KEY_ROW,
+        length=KEY_LENGTH,
+        width=KEY_WIDTH,
+        height_extra=KEY_HEIGHT_EXTRA,
+        wall_thickness=WALL_THICKNESS,
+        polygon_layers=POLYGON_LAYERS,
+        dish_fn=DISH_FN,
+        dish_thickness=DISH_THICKNESS,
+        dish_corner_fn=DISH_CORNER_FN,
+        homing_dot_length=HOMING_DOT_LENGTH,
+        homing_dot_width=HOMING_DOT_WIDTH,
+        homing_dot_x=HOMING_DOT_X,
+        homing_dot_y=HOMING_DOT_Y,
+        homing_dot_z=HOMING_DOT_Z,
+        dish_invert=DISH_INVERT,
+        uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
+        key_profile=KEY_PROFILE
+      );
+    }
+  }
+
+  // Carve the legends in the keycap
+  difference() {
+    C_Shape();
+    translate([0, 0, 0.00001]) // Translate a tiny bit up to avoid geometry issues do to rounding
+      D_Shape();
+  }
+}
+
 rotate(KEY_ROTATION)
-  render_keycap(RENDER);
+  bigTest();

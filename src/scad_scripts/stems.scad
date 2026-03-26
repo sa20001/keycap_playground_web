@@ -92,7 +92,6 @@ module stem_top(
   uniform_wall_thickness = false
 ) {
   // Generate a top layer that spans the entire width of the keycap so we have something legends can print on
-  // NOTE: We generate it similarly to poly_keycap()'s trapezoidal interior cutout so we have a precise fit
   // Give the "undershelf" a distinct color so you know it's there and not the same as the keycap:
   //    color("#620093") // Purple
   if (uniform_wall_thickness) {
@@ -270,16 +269,6 @@ module stem_box_cherry(
       squarish_rpoly(xy=[length, width], h=stem_height, r=stem_corner_radius, center=true);
     translate([0, 0, stem_inset])
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
-  }
-
-  stem_topper_height = stem_height;
-  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
-    squarish_rpoly(
-      xy1=[length, width],
-      xy2=[length, width],
-      h=stem_topper_height,
-      r=stem_corner_radius, center=true
-    );
   }
 
   color("#005500") // Green
@@ -493,15 +482,6 @@ module stem_round_cherry(
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
   }
 
-  stem_topper_height = stem_height;
-  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
-    cylinder(
-      d=CHERRY_CYLINDER_DIAMETER - outside_tolerance,
-      h=stem_topper_height,
-      center=true
-    );
-  }
-
   color("#005500") // Green
   if (stem_flat_support && stem_inset > 0) {
     translate([0, 0, -support_distance]) difference() {
@@ -711,22 +691,6 @@ module stem_alps(
         r=stem_corner_radius, center=true
       );
   }
-
-  stem_topper_height = stem_height;
-  // Alps stem topper
-  translate(
-    [
-      0,
-      0,
-      stem_topper_height / 2 + stem_inset + stem_height,
-    ]
-  )
-    squarish_rpoly(
-      xy1=[length, width],
-      xy2=[length, width],
-      h=stem_topper_height,
-      r=stem_corner_radius, center=true
-    );
 
   color("#005500") // Green
   if (stem_flat_support && stem_inset > 0) {

@@ -6,7 +6,7 @@ use <utils.scad>
 
 // NOTE: Named 'draw_legend' and not just 'legend' to avoid confusion in variable naming
 
-// Extrudes the legend characters the full height of the keycap so an intersection() and difference() can be performed (inside poly_keycap())
+// Extrudes the legend characters the full height of the keycap so an intersection() and difference() can be performed)
 module draw_legend(chars, size, font, height) {
   linear_extrude(height=height)
     text(chars, size=size, font=font, valign="center", halign="center");
@@ -22,6 +22,7 @@ module just_legends(
 ) {
   layer_tilt_adjust = dish_tilt / polygon_layers;
   tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
+  // Take care of the legends (if any)
   if (legend_list[0]) {
     intersection() {
       union() {

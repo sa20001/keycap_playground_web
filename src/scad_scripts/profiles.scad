@@ -36,18 +36,18 @@ module generate_keycap(
   top_difference = 6.08,
   corner_radius = 0.5,
   corner_radius_curve = 2,
-  legend_list = [""],
-  legend_carved = false,
   homing_dot_length = 0,
   homing_dot_width = 0,
   homing_dot_x = 0,
   homing_dot_y = 0,
   homing_dot_z = 0,
   polygon_layers = 10,
-  visualize_legends = false,
   uniform_wall_thickness = false,
-  key_profile = ""
+  key_profile = "",
+  shape_only = false // If true, no cut out, no legends, no homing-- just the shape of the keycap
 ) {
+
+  // TODO: define homing dot values for each profile type (rn are not defined and are all over the place)
 
   assert(key_profile != "", "A key profile is needed");
 
@@ -73,14 +73,12 @@ module generate_keycap(
       dish_thickness=dish_thickness, corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       polygon_layers=polygon_layers, polygon_layer_rotation=0,
       polygon_edges=4, polygon_curve=4.5,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
       uniform_wall_thickness=uniform_wall_thickness,
-      visualize_legends=visualize_legends
+      shape_only=shape_only
     );
   }
   //
@@ -117,8 +115,6 @@ module generate_keycap(
       dish_fn=dish_fn,
       dish_corner_fn=dish_corner_fn,
       dish_invert=dish_invert,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       polygon_layers=polygon_layers,
@@ -130,7 +126,7 @@ module generate_keycap(
       homing_dot_y=homing_dot_y,
       homing_dot_z=homing_dot_z,
       uniform_wall_thickness=uniform_wall_thickness,
-      visualize_legends=visualize_legends
+      shape_only=shape_only
     );
   } //
   else if (key_profile == "dss") {
@@ -159,15 +155,13 @@ module generate_keycap(
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
       dish_thickness=dish_thicknesses[row], dish_fn=dish_fn, dish_corner_fn=dish_corner_fn,
       dish_invert=dish_invert,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       corner_radius=corner_radius, corner_radius_curve=corner_radius_curve,
       polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4,
       polygon_curve=4,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
       uniform_wall_thickness=uniform_wall_thickness,
-      visualize_legends=visualize_legends
+      shape_only=shape_only
     );
   } //
   else if (key_profile == "kat") {
@@ -198,14 +192,12 @@ module generate_keycap(
       dish_thickness=dish_thickness, corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       polygon_layers=polygon_layers, polygon_layer_rotation=0,
       polygon_edges=4, polygon_curve=7,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
       uniform_wall_thickness=uniform_wall_thickness,
-      visualize_legends=visualize_legends
+      shape_only=shape_only
     );
   } //
   else if (key_profile == "kam") {
@@ -225,14 +217,12 @@ module generate_keycap(
       dish_thickness=dish_thickness, corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       polygon_layers=polygon_layers, polygon_layer_rotation=0,
       polygon_edges=4, polygon_curve=4.5,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
       uniform_wall_thickness=uniform_wall_thickness,
-      visualize_legends=visualize_legends
+      shape_only=shape_only
     );
   } //
   else if (key_profile == "riskeycap") {
@@ -264,14 +254,12 @@ module generate_keycap(
       dish_thickness=dish_thickness, corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
-      legend_list=legend_list,
       polygon_layers=polygon_layers, polygon_layer_rotation=0,
       polygon_edges=4, polygon_curve=0,
-      legend_carved=legend_carved,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
-      visualize_legends=visualize_legends,
-      uniform_wall_thickness=uniform_wall_thickness
+      uniform_wall_thickness=uniform_wall_thickness,
+      shape_only=shape_only
     );
   } //
   else if (key_profile == "gem") {
@@ -298,14 +286,12 @@ module generate_keycap(
       dish_thickness=dish_thickness, corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       polygon_layers=polygon_layers, polygon_layer_rotation=0,
       polygon_edges=4, polygon_curve=0,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
-      visualize_legends=visualize_legends,
-      uniform_wall_thickness=uniform_wall_thickness
+      uniform_wall_thickness=uniform_wall_thickness,
+      shape_only=shape_only
     );
   } //
   else if (key_profile == "xda") {
@@ -325,14 +311,12 @@ module generate_keycap(
       dish_thickness=dish_thickness, corner_radius=corner_radius,
       corner_radius_curve=corner_radius_curve,
       stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
-      legend_list=legend_list,
-      legend_carved=legend_carved,
       polygon_layers=polygon_layers, polygon_layer_rotation=0,
       polygon_edges=4, polygon_curve=5,
       homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
       homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
-      visualize_legends=visualize_legends,
-      uniform_wall_thickness=uniform_wall_thickness
+      uniform_wall_thickness=uniform_wall_thickness,
+      shape_only=shape_only
     );
   } //
   else {

@@ -329,6 +329,7 @@ module generate_stem(
   stem_type = undef,
   stem_corner_radius = undef,
   stem_height = undef,
+  stem_topper_height = 0,
   stem_outside_tolerance_x = undef,
   stem_outside_tolerance_y,
   stem_inside_tolerance,
@@ -346,6 +347,7 @@ module generate_stem(
     stem_box_cherry(
       stem_corner_radius=stem_corner_radius,
       stem_height=stem_height,
+      stem_topper_height=stem_topper_height,
       outside_tolerance_x=stem_outside_tolerance_x,
       outside_tolerance_y=stem_outside_tolerance_y,
       inside_tolerance=stem_inside_tolerance,
@@ -357,6 +359,7 @@ module generate_stem(
     stem_round_cherry(
       corner_radius=stem_corner_radius,
       stem_height=stem_height,
+      stem_topper_height=stem_topper_height,
       outside_tolerance=stem_outside_tolerance_x,
       inside_tolerance=stem_inside_tolerance,
       stem_inset=stem_inset,
@@ -367,6 +370,7 @@ module generate_stem(
     stem_alps(
       stem_corner_radius=stem_corner_radius,
       stem_height=stem_height,
+      stem_topper_height=stem_topper_height,
       outside_tolerance_x=stem_outside_tolerance_x,
       outside_tolerance_y=stem_outside_tolerance_y,
       stem_inset=stem_inset,

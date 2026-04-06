@@ -222,6 +222,7 @@ module stem_box_cherry(
   stem_flat_support = true,
   support_distance = 0.2,
   stem_corner_radius = 0.5,
+  stem_topper_height = 0,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
   // key_height,
@@ -269,6 +270,16 @@ module stem_box_cherry(
       squarish_rpoly(xy=[length, width], h=stem_height, r=stem_corner_radius, center=true);
     translate([0, 0, stem_inset])
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
+  }
+
+  // BOX CHERRY TOPPER
+  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
+    squarish_rpoly(
+      xy1=[length, width],
+      xy2=[length, width],
+      h=stem_topper_height,
+      r=stem_corner_radius, center=true
+    );
   }
 
   color("#005500") // Green
@@ -430,6 +441,7 @@ module stem_round_cherry(
   stem_flat_support = true,
   support_distance = 0.2,
   stem_corner_radius = 0.5,
+  stem_topper_height = 0,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
   // key_height,
@@ -480,6 +492,15 @@ module stem_round_cherry(
       cylinder(d=CHERRY_CYLINDER_DIAMETER - outside_tolerance, h=stem_height, center=true);
     translate([0, 0, stem_inset])
       cherry_cross(tolerance=inside_tolerance, flare_base=true);
+  }
+
+  // ROUND CHERRY TOPPER
+  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
+    cylinder(
+      d=CHERRY_CYLINDER_DIAMETER - outside_tolerance,
+      h=stem_topper_height,
+      center=true
+    );
   }
 
   color("#005500") // Green
@@ -638,6 +659,7 @@ module stem_alps(
   stem_inset = 0,
   stem_flat_support = true,
   support_distance = 0.2,
+  stem_topper_height = 0,
   // // Stem lateral support parameters
   // // TODO: side support must be added when the whole keycap is assembled, when generating the stem-> it makes the code so less maintainable to do it here
   // key_height,
@@ -691,6 +713,15 @@ module stem_alps(
         r=stem_corner_radius, center=true
       );
   }
+
+  // ALPS TOPPER
+  translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height])
+    squarish_rpoly(
+      xy1=[length, width],
+      xy2=[length, width],
+      h=stem_topper_height,
+      r=stem_corner_radius, center=true
+    );
 
   color("#005500") // Green
   if (stem_flat_support && stem_inset > 0) {

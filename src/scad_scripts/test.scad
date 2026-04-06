@@ -255,7 +255,8 @@ module key_using_globals(legends) {
 }
 
 // Generates a keycap using global variables without legends so we can do an intersection() that generates the legends as an independent object
-module key_without_legends() { // TODO: does it still make sense to make distinction between  with/without legends?
+module key_without_legends() {
+  // TODO: does it still make sense to make distinction between  with/without legends?
   // NOTE: Removed a few arguments that won't impact this module's purpose (just to save space)
   poly_keycap(
     height=KEY_HEIGHT, length=KEY_LENGTH, width=KEY_WIDTH,
@@ -727,6 +728,7 @@ module handle_render(what, legends) {
         stem_type=STEM_TYPE,
         stem_corner_radius=STEM_CORNER_RADIUS,
         stem_height=STEM_HEIGHT,
+        stem_topper_height=STEM_TOPPER_HEIGHT,
         stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
         stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
         stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
@@ -786,7 +788,10 @@ module render_keycap(stuff_to_render) {
 HOMING_DOT_LENGTH = 3; // Set to something like "3" for a good, easy-to-feel "dot"
 HOMING_DOT_WIDTH = 1; // Default: 1
 HOMING_DOT_Z = 1; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
+STEM_TOPPER_HEIGHT = 1; // Stem topper height in mm
 module bigTest() {
+
+  assert(STEM_TOPPER_HEIGHT >= 0, "STEM_TOPPER_HEIGHT must be non-negative");
 
   module keycapHelper(shape_only = undef) {
     assert(shape_only != undef, "shape_only variable must be set to true or false");
@@ -819,6 +824,7 @@ module bigTest() {
       stem_type=STEM_TYPE,
       stem_corner_radius=STEM_CORNER_RADIUS,
       stem_height=STEM_HEIGHT,
+      stem_topper_height=STEM_TOPPER_HEIGHT,
       stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
       stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
       stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
@@ -836,43 +842,10 @@ module bigTest() {
     union() {
       stem_helper();
       stemTopZ = STEM_INSET + STEM_HEIGHT;
-      stemCubeZ = bigCubeZ / 2 - stemTopZ;
+      stemCubeZ = bigCubeZ / 2 - stemTopZ - STEM_TOPPER_HEIGHT;
       translZ = stemTopZ + stemCubeZ / 2; // Move it up so it's not intersecting with the stem
-      translate([0, 0, translZ])
+      translate([0, 0, translZ + STEM_TOPPER_HEIGHT])
         cube([cubeX, cubeY, stemCubeZ], center=true);
-
-      // TODO: should implement topper to save material?
-      // We avoid the thicker keycap by making the stem higher and we put the cube over there
-      // BOX CHERRY TOPPER
-      // stem_topper_height = stem_height;
-      // translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
-      //   squarish_rpoly(
-      //     xy1=[length, width],
-      //     xy2=[length, width],
-      //     h=stem_topper_height,
-      //     r=stem_corner_radius, center=true
-      //   );
-      // }
-
-      // ROUND CHERRY TOPPER
-      //   stem_topper_height = stem_height;
-      // translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height]) {
-      //   cylinder(
-      //     d=CHERRY_CYLINDER_DIAMETER - outside_tolerance,
-      //     h=stem_topper_height,
-      //     center=true
-      //   );
-      // }
-
-      // ALPS TOPPER
-      // stem_topper_height = stem_height;
-      // translate([0, 0, stem_topper_height / 2 + stem_inset + stem_height])
-      //   squarish_rpoly(
-      //     xy1=[length, width],
-      //     xy2=[length, width],
-      //     h=stem_topper_height,
-      //     r=stem_corner_radius, center=true
-      //   );
     }
   }
 
@@ -936,6 +909,8 @@ module bigTest() {
     translate([0, 0, 0.00001]) // Translate a tiny bit up to avoid geometry issues do to rounding
       D_Shape();
   }
+
+  // C_Shape();
 }
 
 rotate(KEY_ROTATION)

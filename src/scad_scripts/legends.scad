@@ -15,34 +15,26 @@ module draw_legend(chars, size, font, height) {
 // For multi-material prints you can generate *just* the legends in their proper locations:
 module just_legends(
   height = 9.0,
-  dish_tilt = 0,
-  dish_tilt_curve = false,
-  polygon_layers = 10,
   legend_list = [""],
 ) {
-  layer_tilt_adjust = dish_tilt / polygon_layers;
-  tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
   // Take care of the legends (if any)
   if (legend_list[0]) {
-    intersection() {
-      union() {
-        for (l = legend_list) {
-          legend = l[0];
-          font = l[1];
-          font_size = l[2];
-          trans = l[3];
-          rotation = l[4];
-          trans2 = l[5];
-          rotation2 = l[6];
-          l_scale = l[7];
-          underset = l[8];
+    union() {
+      for (l = legend_list) {
+        legend = l[0];
+        font = l[1];
+        font_size = l[2];
+        trans = l[3];
+        rotation = l[4];
+        trans2 = l[5];
+        rotation2 = l[6];
+        l_scale = l[7];
+        underset = l[8];
 
-          translate(underset) translate(trans2) rotate(rotation2) translate(trans) rotate(rotation)
-                    scale(l_scale) rotate([tilt_above_curved, 0, 0])
-                        draw_legend(legend, font_size, font, height);
-        }
+        translate(underset) translate(trans2) rotate(rotation2) translate(trans) rotate(rotation)
+                  scale(l_scale)
+                    draw_legend(legend, font_size, font, height);
       }
-      children();
     }
   } else {
     note("This keycap has no legends.");

@@ -17,15 +17,11 @@
        ...and set DISH_INVERT = true;
 */
 
-// TODO: Fix stems on keycaps with steep dish angles.
 // TODO: Make presets for things like, "spacebar6.25", "shift2.25", "tab1.5" etc
 // TODO: Add support for adding a bevel/rounded edge to the top of keycaps.
 // TODO: Finish whole-keyboard generation support.
-// TODO: BUG profile+legend: kat, dss, 
 
 use <keycaps.scad>
-use <stems.scad>
-use <legends.scad>
 use <utils.scad>
 use <profiles.scad>
 
@@ -317,428 +313,6 @@ module stem_top_using_globals() {
   );
 }
 
-// This takes care of rendering whatever's configured via RENDER:
-module handle_render(what, legends) {
-
-  keycapColor = "white";
-  transparentKeycapColor = "red";
-  stemColor = "purple";
-
-  module keycapRenderType(renderType) {
-    if (renderType == "keycap") {
-      color(keycapColor) {
-        render() {
-          children();
-        }
-      }
-    } else {
-      color(transparentKeycapColor, alpha=0.1)
-        %render() {
-          children();
-        }
-    }
-  }
-
-  if (what == "legends") {
-    // NOTE: just_legends() uses children() which is why there's no semicolon after it
-    color("#505050")
-      render() if (KEY_PROFILE != "") {
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=false,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        ) {
-          generate_keycap(
-            row=KEY_ROW,
-            length=KEY_LENGTH,
-            width=KEY_WIDTH,
-            height_extra=KEY_HEIGHT_EXTRA,
-            wall_thickness=WALL_THICKNESS,
-            polygon_layers=POLYGON_LAYERS,
-            dish_fn=DISH_FN,
-            dish_thickness=DISH_THICKNESS,
-            dish_corner_fn=DISH_CORNER_FN,
-            visualize_legends=VISUALIZE_LEGENDS,
-            homing_dot_length=HOMING_DOT_LENGTH,
-            homing_dot_width=HOMING_DOT_WIDTH,
-            homing_dot_x=HOMING_DOT_X,
-            homing_dot_y=HOMING_DOT_Y,
-            homing_dot_z=HOMING_DOT_Z,
-            dish_invert=DISH_INVERT,
-            uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
-            key_profile=KEY_PROFILE
-          );
-        }
-      } else {
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        ) {
-          key_without_legends();
-        }
-      }
-  } else if (what == "underset_mask") {
-    if (KEY_PROFILE == "dsa") {
-      difference() {
-        DSA_stem(
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=STEM_INSET,
-          depth=STEM_HEIGHT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "dcs") {
-      difference() {
-        DCS_stem(
-          row=KEY_ROW,
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=0, // Not enough room for insets on DCS
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "dss") {
-      difference() {
-        DSS_stem(
-          row=KEY_ROW,
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=0, // Not enough room for insets on DCS
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "kat") {
-      difference() {
-        KAT_stem(
-          row=KEY_ROW,
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=STEM_INSET,
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "kam") {
-      difference() {
-        KAM_stem(
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          inset=STEM_INSET,
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "riskeycap") {
-      difference() {
-        riskeystem(
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=STEM_INSET,
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "gem") {
-      difference() {
-        GEM_stem(
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=STEM_INSET,
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else if (KEY_PROFILE == "xda") {
-      difference() {
-        XDA_stem(
-          stem_type="stem_top",
-          wall_thickness=WALL_THICKNESS,
-          wall_extra=STEM_SIDES_WALL_THICKNESS,
-          wall_inset=STEM_WALLS_INSET,
-          wall_tolerance=STEM_WALLS_TOLERANCE,
-          key_length=KEY_LENGTH,
-          key_width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          dish_depth=DISH_DEPTH,
-          inset=STEM_INSET,
-          depth=STEM_HEIGHT,
-          dish_thickness=DISH_THICKNESS,
-          dish_invert=DISH_INVERT,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          flat_support=STEM_FLAT_SUPPORT,
-          support_distance=STEM_SUPPORT_DISTANCE,
-          side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
-          side_supports=STEM_SIDE_SUPPORTS,
-          outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-          outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-          inside_tolerance=STEM_INSIDE_TOLERANCE,
-          locations=STEM_LOCATIONS,
-          hollow=STEM_HOLLOW,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS
-        );
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    } else {
-      difference() {
-        stem_top_using_globals();
-        just_legends(
-          height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-          dish_tilt=DISH_TILT,
-          dish_tilt_curve=DISH_TILT_CURVE,
-          polygon_layers=POLYGON_LAYERS,
-          legend_list=legends
-        );
-      }
-    }
-  } else if (what == "keycap" || what == "%keycap") {
-    keycapRenderType(renderType=what) {
-      if (KEY_PROFILE != "") {
-        generate_keycap(
-          row=KEY_ROW,
-          length=KEY_LENGTH,
-          width=KEY_WIDTH,
-          height_extra=KEY_HEIGHT_EXTRA,
-          wall_thickness=WALL_THICKNESS,
-          stem_clips=STEM_SNAP_FIT,
-          stem_walls_inset=STEM_WALLS_INSET,
-          polygon_layers=POLYGON_LAYERS,
-          dish_fn=DISH_FN,
-          dish_corner_fn=DISH_CORNER_FN,
-          dish_thickness=DISH_THICKNESS,
-          homing_dot_length=HOMING_DOT_LENGTH,
-          homing_dot_width=HOMING_DOT_WIDTH,
-          homing_dot_x=HOMING_DOT_X,
-          homing_dot_y=HOMING_DOT_Y,
-          homing_dot_z=HOMING_DOT_Z,
-          dish_invert=DISH_INVERT,
-          uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
-          key_profile=KEY_PROFILE
-        );
-      } else {
-        // If no built-in profile is selected
-        key_using_globals(legends=legends);
-      }
-    }
-  } else if (what == "stem") {
-    color(stemColor)
-      generate_stem(
-        stem_type=STEM_TYPE,
-        stem_corner_radius=STEM_CORNER_RADIUS,
-        stem_height=STEM_HEIGHT,
-        stem_topper_height=STEM_TOPPER_HEIGHT,
-        stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-        stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-        stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
-        stem_inset=STEM_INSET,
-        stem_flat_support=STEM_FLAT_SUPPORT,
-        stem_support_distance=STEM_SUPPORT_DISTANCE,
-      );
-  }
-}
-
 // RENDER = ["custom"];
 // // RENDER = ["%keycap", "stem"];
 // RENDER = ["stem"];
@@ -746,7 +320,7 @@ module handle_render(what, legends) {
 // RENDER = ["legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
-KEY_PROFILE = "riskeycap"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
+KEY_PROFILE = "dsa"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
 STEM_TYPE = "box_cherry"; // [box_cherry, round_cherry, alps, stem_top]
 
 module render_keycap(stuff_to_render) {
@@ -789,7 +363,7 @@ HOMING_DOT_LENGTH = 3; // Set to something like "3" for a good, easy-to-feel "do
 HOMING_DOT_WIDTH = 1; // Default: 1
 HOMING_DOT_Z = 1; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
 STEM_TOPPER_HEIGHT = 1; // Stem topper height in mm
-module bigTest() {
+module bigTest(onlyLegend = false) {
 
   assert(STEM_TOPPER_HEIGHT >= 0, "STEM_TOPPER_HEIGHT must be non-negative");
 
@@ -849,6 +423,10 @@ module bigTest() {
     }
   }
 
+  module A_cached() {
+    render() A_Shape();
+  }
+
   // Create the negative space of the keycap shape
   module B_Shape() {
     difference() {
@@ -857,61 +435,48 @@ module bigTest() {
     }
   }
 
+  module B_cached() {
+    render() B_Shape();
+  }
+
   // Get the keycap intersected with the stem with all construction cubes removed
   module C_Shape() {
     union() {
       keycapHelper(shape_only=false);
       difference() {
-        A_Shape();
+        A_cached();
         intersection() {
-          A_Shape();
-          B_Shape();
+          A_cached();
+          B_cached();
         }
       }
     }
   }
 
   // Get the legends as separate geometry
-  // TODO: can be optimized?
   module D_Shape() {
-    just_legends(
-      height=KEY_HEIGHT + KEY_HEIGHT_EXTRA,
-      dish_tilt=DISH_TILT,
-      dish_tilt_curve=false,
-      polygon_layers=POLYGON_LAYERS,
-      legend_list=LEGEND_LIST
-    ) {
-      generate_keycap(
-        row=KEY_ROW,
-        length=KEY_LENGTH,
-        width=KEY_WIDTH,
-        height_extra=KEY_HEIGHT_EXTRA,
-        wall_thickness=WALL_THICKNESS,
-        polygon_layers=POLYGON_LAYERS,
-        dish_fn=DISH_FN,
-        dish_thickness=DISH_THICKNESS,
-        dish_corner_fn=DISH_CORNER_FN,
-        homing_dot_length=HOMING_DOT_LENGTH,
-        homing_dot_width=HOMING_DOT_WIDTH,
-        homing_dot_x=HOMING_DOT_X,
-        homing_dot_y=HOMING_DOT_Y,
-        homing_dot_z=HOMING_DOT_Z,
-        dish_invert=DISH_INVERT,
-        uniform_wall_thickness=UNIFORM_WALL_THICKNESS,
+    difference() {
+      generate_legend(
+        key_height=KEY_HEIGHT,
+        key_height_extra=KEY_HEIGHT_EXTRA,
+        legend_list=LEGEND_LIST,
         key_profile=KEY_PROFILE
       );
+      B_cached();
     }
   }
 
-  // Carve the legends in the keycap
-  difference() {
-    C_Shape();
-    translate([0, 0, 0.00001]) // Translate a tiny bit up to avoid geometry issues do to rounding
-      D_Shape();
+  if (onlyLegend) {
+    D_Shape(); // Just render the legends
+  } else {
+    // Carve the legends in the keycap
+    difference() {
+      C_Shape();
+      translate([0, 0, 0.00001]) // Translate a tiny bit up to avoid geometry issues do to rounding
+        D_Shape();
+    }
   }
-
-  // C_Shape();
 }
 
-rotate(KEY_ROTATION)
-  bigTest();
+// rotate(KEY_ROTATION)
+bigTest(false);

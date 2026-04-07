@@ -3,6 +3,7 @@
 use <keycaps.scad>
 use <stems.scad>
 use <utils.scad>
+use <legends.scad>
 
 // CONSTANTS
 KEY_UNIT = 19.05; // Standard spacing between keys
@@ -319,12 +320,14 @@ module generate_keycap(
       shape_only=shape_only
     );
   } //
-  else {
+  else if (stem_type == "") {
+    echo("Using user defined parameters");
+    // TODO: add support for user defined geometry
+  } else {
     warning(str("Key profile not recognized: ", key_profile));
   }
 }
 
-// Renders a stem
 module generate_stem(
   stem_type = undef,
   stem_corner_radius = undef,
@@ -377,7 +380,75 @@ module generate_stem(
       stem_flat_support=stem_flat_support,
       support_distance=stem_support_distance
     );
+  } else if (stem_type == "") {
+    echo("Using user defined parameters");
+    // TODO: add support for user defined geometry
   } else {
     warning(str("Stem type not recognized: ", stem_type));
+  }
+}
+
+module generate_legend(
+  key_height = undef,
+  key_height_extra = 0,
+  legend_list = [""],
+  key_profile = "",
+  min_letter_height = 0
+) {
+
+  assert(key_height != undef, "key_height parameter is required");
+
+  module removalCube(minLetterHeight = undef) {
+    assert(minLetterHeight != undef, "minLetterHeight parameter is required");
+    letterCube = [10, 10, key_height + key_height_extra];
+    translateZ = letterCube[2] / 2 - minLetterHeight;
+    translate([0, 0, translateZ])
+      cube(letterCube, true);
+  }
+
+  difference() {
+    // Remove the inferior part of the generated legend so it can be printed flat
+    just_legends(
+      // TODO height is pointless, since different profiles have different key height,
+      // use custom value very high.
+      // define the layer values as modules (or function) that can be called (use code from generate_keycap)
+      // this way the same module is called over and over avoid to write the same code
+      // for a milion times
+      height=key_height + key_height_extra,
+      legend_list=legend_list
+    );
+
+    // TODO: number must change based also on row not only profile
+    if (key_profile == "dsa") {
+      removalCube(3.5);
+    }
+    //
+    else if (key_profile == "dcs") {
+      removalCube(2);
+    } //
+    else if (key_profile == "dss") {
+      removalCube(1.5);
+    } //
+    else if (key_profile == "kat") {
+      removalCube(1.5);
+    } //
+    else if (key_profile == "kam") {
+      removalCube(2);
+    } //
+    else if (key_profile == "riskeycap") {
+      removalCube(3);
+    } //
+    else if (key_profile == "gem") {
+      removalCube(3);
+    } //
+    else if (key_profile == "xda") {
+      removalCube(2);
+    } //
+    else if (stem_type == "") {
+      echo("Using user defined parameters");
+      removalCube(min_letter_height);
+    } else {
+      warning(str("Key profile not recognized: ", key_profile));
+    }
   }
 }

@@ -57,7 +57,8 @@ module generate_keycap(
     // NOTE: Spec says wall_thickness should be 1mm but the default here is 1.35 since this script will mostly be used in 3D printing.  Make sure to set it to 1mm if making an injection mold.
 
     // NOTE: The 0-index values are ignored (there's no row 0 in DSA)
-    row_height = dish_invert ? 6.3914 + height_extra : 7.3914 + height_extra; // One less if we're generating a spacebar
+    row_height = 7.3914;
+    key_height = dish_invert ? row_height - 1 : row_height; // One less if we're generating a spacebar
     // NOTE: 7.3914 is from the Signature Plastics DSA spec which has .291 inches
     if (row != 1) {
       warning("Only row 1 is supported for DSA profile caps.");
@@ -67,7 +68,8 @@ module generate_keycap(
     dish_z = 0.111; // NOTE: Width of the top dish (at widest) should be ~12.7mm
     top_y = 0;
     poly_keycap(
-      height=row_height, length=length, width=width, wall_thickness=wall_thickness,
+      height=key_height + height_extra,
+      length=length, width=width, wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=0, dish_z=dish_z, dish_fn=dish_fn,
       dish_corner_fn=dish_corner_fn,
       dish_invert=dish_invert, top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
@@ -133,7 +135,7 @@ module generate_keycap(
   else if (key_profile == "dss") {
     // NOTE: The 0-index values are ignored (there's no row 0 in DSS)
     row_height = [0, 10.4, 8.7, 8.5, 10.6];
-    adjusted_row_height = dish_invert ? row_height[row] + height_extra - 1 : row_height[row] + height_extra; // One less if we're generating a spacebar (which is always row 3 with DSS)
+    adjusted_row_height = dish_invert ? row_height[row] - 1 : row_height[row]; // One less if we're generating a spacebar (which is always row 3 with DSS)
     dish_tilt = [0, -1, 3, 8, 16];
     // Dish needs to cut into the top a unique amount depending on the height and angle
     dish_y = [0, 1.2, -2.5, -5.7, -11.4];
@@ -148,7 +150,8 @@ module generate_keycap(
     dish_depth = 1;
     top_y = 0;
     poly_keycap(
-      height=adjusted_row_height, length=length, width=width,
+      height=adjusted_row_height + height_extra,
+      length=length, width=width,
       wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=dish_tilt[row],
       dish_z=dish_z[row], dish_y=dish_y[row],
@@ -184,7 +187,8 @@ module generate_keycap(
     // Official KAT keycaps have a cylindrical dish when inverted:
     dish_type = dish_invert ? "cylinder" : "sphere";
     poly_keycap(
-      height=row_height[row] + height_extra, length=length, width=width,
+      height=row_height[row] + height_extra,
+      length=length, width=width,
       wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=dish_tilt[row],
       dish_y=dish_y[row], dish_z=dish_z[row], dish_fn=dish_fn,
@@ -210,7 +214,8 @@ module generate_keycap(
     dish_z = 0;
     top_y = 0;
     poly_keycap(
-      height=row_height + height_extra, length=length, width=width,
+      height=row_height + height_extra,
+      length=length, width=width,
       wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=0, dish_z=dish_z, dish_fn=dish_fn,
       dish_corner_fn=dish_corner_fn,
@@ -236,7 +241,7 @@ module generate_keycap(
     */
 
     // The height needs a smidge of adjustment based on the length of the keycap
-    adjusted_height_extra = length < KEY_UNIT * 1.25 ? height_extra : height_extra + 0.35;
+    adjusted_height_extra = length < KEY_UNIT * 1.25 ? 0 : 0.35;
     adjusted_height = dish_invert ? 6.5 + adjusted_height_extra : 8.2 + adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (row != 1) {
@@ -248,7 +253,8 @@ module generate_keycap(
     //    echo(riskeycap_dish_depth=adjusted_dish_depth);
     //    echo(riskeycap_height=adjusted_height);
     poly_keycap(
-      height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
+      height=adjusted_height + height_extra,
+      length=length, width=width, wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=0, dish_x=0, dish_z=dish_z,
       dish_fn=dish_fn, dish_corner_fn=dish_corner_fn, dish_invert=dish_invert,
       top_y=top_y, dish_depth=adjusted_dish_depth, dish_type=dish_type,
@@ -267,7 +273,7 @@ module generate_keycap(
     // Similar to Riskeycap but with a "gem cut" (like Asscher) =)
 
     // The height needs a smidge of adjustment based on the length of the keycap
-    adjusted_height_extra = length < KEY_UNIT * 1.25 ? height_extra : height_extra + 0.35;
+    adjusted_height_extra = length < KEY_UNIT * 1.25 ? 0 : 0.35;
     adjusted_height = dish_invert ? 6.5 + adjusted_height_extra : 8.2 + adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (row != 1) {
@@ -280,7 +286,8 @@ module generate_keycap(
     //    echo(gem_dish_depth=adjusted_dish_depth);
     //    echo(gem_height=adjusted_height);
     poly_keycap(
-      height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
+      height=adjusted_height + height_extra,
+      length=length, width=width, wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=0, dish_x=0, dish_z=dish_z,
       dish_fn=dish_fn, dish_corner_fn=adjusted_dish_corner_fn, dish_invert=dish_invert,
       top_y=top_y, dish_depth=adjusted_dish_depth, dish_type=dish_type,
@@ -297,7 +304,7 @@ module generate_keycap(
   } //
   else if (key_profile == "xda") {
     // NOTE: The 0-index values are ignored (there's no row 0 in XDA)
-    row_height = dish_invert ? 8.1 + height_extra : 9.1 + height_extra; // One less if we're generating a spacebar
+    row_height = dish_invert ? 8.1 : 9.1; // One less if we're generating a spacebar
     if (row != 1) {
       warning("Only row 1 is supported for XDA profile caps.");
     }
@@ -305,7 +312,8 @@ module generate_keycap(
     dish_z = 0;
     top_y = 0;
     poly_keycap(
-      height=row_height, length=length, width=width, wall_thickness=wall_thickness,
+      height=row_height + height_extra,
+      length=length, width=width, wall_thickness=wall_thickness,
       top_difference=top_difference, dish_tilt=0, dish_x=0, dish_z=dish_z,
       dish_fn=dish_fn, dish_corner_fn=dish_corner_fn, dish_invert=dish_invert,
       top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
@@ -320,7 +328,7 @@ module generate_keycap(
       shape_only=shape_only
     );
   } //
-  else if (stem_type == "") {
+  else if (key_profile == "") {
     echo("Using user defined parameters");
     // TODO: add support for user defined geometry
   } else {
@@ -339,52 +347,116 @@ module generate_stem(
   stem_inset = 0,
   stem_flat_support = false,
   stem_support_distance = 0,
+  key_profile = "",
+  cubeDimensions = undef,
+  cubeZ_Offset = 0
 ) {
 
   assert(stem_type != undef, "stem_type parameter is required");
   assert(stem_corner_radius != undef, "stem_corner_radius parameter is required");
   assert(stem_height != undef, "depth parameter is required");
   assert(stem_outside_tolerance_x != undef, "outside_tolerance_x parameter is required");
+  assert(cubeDimensions != undef, "cubeDimensions parameter is required");
 
-  if (stem_type == "box_cherry") {
-    stem_box_cherry(
-      stem_corner_radius=stem_corner_radius,
-      stem_height=stem_height,
-      stem_topper_height=stem_topper_height,
-      outside_tolerance_x=stem_outside_tolerance_x,
-      outside_tolerance_y=stem_outside_tolerance_y,
-      inside_tolerance=stem_inside_tolerance,
-      stem_inset=stem_inset,
-      stem_flat_support=stem_flat_support,
-      support_distance=stem_support_distance
-    );
-  } else if (stem_type == "round_cherry") {
-    stem_round_cherry(
-      corner_radius=stem_corner_radius,
-      stem_height=stem_height,
-      stem_topper_height=stem_topper_height,
-      outside_tolerance=stem_outside_tolerance_x,
-      inside_tolerance=stem_inside_tolerance,
-      stem_inset=stem_inset,
-      stem_flat_support=stem_flat_support,
-      support_distance=stem_support_distance
-    );
-  } else if (stem_type == "alps") {
-    stem_alps(
-      stem_corner_radius=stem_corner_radius,
-      stem_height=stem_height,
-      stem_topper_height=stem_topper_height,
-      outside_tolerance_x=stem_outside_tolerance_x,
-      outside_tolerance_y=stem_outside_tolerance_y,
-      stem_inset=stem_inset,
-      stem_flat_support=stem_flat_support,
-      support_distance=stem_support_distance
-    );
-  } else if (stem_type == "") {
+  module stemMain(
+    stem_topper_height = 0
+  ) {
+    if (stem_type == "box_cherry") {
+      stem_box_cherry(
+        stem_corner_radius=stem_corner_radius,
+        stem_height=stem_height,
+        stem_topper_height=stem_topper_height,
+        outside_tolerance_x=stem_outside_tolerance_x,
+        outside_tolerance_y=stem_outside_tolerance_y,
+        inside_tolerance=stem_inside_tolerance,
+        stem_inset=stem_inset,
+        stem_flat_support=stem_flat_support,
+        support_distance=stem_support_distance
+      );
+    } else if (stem_type == "round_cherry") {
+      stem_round_cherry(
+        corner_radius=stem_corner_radius,
+        stem_height=stem_height,
+        stem_topper_height=stem_topper_height,
+        outside_tolerance=stem_outside_tolerance_x,
+        inside_tolerance=stem_inside_tolerance,
+        stem_inset=stem_inset,
+        stem_flat_support=stem_flat_support,
+        support_distance=stem_support_distance
+      );
+    } else if (stem_type == "alps") {
+      stem_alps(
+        stem_corner_radius=stem_corner_radius,
+        stem_height=stem_height,
+        stem_topper_height=stem_topper_height,
+        outside_tolerance_x=stem_outside_tolerance_x,
+        outside_tolerance_y=stem_outside_tolerance_y,
+        stem_inset=stem_inset,
+        stem_flat_support=stem_flat_support,
+        support_distance=stem_support_distance
+      );
+    } else {
+      warning(str("Stem type not recognized: ", stem_type));
+    }
+  }
+
+  module stemMainCached(stem_topper_height = 0) {
+    render() stemMain(stem_topper_height);
+  }
+
+  module stemFull(
+    cubeZ_Offset = undef,
+    stem_topper_height = 0
+  ) {
+    assert(cubeZ_Offset != undef, "cubeZ_Offset parameter is required");
+    union() {
+      difference() {
+        cubeX = cubeDimensions[0];
+        cubeY = cubeDimensions[1];
+        bigCubeZ = cubeDimensions[2];
+        stemTopZ = stem_inset + stem_height;
+        stemCubeZ = bigCubeZ / 2 - stemTopZ - stem_topper_height - cubeZ_Offset;
+        translZ = stemTopZ + stemCubeZ / 2 + stem_topper_height + cubeZ_Offset; // Move it up so it's not intersecting with the stem
+        translate([0, 0, translZ])
+          cube([cubeX, cubeY, stemCubeZ], center=true);
+
+        stemMainCached(stem_topper_height);
+      }
+      stemMainCached(stem_topper_height);
+    }
+  }
+
+  // In order to achieve at least 0.75mm thickness where the legend is carved
+  if (key_profile == "dsa") {
+    stemFull(-1.25);
+  }
+  //
+  else if (key_profile == "dcs") {
+    stemFull(0, 1.25);
+  } //
+  else if (key_profile == "dss") {
+    stemFull(0, 1.95);
+  } //
+  else if (key_profile == "kat") {
+    stemFull(0, 1.95);
+  } //
+  else if (key_profile == "kam") {
+    stemFull(0, 1.2);
+  } //
+  else if (key_profile == "riskeycap") {
+    stemFull(-0.75);
+  } //
+  else if (key_profile == "gem") {
+    stemFull(-0.75);
+  } //
+  else if (key_profile == "xda") {
+    stemFull(0, 1.25);
+  } //
+  else if (key_profile == "") {
     echo("Using user defined parameters");
-    // TODO: add support for user defined geometry
+    stemFull(cubeZ_Offset, stem_topper_height);
   } else {
-    warning(str("Stem type not recognized: ", stem_type));
+    warning(str("Key profile not recognized: ", key_profile));
   }
 }
 
@@ -409,16 +481,10 @@ module generate_legend(
   difference() {
     // Remove the inferior part of the generated legend so it can be printed flat
     just_legends(
-      // TODO height is pointless, since different profiles have different key height,
-      // use custom value very high.
-      // define the layer values as modules (or function) that can be called (use code from generate_keycap)
-      // this way the same module is called over and over avoid to write the same code
-      // for a milion times
-      height=key_height + key_height_extra,
+      height=key_height > KEY_UNIT ? key_height + key_height_extra : KEY_UNIT,
       legend_list=legend_list
     );
 
-    // TODO: number must change based also on row not only profile
     if (key_profile == "dsa") {
       removalCube(3.5);
     }
@@ -427,10 +493,10 @@ module generate_legend(
       removalCube(2);
     } //
     else if (key_profile == "dss") {
-      removalCube(1.5);
+      removalCube(1.10);
     } //
     else if (key_profile == "kat") {
-      removalCube(1.5);
+      removalCube(1.3);
     } //
     else if (key_profile == "kam") {
       removalCube(2);
@@ -444,7 +510,7 @@ module generate_legend(
     else if (key_profile == "xda") {
       removalCube(2);
     } //
-    else if (stem_type == "") {
+    else if (key_profile == "") {
       echo("Using user defined parameters");
       removalCube(min_letter_height);
     } else {

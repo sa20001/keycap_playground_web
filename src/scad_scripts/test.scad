@@ -320,7 +320,9 @@ module stem_top_using_globals() {
 // RENDER = ["legends"];
 // RENDER = ["keycap"];
 // RENDER = ["%keycap"];
-KEY_PROFILE = "dsa"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda], use "" for no profile (will use globals)
+
+// Use "" for no profile (will use globals)
+KEY_PROFILE = "xda"; // [riskeycap, gem, dsa, dcs, dss, kat, kam, xda]
 STEM_TYPE = "box_cherry"; // [box_cherry, round_cherry, alps, stem_top]
 
 module render_keycap(stuff_to_render) {
@@ -363,7 +365,9 @@ HOMING_DOT_LENGTH = 3; // Set to something like "3" for a good, easy-to-feel "do
 HOMING_DOT_WIDTH = 1; // Default: 1
 HOMING_DOT_Z = 1; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
 STEM_TOPPER_HEIGHT = 1; // Stem topper height in mm
-module bigTest(onlyLegend = false) {
+// TODO: do different profiles requires different topper heights?
+STEM_CUBE_Z_OFFSET = 0;
+module bigTest(exportType = 0) {
 
   assert(STEM_TOPPER_HEIGHT >= 0, "STEM_TOPPER_HEIGHT must be non-negative");
 
@@ -393,44 +397,33 @@ module bigTest(onlyLegend = false) {
     );
   }
 
-  module stem_helper() {
-    generate_stem(
-      stem_type=STEM_TYPE,
-      stem_corner_radius=STEM_CORNER_RADIUS,
-      stem_height=STEM_HEIGHT,
-      stem_topper_height=STEM_TOPPER_HEIGHT,
-      stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
-      stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
-      stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
-      stem_inset=STEM_INSET,
-      stem_flat_support=STEM_FLAT_SUPPORT,
-      stem_support_distance=STEM_SUPPORT_DISTANCE,
-    );
-  }
-
   cubeX = 100;
   cubeY = 100;
-  bigCubeZ = 100;
-  // Create the stem and a big cube above it
-  module A_Shape() {
-    union() {
-      stem_helper();
-      stemTopZ = STEM_INSET + STEM_HEIGHT;
-      stemCubeZ = bigCubeZ / 2 - stemTopZ - STEM_TOPPER_HEIGHT;
-      translZ = stemTopZ + stemCubeZ / 2; // Move it up so it's not intersecting with the stem
-      translate([0, 0, translZ + STEM_TOPPER_HEIGHT])
-        cube([cubeX, cubeY, stemCubeZ], center=true);
-    }
-  }
+  cubeZ = 100;
 
+  // Create the stem and a big cube above it
   module A_cached() {
-    render() A_Shape();
+    render() generate_stem(
+        stem_type=STEM_TYPE,
+        stem_corner_radius=STEM_CORNER_RADIUS,
+        stem_height=STEM_HEIGHT,
+        stem_topper_height=STEM_TOPPER_HEIGHT,
+        stem_outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
+        stem_outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
+        stem_inside_tolerance=STEM_INSIDE_TOLERANCE,
+        stem_inset=STEM_INSET,
+        stem_flat_support=STEM_FLAT_SUPPORT,
+        stem_support_distance=STEM_SUPPORT_DISTANCE,
+        key_profile=KEY_PROFILE,
+        cubeDimensions=[cubeX, cubeY, cubeZ],
+        cubeZ_Offset=STEM_CUBE_Z_OFFSET
+      );
   }
 
   // Create the negative space of the keycap shape
   module B_Shape() {
     difference() {
-      cube([cubeX, cubeY, bigCubeZ], center=true);
+      cube([cubeX, cubeY, cubeZ], center=true);
       keycapHelper(shape_only=true);
     }
   }
@@ -466,17 +459,30 @@ module bigTest(onlyLegend = false) {
     }
   }
 
-  if (onlyLegend) {
-    D_Shape(); // Just render the legends
-  } else {
-    // Carve the legends in the keycap
+  module carvedKeycap() {
     difference() {
       C_Shape();
       translate([0, 0, 0.00001]) // Translate a tiny bit up to avoid geometry issues do to rounding
         D_Shape();
     }
   }
+
+  if (exportType == 0) {
+    D_Shape(); // Just render the legends
+  } else if (exportType == 1) {
+    // Carve the legends in the keycap
+    carvedKeycap();
+  } else if (exportType == 2) {
+    // TODO finish implementation
+    color("red") carvedKeycap();
+    translate([0, 0, 0.00001]) // Translate a tiny bit up to avoid geometry issues do to rounding
+      D_Shape();
+  } else {
+    echo("Not implemented");
+  }
 }
 
 // rotate(KEY_ROTATION)
-bigTest(false);
+bigTest(2);
+
+// TODO: export in 3mf or similar-> no stl (too low res)
